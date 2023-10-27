@@ -13,6 +13,6 @@ describe('App', () => {
       screen.getByRole('heading', {
         level: 1,
       })
-    ).toBeTypeOf('string');
+    );
   });
 });

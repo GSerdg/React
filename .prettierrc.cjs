@@ -1,8 +1,11 @@
 const config = {
-  trailingComma: 'es5',
-  tabWidth: 2,
-  semi: true,
-  singleQuote: true,
+  'endOfLine': 'auto',
+  'semi': true,
+  'singleQuote': true,
+  'tabWidth': 2,
+  'trailingComma': 'es5',
+  'printWidth': 80,
+  'arrowParens': 'always'
 };
 
 module.exports = config;

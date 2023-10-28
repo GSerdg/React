@@ -6,14 +6,13 @@ module.exports = {
     node: true,
   },
   extends: [
-    'airbnb',
-    'airbnb-typescript',
-    'airbnb/hooks',
-    'plugin:react/recommended',
+    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
     'prettier',
     'plugin:prettier/recommended',
   ],
+  ignorePatterns: ['dist', '.eslintrc.cjs'],
   overrides: [],
   parser: '@typescript-eslint/parser',
   parserOptions: {

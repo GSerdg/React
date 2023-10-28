@@ -1,5 +1,12 @@
+import Finder from './components/Finder';
+
 function App() {
-  return <h1>Hello World!!</h1>;
+  return (
+    <div className="App">
+      <h1>React APP</h1>
+      <Finder />
+    </div>
+  );
 }
 
 export default App;

@@ -21,7 +21,6 @@ class Finder extends React.Component<
     const { results } = await ResponseServise.getForName(name);
     this.setState({ respData: results });
     console.log('res', results);
-    console.log('props', this.state);
   }
 
   async getPeoples() {

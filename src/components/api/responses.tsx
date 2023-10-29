@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PeopleResponse } from './types';
+import { PeopleResponse } from '../../types/types';
 
 export default class ResponseServise {
   static async getAll(page = 1) {

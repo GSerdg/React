@@ -46,9 +46,11 @@ class Page extends React.Component<PageProps, PageState> {
   render() {
     const data = this.state.respData;
     let cards: JSX.Element | null = null;
+
     if (!this.state.spinner) {
       cards = <Cards respData={data} />;
     }
+
     return (
       <div className="page">
         <Input onInputSubmit={this.handleInputSubmit} />

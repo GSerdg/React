@@ -1,31 +1,20 @@
 import React from 'react';
-import ResponseServise from './api/responses';
-import { PeopleResult } from '../types/types';
 
-class Finder extends React.Component<
-  unknown,
-  {
-    value: string;
-    respData: PeopleResult[];
-  }
-> {
-  constructor(props: string) {
+interface FinderProps {
+  onInputSubmit: (value: string) => void;
+}
+
+interface FinderState {
+  value: string;
+}
+
+class Finder extends React.Component<FinderProps, FinderState> {
+  constructor(props: FinderProps) {
     super(props);
-    this.state = { value: '', respData: [] };
+    this.state = { value: '' };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  async getPeopleForName(name: string) {
-    const { results } = await ResponseServise.getForName(name);
-    this.setState({ respData: results });
-    console.log('res', results);
-  }
-
-  async getPeoples() {
-    const { results } = await ResponseServise.getAll();
-    console.log(results);
   }
 
   handleChange(event: React.FormEvent<HTMLInputElement>) {
@@ -35,12 +24,8 @@ class Finder extends React.Component<
 
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (this.state.value === '') {
-      this.getPeoples();
-    } else {
-      this.getPeopleForName(this.state.value);
-    }
-    console.log(this.state.value);
+
+    this.props.onInputSubmit(this.state.value);
   }
 
   render() {

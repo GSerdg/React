@@ -1,13 +1,13 @@
 import React from 'react';
 import { PeopleResult } from '../types/types';
 import Cards from './Cards';
-import Finder from './Finder';
+import Input from './Input';
 import ResponseServise from './api/responses';
 
 interface PageProps {}
 
 interface PageState {
-  inputValue: string;
+  // inputValue: string;
   respData: PeopleResult[];
 }
 
@@ -16,7 +16,7 @@ class Page extends React.Component<PageProps, PageState> {
     super(props);
 
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
-    this.state = { inputValue: '', respData: [] };
+    this.state = { /*  inputValue: '', */ respData: [] };
   }
 
   async getPeopleForName(name: string) {
@@ -35,6 +35,7 @@ class Page extends React.Component<PageProps, PageState> {
     } else {
       this.getPeopleForName(inputValue);
     }
+    localStorage.setItem('inputValue', inputValue);
   }
 
   render() {
@@ -42,7 +43,7 @@ class Page extends React.Component<PageProps, PageState> {
 
     return (
       <div className="page">
-        <Finder onInputSubmit={this.handleInputSubmit} />
+        <Input onInputSubmit={this.handleInputSubmit} />
         <Cards respData={data} />
       </div>
     );

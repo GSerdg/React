@@ -1,17 +1,21 @@
 import React from 'react';
 
-interface FinderProps {
+interface InputProps {
   onInputSubmit: (value: string) => void;
 }
 
-interface FinderState {
+interface InputState {
   value: string;
 }
 
-class Finder extends React.Component<FinderProps, FinderState> {
-  constructor(props: FinderProps) {
+class Input extends React.Component<InputProps, InputState> {
+  constructor(props: InputProps) {
     super(props);
-    this.state = { value: '' };
+
+    const valueLs = localStorage.getItem('inputValue');
+    valueLs !== null
+      ? (this.state = { value: valueLs })
+      : (this.state = { value: '' });
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,4 +49,4 @@ class Finder extends React.Component<FinderProps, FinderState> {
   }
 }
 
-export default Finder;
+export default Input;

@@ -7,7 +7,6 @@ import ResponseServise from './api/responses';
 interface PageProps {}
 
 interface PageState {
-  // inputValue: string;
   respData: PeopleResult[];
 }
 
@@ -16,7 +15,7 @@ class Page extends React.Component<PageProps, PageState> {
     super(props);
 
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
-    this.state = { /*  inputValue: '', */ respData: [] };
+    this.state = { respData: [] };
   }
 
   async getPeopleForName(name: string) {

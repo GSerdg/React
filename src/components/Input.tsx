@@ -21,6 +21,10 @@ class Input extends React.Component<InputProps, InputState> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount(): void {
+    this.props.onInputSubmit(this.state.value);
+  }
+
   handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;
     this.setState({ value: target.value });

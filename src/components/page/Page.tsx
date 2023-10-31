@@ -23,17 +23,27 @@ class Page extends React.Component<PageProps, PageState> {
   }
 
   async getPeopleForName(name: string) {
-    this.setState({ spinner: true });
-    const { results } = await ResponseServise.getForName(name);
-    this.setState({ spinner: false });
-    this.setState({ respData: results });
+    try {
+      this.setState({ spinner: true });
+      const { results } = await ResponseServise.getForName(name);
+      this.setState({ spinner: false });
+      this.setState({ respData: results });
+    } catch (error) {
+      this.setState({ spinner: false });
+      console.error(error as Error);
+    }
   }
 
   async getPeoples() {
-    this.setState({ spinner: true });
-    const { results } = await ResponseServise.getAll();
-    this.setState({ spinner: false });
-    this.setState({ respData: results });
+    try {
+      this.setState({ spinner: true });
+      const { results } = await ResponseServise.getAll();
+      this.setState({ spinner: false });
+      this.setState({ respData: results });
+    } catch (error) {
+      this.setState({ spinner: false });
+      console.error(error as Error);
+    }
   }
 
   handleInputSubmit(inputValue: string) {

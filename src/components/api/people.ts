@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { PeopleResponse } from '../../types/types';
 
-export default class ResponseServise {
-  static async getAll(page = 1) {
+export default class PeopleServise {
+  static async getAllPeople(page = 1) {
     const resp: PeopleResponse = (
       await axios.get(`https://swapi.dev/api/people`, {
         params: {
@@ -14,7 +14,7 @@ export default class ResponseServise {
     return resp;
   }
 
-  static async getForName(name: string) {
+  static async getPeopleByName(name: string) {
     const resp: PeopleResponse = (
       await axios.get(`https://swapi.dev/api/people`, {
         params: {

@@ -25,7 +25,3 @@ export interface PeopleResult {
 }
 
 type Gender = 'male' | 'female' | 'n/a';
-
-/* export type HTMLElementEvent<T extends HTMLElement> = Event & {
-  target: T;
-}; */

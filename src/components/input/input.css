@@ -9,6 +9,11 @@
   margin: 8px 0;
   box-sizing: border-box;
   margin: 0 20px;
+  outline: none;
+}
+
+.finder_color {
+  border-color: #ff0000;
 }
 
 .submit-button {
@@ -23,4 +28,8 @@
   border-radius: 5px;
   margin-bottom: 10px;
   cursor: pointer;
+}
+
+.submit-button_disable {
+  cursor: auto;
 }

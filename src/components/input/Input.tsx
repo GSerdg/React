@@ -37,16 +37,30 @@ class Input extends React.Component<InputProps, InputState> {
   }
 
   render() {
+    let nameClass = 'finder';
+    let submitClass = 'submit-button';
+    let submitDisable = false;
+    if (this.state.value.length !== this.state.value.trim().length) {
+      nameClass = 'finder finder_color';
+      submitClass = 'submit-button submit-button_disable';
+      submitDisable = true;
+    }
+
     return (
       <form className="form" onSubmit={this.handleSubmit}>
         <label>Find</label>
         <input
-          className="finder"
+          className={nameClass}
           type="text"
           value={this.state.value}
           onChange={this.handleChange}
         />
-        <input className="submit-button" type="submit" value="Find" />
+        <input
+          className={submitClass}
+          type="submit"
+          value="Find"
+          disabled={submitDisable}
+        />
       </form>
     );
   }

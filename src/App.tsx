@@ -1,3 +1,4 @@
+import ErrorBoundary from './components/ErrorBoundary';
 import Page from './components/Page';
 
 alert(
@@ -6,10 +7,12 @@ alert(
 
 function App() {
   return (
-    <div className="App">
-      <h1>React APP</h1>
-      <Page />
-    </div>
+    <ErrorBoundary>
+      <div className="App">
+        <h1>React APP</h1>
+        <Page />
+      </div>
+    </ErrorBoundary>
   );
 }
 

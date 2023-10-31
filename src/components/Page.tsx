@@ -4,6 +4,7 @@ import Cards from './Cards';
 import Input from './Input';
 import ResponseServise from './api/responses';
 import { BallTriangle } from 'react-loader-spinner';
+import Button from './Button';
 
 interface PageProps {}
 
@@ -53,6 +54,7 @@ class Page extends React.Component<PageProps, PageState> {
 
     return (
       <div className="page">
+        <Button />
         <Input onInputSubmit={this.handleInputSubmit} />
         <BallTriangle
           height={100}

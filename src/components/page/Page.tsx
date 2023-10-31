@@ -3,7 +3,6 @@ import { PeopleResult } from '../../types/types';
 import Cards from '../cards/Cards';
 import Input from '../input/Input';
 import PeopleServise from '../api/people';
-import { BallTriangle } from 'react-loader-spinner';
 import Button from '../button/Button';
 import './page.css';
 
@@ -56,26 +55,12 @@ class Page extends React.Component<PageProps, PageState> {
   }
 
   render() {
-    /* const data = this.state.people;
-    let cards: JSX.Element | null = null;
-
-    if (!this.state.isLoading) {
-      cards = <Cards respData={data} />;
-    } */
-
     return (
       <div className="page">
         <Button />
         <Input onInputSubmit={this.handleInputSubmit} />
         {this.state.isLoading ? (
-          <BallTriangle
-            height={100}
-            width={100}
-            radius={5}
-            color="#4fa94d"
-            ariaLabel="ball-triangle-loading"
-            visible={this.state.isLoading}
-          />
+          <div>Loading...</div>
         ) : (
           <Cards respData={this.state.people} />
         )}

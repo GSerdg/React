@@ -1,5 +1,5 @@
 import { Component } from 'react';
-
+import './button.css';
 interface ButtonProps {}
 interface ButtonState {
   error: boolean;

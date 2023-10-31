@@ -1,10 +1,11 @@
 import React from 'react';
-import { PeopleResult } from '../types/types';
-import Cards from './Cards';
-import Input from './Input';
-import ResponseServise from './api/responses';
+import { PeopleResult } from '../../types/types';
+import Cards from '../cards/Cards';
+import Input from '../input/Input';
+import ResponseServise from '../api/responses';
 import { BallTriangle } from 'react-loader-spinner';
-import Button from './Button';
+import Button from '../button/Button';
+import './page.css';
 
 interface PageProps {}
 

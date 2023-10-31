@@ -1,5 +1,5 @@
 import { Component } from 'react';
-
+import './error-boundary.css';
 interface ErrorProps {
   children: JSX.Element;
 }
@@ -21,7 +21,11 @@ export class ErrorBoundary extends Component<ErrorProps, ErrorState> {
     console.error(error);
   }
   render() {
-    return this.state.hasError ? <h1>Ohh Error!!!</h1> : this.props.children;
+    return this.state.hasError ? (
+      <h1 className="error-header">Ohh Error!!!</h1>
+    ) : (
+      this.props.children
+    );
   }
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './input.css';
 interface InputProps {
   onInputSubmit: (value: string) => void;
 }
@@ -38,16 +38,15 @@ class Input extends React.Component<InputProps, InputState> {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Find
-          <input
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-          />
-        </label>
-        <input type="submit" value="Find" />
+      <form className="form" onSubmit={this.handleSubmit}>
+        <label>Find</label>
+        <input
+          className="finder"
+          type="text"
+          value={this.state.value}
+          onChange={this.handleChange}
+        />
+        <input className="submit-button" type="submit" value="Find" />
       </form>
     );
   }

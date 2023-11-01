@@ -1,16 +1,29 @@
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import ErrorBoundary from './components/error/Error-boundary';
-import Page from './components/page/Page';
+import Home from './pages/home/Home';
 import './index.css';
+import NotFound from './pages/not-found/NotFound';
 
 function App() {
   return (
     <ErrorBoundary>
       <div className="app">
         <h1>React APP</h1>
-        <Page />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </div>
     </ErrorBoundary>
   );
 }
 
-export default App;
+function WrappedApp() {
+  return (
+    <HashRouter>
+      <App />
+    </HashRouter>
+  );
+}
+
+export default WrappedApp;

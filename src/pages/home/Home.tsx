@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { PeopleResult } from '../../types/types';
-import Cards from '../cards/Cards';
-import Input from '../input/Input';
-import PeopleServise from '../api/people';
-import Button from '../button/Button';
-import './page.css';
+import Cards from '../../components/cards/Cards';
+import Input from '../../components/input/Input';
+import PeopleServise from '../../components/api/people';
+import Button from '../../components/button/Button';
+import './home.css';
 
-export default function Page() {
+export default function Home() {
   const [people, setPeople] = useState<PeopleResult[] | []>([]);
   const [isLoading, setIsLoading] = useState(false);
 

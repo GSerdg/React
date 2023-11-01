@@ -1,70 +1,58 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './input.css';
 
 interface InputProps {
   onInputSubmit: (value: string) => void;
 }
 
-interface InputState {
-  value: string;
-}
+export default function Input(props: InputProps) {
+  const valueLs = localStorage.getItem('inputValue');
+  let state: string;
+  let nameClass = 'finder';
+  let submitClass = 'submit-button';
+  let submitDisable = false;
 
-class Input extends React.Component<InputProps, InputState> {
-  constructor(props: InputProps) {
-    super(props);
+  valueLs !== null ? (state = valueLs) : (state = '');
 
-    const valueLs = localStorage.getItem('inputValue');
-    valueLs !== null
-      ? (this.state = { value: valueLs })
-      : (this.state = { value: '' });
+  const [value, SetValue] = useState(state);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  useEffect(() => {
+    props.onInputSubmit(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  componentDidMount(): void {
-    this.props.onInputSubmit(this.state.value);
-  }
-
-  handleChange(event: React.FormEvent<HTMLInputElement>) {
+  function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;
-    this.setState({ value: target.value });
+    SetValue(target.value);
   }
 
-  handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    this.props.onInputSubmit(this.state.value);
+    props.onInputSubmit(value);
   }
 
-  render() {
-    let nameClass = 'finder';
-    let submitClass = 'submit-button';
-    let submitDisable = false;
-    if (this.state.value.length !== this.state.value.trim().length) {
-      nameClass = 'finder finder_color';
-      submitClass = 'submit-button submit-button_disable';
-      submitDisable = true;
-    }
-
-    return (
-      <form className="form" onSubmit={this.handleSubmit}>
-        <label>Find</label>
-        <input
-          className={nameClass}
-          type="text"
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
-        <input
-          className={submitClass}
-          type="submit"
-          value="Find"
-          disabled={submitDisable}
-        />
-      </form>
-    );
+  if (value.length !== value.trim().length) {
+    nameClass = 'finder finder_color';
+    submitClass = 'submit-button submit-button_disable';
+    submitDisable = true;
   }
+
+  return (
+    <form className="form" onSubmit={handleSubmit}>
+      <label>Find</label>
+      <input
+        className={nameClass}
+        type="text"
+        value={value}
+        onChange={handleChange}
+      />
+      <input
+        className={submitClass}
+        type="submit"
+        value="Find"
+        disabled={submitDisable}
+      />
+    </form>
+  );
 }
-
-export default Input;

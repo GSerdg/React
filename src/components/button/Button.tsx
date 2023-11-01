@@ -1,30 +1,20 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import './button.css';
 
-interface ButtonProps {}
+export default function Button() {
+  const [error, setError] = useState(false);
 
-interface ButtonState {
-  error: boolean;
-}
+  function handleClick() {
+    setError(true);
+  }
 
-export default class Button extends Component<ButtonProps, ButtonState> {
-  constructor(props: ButtonProps) {
-    super(props);
+  if (error) {
+    throw new Error('You generate some error');
+  }
 
-    this.state = { error: false };
-    this.handleClick = this.handleClick.bind(this);
-  }
-  handleClick() {
-    this.setState({ error: true });
-  }
-  render() {
-    if (this.state.error) {
-      throw new Error('You generate some error');
-    }
-    return (
-      <button onClick={this.handleClick} className="button">
-        Error
-      </button>
-    );
-  }
+  return (
+    <button onClick={handleClick} className="button">
+      Error
+    </button>
+  );
 }

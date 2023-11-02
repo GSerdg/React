@@ -1,38 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './input.css';
 
 interface InputProps {
-  onInputSubmit: (value: string) => void;
+  onInputSubmit: (inputValue: string, page: number) => void;
+  onInputChange: (inputValue: string) => void;
+  inputValue: string;
 }
 
 export default function Input(props: InputProps) {
-  const valueLs = localStorage.getItem('inputValue');
-  let state: string;
   let nameClass = 'finder';
   let submitClass = 'submit-button';
   let submitDisable = false;
 
-  valueLs !== null ? (state = valueLs) : (state = '');
-
-  const [value, SetValue] = useState(state);
+  const page = 1;
 
   useEffect(() => {
-    props.onInputSubmit(value);
+    props.onInputSubmit(props.inputValue, page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;
-    SetValue(target.value);
+
+    props.onInputChange(target.value);
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    props.onInputSubmit(value);
+    props.onInputSubmit(props.inputValue, page);
   }
 
-  if (value.length !== value.trim().length) {
+  if (props.inputValue.length !== props.inputValue.trim().length) {
     nameClass = 'finder finder_color';
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
@@ -44,7 +43,7 @@ export default function Input(props: InputProps) {
       <input
         className={nameClass}
         type="text"
-        value={value}
+        value={props.inputValue}
         onChange={handleChange}
       />
       <input

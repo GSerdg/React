@@ -4,9 +4,10 @@ import Input from '../../components/input/Input';
 import PeopleServise from '../../components/api/people';
 import Button from '../../components/button/Button';
 import Pagination from '../../components/pagination/Pagination';
-import { PATHS, router } from '../../components/router/router';
+import { PATHS } from '../../components/router/router';
 import './home.css';
 import { useNavigate } from 'react-router-dom';
+import Cards from '../../components/cards/Cards';
 
 export default function Home() {
   const valueLs = localStorage.getItem('inputValue');
@@ -89,7 +90,11 @@ export default function Home() {
         onInputChange={handleInputChange}
         inputValue={inputValue}
       />
-      {router(isLoading, responseData?.results)}
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <Cards respData={responseData?.results || []} />
+      )}
       <Pagination
         handleShowCards={handleShowCards}
         onGetNewPage={handleInputSubmit}

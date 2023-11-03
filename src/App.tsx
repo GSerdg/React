@@ -1,6 +1,6 @@
 import { HashRouter } from 'react-router-dom';
 import ErrorBoundary from './components/error/Error-boundary';
-import Home from './pages/home/Home';
+import { router } from './components/router/router';
 import './index.css';
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <ErrorBoundary>
       <div className="app">
         <h1>React APP</h1>
-        <Home />
+        {router()}
       </div>
     </ErrorBoundary>
   );

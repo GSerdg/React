@@ -1,25 +1,15 @@
 import { Route, Routes } from 'react-router-dom';
 import NotFound from '../../pages/not-found/NotFound';
-import { PeopleResult } from '../../types/types';
-import Cards from '../cards/Cards';
+import Home from '../../pages/home/Home';
 
 export const PATHS = {
   HOME: '/',
   NESTED_HOME: '/:page',
 };
 
-export const router = (
-  isLoading: boolean,
-  people: PeopleResult[] | undefined
-) => (
+export const router = () => (
   <Routes>
-    <Route
-      index
-      path={PATHS.NESTED_HOME}
-      element={
-        isLoading ? <div>Loading...</div> : <Cards respData={people || []} />
-      }
-    />
+    <Route index path={PATHS.NESTED_HOME} element={<Home />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );

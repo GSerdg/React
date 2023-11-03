@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { PeopleResponse } from '../../types/types';
-import Cards from '../../components/cards/Cards';
 import Input from '../../components/input/Input';
 import PeopleServise from '../../components/api/people';
 import Button from '../../components/button/Button';
-import './home.css';
 import Pagination from '../../components/pagination/Pagination';
+import { PATHS, router } from '../../components/api/router/router';
+import './home.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const valueLs = localStorage.getItem('inputValue');
@@ -72,6 +73,13 @@ export default function Home() {
     SetValue(value);
   }
 
+  const navigate = useNavigate();
+  const handleShowCards = useCallback(
+    (id: number) => navigate(`${PATHS.HOME}page${id}`),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   return (
     <div className="page">
       <Button />
@@ -80,12 +88,9 @@ export default function Home() {
         onInputChange={handleInputChange}
         inputValue={inputValue}
       />
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <Cards respData={responseData?.results || []} />
-      )}
+      {router(isLoading, responseData?.results)}
       <Pagination
+        handleShowCards={handleShowCards}
         onGetNewPage={handleInputSubmit}
         inputValue={inputValue}
         pageNumber={pageNumber}

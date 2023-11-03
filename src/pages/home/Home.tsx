@@ -88,9 +88,10 @@ export default function Home() {
       <Pagination
         onGetNewPage={handleInputSubmit}
         inputValue={inputValue}
+        pageNumber={pageNumber}
         isNextPage={isNextPage}
         isPrevPage={isPrevPage}
-        pageNumber={pageNumber}
+        isLoading={isLoading}
       />
     </div>
   );

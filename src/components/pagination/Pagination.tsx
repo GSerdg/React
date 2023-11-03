@@ -2,6 +2,7 @@ interface PaginationProps {
   onGetNewPage: (value: string, page: number) => void;
   isNextPage: boolean;
   isPrevPage: boolean;
+  isLoading: boolean;
   inputValue: string;
   pageNumber: number;
 }
@@ -23,24 +24,26 @@ export default function Pagination(props: PaginationProps) {
   }
 
   return (
-    <div className="pagination">
-      <button
-        id="prev"
-        className="pagination__btn"
-        onClick={handleClick}
-        disabled={!props.isPrevPage}
-      >
-        {'<<'}
-      </button>
-      <span className="pfgination__page">{props.pageNumber}</span>
-      <button
-        id="next"
-        className="pagination__btn"
-        onClick={handleClick}
-        disabled={!props.isNextPage}
-      >
-        {'>>'}
-      </button>
-    </div>
+    !props.isLoading && (
+      <div className="pagination">
+        <button
+          id="prev"
+          className="pagination__btn"
+          onClick={handleClick}
+          disabled={!props.isPrevPage}
+        >
+          {'<<'}
+        </button>
+        <span className="pfgination__page">{props.pageNumber}</span>
+        <button
+          id="next"
+          className="pagination__btn"
+          onClick={handleClick}
+          disabled={!props.isNextPage}
+        >
+          {'>>'}
+        </button>
+      </div>
+    )
   );
 }

@@ -1,6 +1,6 @@
 interface PaginationProps {
   onGetNewPage: (value: string, page: number) => void;
-  handleShowCards: (id: number) => void;
+  handleShowCards: (page: number, search?: string) => void;
   isNextPage: boolean;
   isPrevPage: boolean;
   isLoading: boolean;
@@ -22,7 +22,7 @@ export default function Pagination(props: PaginationProps) {
     }
 
     props.onGetNewPage(props.inputValue, newPage);
-    props.handleShowCards(newPage);
+    props.handleShowCards(newPage, props.inputValue);
   }
 
   return (

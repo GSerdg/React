@@ -14,11 +14,12 @@ export default class PeopleServise {
     return resp;
   }
 
-  static async getPeopleByName(name: string) {
+  static async getPeopleByName(name: string, page: number) {
     const resp: PeopleResponse = (
       await axios.get(`https://swapi.dev/api/people`, {
         params: {
           search: name,
+          page,
         },
       })
     ).data;

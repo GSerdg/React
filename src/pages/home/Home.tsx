@@ -1,10 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { PeopleResponse } from '../../types/types';
 import Input from '../../components/input/Input';
 import PeopleServise from '../../components/api/people';
 import Button from '../../components/button/Button';
 import Pagination from '../../components/pagination/Pagination';
-import { PATHS, router } from '../../components/api/router/router';
+import { PATHS, router } from '../../components/router/router';
 import './home.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,6 +19,12 @@ export default function Home() {
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    handleShowCards(pageNumber);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleIsNextPage(data: PeopleResponse | undefined) {
     return data?.next === null ? false : true;
@@ -28,34 +34,25 @@ export default function Home() {
     return data?.previous === null ? false : true;
   }
 
-  async function getPeopleForName(namePeople: string) {
-    try {
-      setIsLoading(true);
-      const data = await PeopleServise.getPeopleByName(namePeople);
-      setIsLoading(false);
-      setData(data);
-      setIsNextPage(handleIsNextPage(data));
-    } catch (error) {
-      setIsLoading(false);
-      console.error(error as Error);
-    }
-  }
-
-  async function getPeoples(pageNumber: number) {
+  async function getPeoples(pageNumber: number, namePeople?: string) {
     try {
       setIsPrevPage(false);
       setIsNextPage(false);
       setIsLoading(true);
-      const data = await PeopleServise.getAllPeople(pageNumber);
-      setIsLoading(false);
+
+      const data = namePeople
+        ? await PeopleServise.getPeopleByName(namePeople, pageNumber)
+        : await PeopleServise.getAllPeople(pageNumber);
+
       setData(data);
       setIsPrevPage(handleIsPrevPage(data));
       setIsNextPage(handleIsNextPage(data));
     } catch (error) {
-      setIsLoading(false);
       setIsPrevPage(handleIsPrevPage(responseData));
       setIsNextPage(handleIsNextPage(responseData));
       console.error(error as Error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -63,19 +60,23 @@ export default function Home() {
     if (value === '') {
       getPeoples(page);
     } else {
-      getPeopleForName(value);
+      getPeoples(page, value);
     }
+
     setPageNumber(page);
     localStorage.setItem('inputValue', value);
+    handleShowCards(page, value);
   }
 
   function handleInputChange(value: string) {
     SetValue(value);
   }
 
-  const navigate = useNavigate();
   const handleShowCards = useCallback(
-    (id: number) => navigate(`${PATHS.HOME}page${id}`),
+    (page: number, search?: string) =>
+      search
+        ? navigate(`${PATHS.HOME}search=${search}&page=${page}`)
+        : navigate(`${PATHS.HOME}page=${page}`),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );

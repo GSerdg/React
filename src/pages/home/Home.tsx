@@ -6,24 +6,41 @@ import Button from '../../components/button/Button';
 import Pagination from '../../components/pagination/Pagination';
 import { PATHS } from '../../components/router/router';
 import './home.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Cards from '../../components/cards/Cards';
 
 export default function Home() {
   const valueLs = localStorage.getItem('inputValue');
   let state: string;
   valueLs !== null ? (state = valueLs) : (state = '');
+  let value: string | undefined;
+  let number: number | undefined;
 
+  const { page } = useParams();
+  console.log(page);
+  if (page) {
+    const pageParams = page.split('&').map((item) => item.split('='));
+    value = pageParams.length === 2 ? pageParams[0][1] : '';
+    number = pageParams.length === 2 ? +pageParams[1][1] : +pageParams[0][1];
+  }
   const [responseData, setData] = useState<PeopleResponse>();
   const [inputValue, SetValue] = useState(state);
   const [isLoading, setIsLoading] = useState(false);
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
+
   const navigate = useNavigate();
 
+  // setPageNumber(number);
+  // SetValue(value);
+  // handleInputSubmit(value, +number);
+
   useEffect(() => {
-    handleShowCards(pageNumber);
+    handleInputSubmit(value || '', number || 1);
+    // handleShowCards(pageNumber);
+    setPageNumber(number || 1);
+    SetValue(value || '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,6 +106,7 @@ export default function Home() {
         onInputSubmit={handleInputSubmit}
         onInputChange={handleInputChange}
         inputValue={inputValue}
+        pageNumber={pageNumber}
       />
       {isLoading ? (
         <div>Loading...</div>

@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './input.css';
 
 interface InputProps {
   onInputSubmit: (inputValue: string, page: number) => void;
   onInputChange: (inputValue: string) => void;
   inputValue: string;
+  pageNumber: number;
 }
 
 export default function Input(props: InputProps) {
@@ -14,10 +15,10 @@ export default function Input(props: InputProps) {
 
   const page = 1;
 
-  useEffect(() => {
-    props.onInputSubmit(props.inputValue, page);
+  /* useEffect(() => {
+    props.onInputSubmit(props.inputValue, props.pageNumber);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); */
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;

@@ -3,11 +3,12 @@ import { PeopleResponse } from '../../types/types';
 import Input from '../../components/input/Input';
 import PeopleServise from '../../components/api/people';
 import Button from '../../components/button/Button';
-import Pagination from '../../components/pagination/Pagination';
+import CardsPagination from '../../components/cards-pagination/Cards-pagination';
 import { PATHS } from '../../components/router/router';
 import './home.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import Cards from '../../components/cards/Cards';
+import CardsOnPage from '../../components/cards-on-page/Cards-on-page';
 
 export default function Home() {
   const valueLs = localStorage.getItem('inputValue');
@@ -22,6 +23,7 @@ export default function Home() {
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
+  const [counter, setCounter] = useState(10);
 
   const navigate = useNavigate();
   const { page } = useParams();
@@ -90,6 +92,10 @@ export default function Home() {
       ? navigate(`${PATHS.HOME}search=${search}&page=${page}`)
       : navigate(`${PATHS.HOME}page=${page}`);
 
+  function handleButtonChange(counter: number) {
+    setCounter(counter);
+  }
+
   return (
     <div className="page">
       <Button />
@@ -100,12 +106,13 @@ export default function Home() {
         pageNumber={pageNumber}
         isLoading={isLoading}
       />
+      <CardsOnPage onButtonChange={handleButtonChange} counter={counter} />
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <Cards respData={responseData?.results || []} />
+        <Cards respData={responseData?.results || []} counter={counter} />
       )}
-      <Pagination
+      <CardsPagination
         handleShowCards={handleShowCards}
         onGetNewPage={handleInputSubmit}
         inputValue={inputValue}

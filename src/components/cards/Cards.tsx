@@ -4,14 +4,17 @@ import './cards.css';
 
 interface CardsProps {
   respData: PeopleResult[];
+  counter: number;
 }
 
 export default function Cards(props: CardsProps) {
   const data = props.respData;
 
-  const cardsList = data.map((item, index) => (
-    <Card cardData={item} key={index} />
-  ));
+  const cardsList = data.map((item, index) => {
+    if (index < props.counter) {
+      return <Card cardData={item} key={index} counter={props.counter} />;
+    }
+  });
 
   return <div className="cards">{cardsList}</div>;
 }

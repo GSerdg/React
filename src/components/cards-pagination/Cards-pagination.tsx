@@ -1,3 +1,5 @@
+import PaginationBtn from '../pagination-btn/Pagination-btn';
+
 interface PaginationProps {
   onGetNewPage: (value: string, page: number) => void;
   handleShowCards: (page: number, search?: string) => void;
@@ -8,7 +10,7 @@ interface PaginationProps {
   pageNumber: number;
 }
 
-export default function Pagination(props: PaginationProps) {
+export default function CardsPagination(props: PaginationProps) {
   function handleClick(event: React.FormEvent<HTMLButtonElement>) {
     const target = event.target as HTMLButtonElement;
     let newPage = props.pageNumber;
@@ -27,23 +29,19 @@ export default function Pagination(props: PaginationProps) {
   return (
     !props.isLoading && (
       <div className="pagination">
-        <button
-          id="prev"
-          className="pagination__btn"
-          onClick={handleClick}
-          disabled={!props.isPrevPage}
-        >
-          {'<<'}
-        </button>
-        <span className="pfgination__page">{props.pageNumber}</span>
-        <button
-          id="next"
-          className="pagination__btn"
-          onClick={handleClick}
-          disabled={!props.isNextPage}
-        >
-          {'>>'}
-        </button>
+        <PaginationBtn
+          id={'prev'}
+          onHandleClick={handleClick}
+          isDisabled={props.isPrevPage}
+          title={'<<'}
+        />
+        <span className="pagination__page">{props.pageNumber}</span>
+        <PaginationBtn
+          id={'next'}
+          onHandleClick={handleClick}
+          isDisabled={props.isNextPage}
+          title={'>>'}
+        />
       </div>
     )
   );

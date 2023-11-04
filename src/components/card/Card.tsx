@@ -3,6 +3,7 @@ import './card.css';
 
 interface CardProps {
   cardData: PeopleResult;
+  counter: number;
 }
 
 export default function Card(props: CardProps) {

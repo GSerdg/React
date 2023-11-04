@@ -2,10 +2,11 @@ import React from 'react';
 import './input.css';
 
 interface InputProps {
-  onInputSubmit: (inputValue: string, page: number) => void;
+  onInputSubmit: (page: number, inputValue: string) => void;
   onInputChange: (inputValue: string) => void;
   inputValue: string;
   pageNumber: number;
+  isLoading: boolean;
 }
 
 export default function Input(props: InputProps) {
@@ -14,11 +15,6 @@ export default function Input(props: InputProps) {
   let submitDisable = false;
 
   const page = 1;
-
-  /* useEffect(() => {
-    props.onInputSubmit(props.inputValue, props.pageNumber);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); */
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;
@@ -29,11 +25,16 @@ export default function Input(props: InputProps) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    props.onInputSubmit(props.inputValue, page);
+    props.onInputSubmit(page, props.inputValue);
   }
 
   if (props.inputValue.length !== props.inputValue.trim().length) {
     nameClass = 'finder finder_color';
+    submitClass = 'submit-button submit-button_disable';
+    submitDisable = true;
+  }
+
+  if (props.isLoading) {
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
   }

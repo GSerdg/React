@@ -21,7 +21,6 @@ export default function Pagination(props: PaginationProps) {
       newPage = props.pageNumber + 1;
     }
 
-    props.onGetNewPage(props.inputValue, newPage);
     props.handleShowCards(newPage, props.inputValue);
   }
 

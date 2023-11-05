@@ -6,10 +6,10 @@ import Button from '../../components/button/Button';
 import CardsPagination from '../../components/cards-pagination/Cards-pagination';
 import { PATHS } from '../../components/router/router';
 import './home.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import Cards from '../../components/cards/Cards';
 import CardsOnPage from '../../components/cards-on-page/Cards-on-page';
-import CardDetails from '../../components/card-details/CardDetails';
+// import CardDetails from '../../components/card-details/CardDetails';
 
 export default function Home() {
   const valueLs = localStorage.getItem('inputValue');
@@ -33,7 +33,6 @@ export default function Home() {
 
   const navigate = useNavigate();
   const { page } = useParams();
-
   if (page) {
     const pageParams = page.split('&').map((item) => item.split('='));
     value = pageParams.length === 2 ? pageParams[0][1] : '';
@@ -116,27 +115,55 @@ export default function Home() {
     handleShowCards(page, inputValue);
   }
 
-  async function handleCardClick(link: string) {
+  function handleCardClick(link: string) {
+    const peopleId = link.match(/\d+/);
+    peopleId && navigate(`./${peopleId[0]}`);
+
+    setCardDetails(
+      <Outlet
+        context={{
+          link: link,
+          respData: undefined,
+          onHandleClick: handleBtnCloseCardDetailClick,
+          isLoading: true,
+          getCard: getDetailedCard,
+        }}
+      />
+    );
+  }
+
+  async function getDetailedCard(link: string) {
     try {
       setCardDetails(
-        <CardDetails
-          respData={undefined}
-          onHandleClick={handleBtnCloseCardDetailClick}
-          isLoading={true}
+        <Outlet
+          context={{
+            link: link,
+            respData: undefined,
+            onHandleClick: handleBtnCloseCardDetailClick,
+            isLoading: true,
+            getCard: getDetailedCard,
+          }}
         />
       );
+
       const data = await PeopleServise.getPeopleByLink(link);
+
       setCardDetails(
-        <CardDetails
-          respData={data}
-          onHandleClick={handleBtnCloseCardDetailClick}
-          isLoading={false}
+        <Outlet
+          context={{
+            respData: data,
+            onHandleClick: handleBtnCloseCardDetailClick,
+            isLoading: false,
+            getCard: getDetailedCard,
+            link: link,
+          }}
         />
       );
     } catch (error) {
       console.error(error as Error);
     }
   }
+
   function handleBtnCloseCardDetailClick() {
     setCardDetails(null);
   }
@@ -145,8 +172,10 @@ export default function Home() {
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) {
     const target = event.target as HTMLElement;
-    // if (target.closest('.card')) return;
-    if (target.classList[0] === 'view-cards__list') {
+    if (
+      target.classList[0] === 'view-cards__list' ||
+      target.classList[0] === 'cards'
+    ) {
       setCardDetails(null);
     }
   }

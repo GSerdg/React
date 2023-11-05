@@ -23,4 +23,5 @@
   align-items: center;
   flex: 3 3 60%;
   border: solid 2px;
+  padding: 10px;
 }

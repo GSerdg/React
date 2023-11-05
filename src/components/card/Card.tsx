@@ -6,6 +6,7 @@ interface CardProps {
   cardData: PeopleResult;
   counter?: number;
   isDetails?: boolean;
+  className: string;
 }
 
 export default function Card(props: CardProps) {
@@ -37,7 +38,7 @@ export default function Card(props: CardProps) {
   }
 
   return (
-    <div className="card" onClick={handleCardClick}>
+    <div className={props.className} onClick={handleCardClick}>
       <div className="name">
         <h3 className="name__title">{props.cardData.name}</h3>
       </div>

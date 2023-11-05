@@ -19,6 +19,7 @@ export default function Cards(props: CardsProps) {
           cardData={item}
           key={index}
           counter={props.counter}
+          className={'card card_active'}
         />
       );
     }

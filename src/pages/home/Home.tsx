@@ -109,7 +109,8 @@ export default function Home() {
   function handleBtnClick() {
     const page = 1;
     setSubmitCounter(counter);
-    handleInputSubmit(inputValue, page);
+    // handleInputSubmit(inputValue, page);
+    handleShowCards(page, inputValue);
   }
 
   return (

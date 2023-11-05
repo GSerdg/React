@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PeopleResponse } from '../../types/types';
+import { PeopleResponse, PeopleResult } from '../../types/types';
 
 export default class PeopleServise {
   static async getAllPeople(page: number) {
@@ -23,6 +23,12 @@ export default class PeopleServise {
         },
       })
     ).data;
+
+    return resp;
+  }
+
+  static async getPeopleByLink(link: string) {
+    const resp: PeopleResult = (await axios.get(link)).data;
 
     return resp;
   }

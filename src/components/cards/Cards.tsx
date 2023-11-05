@@ -3,6 +3,7 @@ import Card from '../card/Card';
 import './cards.css';
 
 interface CardsProps {
+  onHandleCardClick: (link: string) => void;
   respData: PeopleResult[];
   counter: number;
 }
@@ -12,7 +13,14 @@ export default function Cards(props: CardsProps) {
 
   const cardsList = data.map((item, index) => {
     if (index < props.counter) {
-      return <Card cardData={item} key={index} counter={props.counter} />;
+      return (
+        <Card
+          onHandleCardClick={props.onHandleCardClick}
+          cardData={item}
+          key={index}
+          counter={props.counter}
+        />
+      );
     }
   });
 

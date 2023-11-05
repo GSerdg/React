@@ -9,6 +9,7 @@ import './home.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import Cards from '../../components/cards/Cards';
 import CardsOnPage from '../../components/cards-on-page/Cards-on-page';
+import CardDetails from '../../components/card-details/CardDetails';
 
 export default function Home() {
   const valueLs = localStorage.getItem('inputValue');
@@ -26,6 +27,9 @@ export default function Home() {
   const [counter, setCounter] = useState(10);
   const [submitCounter, setSubmitCounter] = useState(10);
   const [error, setError] = useState(false);
+  const [componentCardDetails, setCardDetails] = useState<JSX.Element | null>(
+    null
+  );
 
   const navigate = useNavigate();
   const { page } = useParams();
@@ -109,8 +113,42 @@ export default function Home() {
   function handleBtnClick() {
     const page = 1;
     setSubmitCounter(counter);
-    // handleInputSubmit(inputValue, page);
     handleShowCards(page, inputValue);
+  }
+
+  async function handleCardClick(link: string) {
+    try {
+      setCardDetails(
+        <CardDetails
+          respData={undefined}
+          onHandleClick={handleBtnCloseCardDetailClick}
+          isLoading={true}
+        />
+      );
+      const data = await PeopleServise.getPeopleByLink(link);
+      setCardDetails(
+        <CardDetails
+          respData={data}
+          onHandleClick={handleBtnCloseCardDetailClick}
+          isLoading={false}
+        />
+      );
+    } catch (error) {
+      console.error(error as Error);
+    }
+  }
+  function handleBtnCloseCardDetailClick() {
+    setCardDetails(null);
+  }
+
+  function handleCloseCardDetailClick(
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) {
+    const target = event.target as HTMLElement;
+    // if (target.closest('.card')) return;
+    if (target.classList[0] === 'view-cards__list') {
+      setCardDetails(null);
+    }
   }
 
   return (
@@ -123,25 +161,36 @@ export default function Home() {
         pageNumber={pageNumber}
         isLoading={isLoading}
       />
-      <CardsOnPage
-        onHandleBtnClick={handleBtnClick}
-        onButtonChange={handleButtonChange}
-        counter={counter}
-      />
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <Cards respData={responseData?.results || []} counter={submitCounter} />
-      )}
-      <CardsPagination
-        handleShowCards={handleShowCards}
-        onGetNewPage={handleInputSubmit}
-        inputValue={inputValue}
-        pageNumber={pageNumber}
-        isNextPage={isNextPage}
-        isPrevPage={isPrevPage}
-        isLoading={isLoading}
-      />
+      <div className="view-cards">
+        <div className="cards__container" onClick={handleCloseCardDetailClick}>
+          <CardsOnPage
+            onHandleBtnClick={handleBtnClick}
+            onButtonChange={handleButtonChange}
+            counter={counter}
+          />
+          <div className="view-cards__list">
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : (
+              <Cards
+                onHandleCardClick={handleCardClick}
+                respData={responseData?.results || []}
+                counter={submitCounter}
+              />
+            )}
+            <CardsPagination
+              handleShowCards={handleShowCards}
+              onGetNewPage={handleInputSubmit}
+              inputValue={inputValue}
+              pageNumber={pageNumber}
+              isNextPage={isNextPage}
+              isPrevPage={isPrevPage}
+              isLoading={isLoading}
+            />
+          </div>
+        </div>
+        {componentCardDetails}
+      </div>
     </div>
   );
 }

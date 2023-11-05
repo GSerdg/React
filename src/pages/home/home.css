@@ -4,3 +4,23 @@
   flex-direction: column;
   align-items: center;
 }
+
+.view-cards {
+  display: flex;
+  width: 100%;
+  column-gap: 10px;
+}
+
+.view-cards__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cards__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 3 3 60%;
+  border: solid 2px;
+}

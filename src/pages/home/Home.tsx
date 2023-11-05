@@ -9,7 +9,6 @@ import './home.css';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import Cards from '../../components/cards/Cards';
 import CardsOnPage from '../../components/cards-on-page/Cards-on-page';
-// import CardDetails from '../../components/card-details/CardDetails';
 
 export default function Home() {
   const valueLs = localStorage.getItem('inputValue');

@@ -2,8 +2,8 @@ import { useOutletContext, useParams } from 'react-router-dom';
 import { PeopleResult } from '../../types/types';
 import Button from '../button/Button';
 import Card from '../card/Card';
-import './cardDetails.css';
 import { useEffect } from 'react';
+import './cardDetails.css';
 
 interface CardDetailsContext {
   onHandleClick: () => void;

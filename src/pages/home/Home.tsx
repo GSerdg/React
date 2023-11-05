@@ -166,6 +166,7 @@ export default function Home() {
 
   function handleBtnCloseCardDetailClick() {
     setCardDetails(null);
+    navigate(`.`);
   }
 
   function handleCloseCardDetailClick(
@@ -177,6 +178,7 @@ export default function Home() {
       target.classList[0] === 'cards'
     ) {
       setCardDetails(null);
+      navigate(`.`);
     }
   }
 

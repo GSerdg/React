@@ -24,6 +24,8 @@ export default function Home() {
   const [isPrevPage, setIsPrevPage] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [counter, setCounter] = useState(10);
+  const [submitCounter, setSubmitCounter] = useState(10);
+  const [error, setError] = useState(false);
 
   const navigate = useNavigate();
   const { page } = useParams();
@@ -96,9 +98,23 @@ export default function Home() {
     setCounter(counter);
   }
 
+  function handleClick() {
+    setError(true);
+  }
+
+  if (error) {
+    throw new Error('You generate some error');
+  }
+
+  function handleBtnClick() {
+    const page = 1;
+    setSubmitCounter(counter);
+    handleInputSubmit(inputValue, page);
+  }
+
   return (
     <div className="page">
-      <Button />
+      <Button title={'Error'} onHandleClick={handleClick} />
       <Input
         onInputSubmit={handleShowCards}
         onInputChange={handleInputChange}
@@ -106,11 +122,15 @@ export default function Home() {
         pageNumber={pageNumber}
         isLoading={isLoading}
       />
-      <CardsOnPage onButtonChange={handleButtonChange} counter={counter} />
+      <CardsOnPage
+        onHandleBtnClick={handleBtnClick}
+        onButtonChange={handleButtonChange}
+        counter={counter}
+      />
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <Cards respData={responseData?.results || []} counter={counter} />
+        <Cards respData={responseData?.results || []} counter={submitCounter} />
       )}
       <CardsPagination
         handleShowCards={handleShowCards}

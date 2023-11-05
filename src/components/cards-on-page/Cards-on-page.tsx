@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import PaginationBtn from '../pagination-btn/Pagination-btn';
+import Button from '../button/Button';
 
 interface CardsOnPageProps {
+  onHandleBtnClick: () => void;
   onButtonChange: (newCounter: number) => void;
   counter: number;
-
-  /* onGetNewPage: (value: string, page: number) => void;
-  handleShowCards: (page: number, search?: string) => void;
-  isLoading: boolean;
-  inputValue: string;
-  pageNumber: number; */
 }
 
 export default function CardsOnPage(props: CardsOnPageProps) {
@@ -40,15 +36,16 @@ export default function CardsOnPage(props: CardsOnPageProps) {
         id={'prev'}
         onHandleClick={handleClick}
         isDisabled={isPrev}
-        title={'<<'}
+        title={'-'}
       />
       <span className="pagination__page">{props.counter}</span>
       <PaginationBtn
         id={'next'}
         onHandleClick={handleClick}
         isDisabled={isNext}
-        title={'>>'}
+        title={'+'}
       />
+      <Button title={'Set'} onHandleClick={props.onHandleBtnClick} />
     </div>
   );
 }

@@ -1,20 +1,14 @@
-import { useState } from 'react';
 import './button.css';
 
-export default function Button() {
-  const [error, setError] = useState(false);
+interface ButtonProps {
+  onHandleClick: () => void;
+  title: string;
+}
 
-  function handleClick() {
-    setError(true);
-  }
-
-  if (error) {
-    throw new Error('You generate some error');
-  }
-
+export default function Button(props: ButtonProps) {
   return (
-    <button onClick={handleClick} className="button">
-      Error
+    <button onClick={props.onHandleClick} className="button">
+      {props.title}
     </button>
   );
 }

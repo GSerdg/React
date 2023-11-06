@@ -1,41 +1,44 @@
-import { useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { PeopleResult } from '../../types/types';
 import Button from '../button/Button';
-import Card from '../card/Card';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import PeopleServise from '../api/people';
+import CardDetail from '../card/CardDetail';
 import './cardDetails.css';
 
-interface CardDetailsContext {
-  onHandleClick: () => void;
-  getCard: (link: string) => Promise<void>;
-  respData: PeopleResult | undefined;
-  isLoading: boolean;
-  link: string;
-}
-
 export default function CardDetails() {
-  const context = useOutletContext<CardDetailsContext>();
-  let cardComponent = null;
-  const { card } = useParams();
-  let link = context.link;
-  if (card) {
-    link = link.replace(/\d+/, card);
-  }
+  const [detailedCard, setDetailedCard] = useState<PeopleResult>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const { cardId } = useParams();
 
   useEffect(() => {
-    context.getCard(link);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [link]);
+    async function getDetailedCard(id: string) {
+      try {
+        setIsLoading(true);
+        const data = await PeopleServise.getPeopleById(id);
+        setDetailedCard(data);
+      } catch (error) {
+        console.error(error as Error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
-  if (context.respData) {
-    cardComponent = (
-      <Card cardData={context.respData} isDetails={true} className="card" />
-    );
-  }
+    cardId && getDetailedCard(cardId);
+  }, [cardId]);
+
   return (
     <div className="card-details">
-      <Button onHandleClick={context.onHandleClick} title={'Closed'} />
-      {context.isLoading ? <div>Loading...</div> : cardComponent}
+      <Button onHandleClick={() => navigate(-1)} title={'Close'} />
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : detailedCard ? (
+        <CardDetail cardData={detailedCard} />
+      ) : (
+        <div>Loading...</div>
+      )}
     </div>
   );
 }

@@ -1,18 +1,20 @@
+import { useNavigate } from 'react-router-dom';
 import PaginationBtn from '../pagination-btn/Pagination-btn';
+import navigateToPage from '../../shared/navigate';
 
 interface PaginationProps {
-  onGetNewPage: (value: string, page: number) => void;
-  handleShowCards: (page: number, search?: string) => void;
   isNextPage: boolean;
   isPrevPage: boolean;
   isLoading: boolean;
-  inputValue: string;
   pageNumber: number;
 }
 
 export default function CardsPagination(props: PaginationProps) {
+  const navigate = useNavigate();
+
   function handleClick(event: React.FormEvent<HTMLButtonElement>) {
     const target = event.target as HTMLButtonElement;
+
     let newPage = props.pageNumber;
 
     if (target.id === 'prev') {
@@ -23,7 +25,7 @@ export default function CardsPagination(props: PaginationProps) {
       newPage = props.pageNumber + 1;
     }
 
-    props.handleShowCards(newPage, props.inputValue);
+    navigateToPage(navigate, newPage);
   }
 
   return (

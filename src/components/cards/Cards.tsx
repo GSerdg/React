@@ -1,29 +1,104 @@
+import {
+  Outlet,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from 'react-router-dom';
 import { PeopleResult } from '../../types/types';
 import Card from '../card/Card';
+import { useEffect, useState } from 'react';
+import PeopleServise from '../api/people';
+import CardsOnPage from '../cards-on-page/Cards-on-page';
+import CardsPagination from '../cards-pagination/Cards-pagination';
+import navigateToPage from '../../shared/navigate';
 import './cards.css';
 
-interface CardsProps {
-  onHandleCardClick: (link: string) => void;
-  respData: PeopleResult[];
-  counter: number;
+interface CardsContext {
+  setIsLoadingState: (state: boolean) => void;
+  isLoading: boolean;
 }
 
-export default function Cards(props: CardsProps) {
-  const data = props.respData;
+export default function Cards() {
+  const context = useOutletContext<CardsContext>();
+  const [cardsData, setCardsData] = useState<PeopleResult[]>();
+  const [cardsOnPage, setCardsOnPage] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [isNextPage, setIsNextPage] = useState(true);
+  const [isPrevPage, setIsPrevPage] = useState(false);
 
-  const cardsList = data.map((item, index) => {
-    if (index < props.counter) {
-      return (
-        <Card
-          onHandleCardClick={props.onHandleCardClick}
-          cardData={item}
-          key={index}
-          counter={props.counter}
-          className={'card card_active'}
-        />
-      );
+  const navigate = useNavigate();
+  const { page: pageParams } = useParams();
+
+  useEffect(() => {
+    async function getPeoples(pageParams: string) {
+      try {
+        const pageParamsArray = pageParams
+          .split('&')
+          .map((item) => item.split('='));
+        const searchValue =
+          pageParamsArray.length === 2 ? pageParamsArray[0][1] : '';
+        const pageNumber =
+          pageParamsArray.length === 2
+            ? +pageParamsArray[1][1]
+            : +pageParamsArray[0][1];
+
+        context.setIsLoadingState(true);
+        const data = searchValue
+          ? await PeopleServise.getPeopleByName(searchValue, pageNumber)
+          : await PeopleServise.getAllPeople(pageNumber);
+
+        setPageNumber(pageNumber);
+        setCardsData(data.results);
+        setIsNextPage(data?.next === null ? false : true);
+        setIsPrevPage(data?.previous === null ? false : true);
+      } catch (error) {
+        console.error(error as Error);
+      } finally {
+        context.setIsLoadingState(false);
+      }
+    }
+
+    pageParams ? getPeoples(pageParams) : navigateToPage(navigate, 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageParams]);
+
+  const cardsList = cardsData?.map((item, index) => {
+    if (index < cardsOnPage) {
+      return <Card cardData={item} key={item.url} counter={cardsOnPage} />;
     }
   });
 
-  return <div className="cards">{cardsList}</div>;
+  return (
+    <div className="view-cards">
+      <div
+        className="cards__container"
+        onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+          const target = event.target as HTMLElement;
+          if (
+            target.classList[0] === 'view-cards__list' ||
+            target.classList[0] === 'cards'
+          ) {
+            navigate(-1);
+          }
+        }}
+      >
+        <CardsOnPage onButtonChange={setCardsOnPage} counter={cardsOnPage} />
+        <div className="view-cards__list">
+          {context.isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <div className="cards">{cardsList}</div>
+          )}
+          <CardsPagination
+            pageNumber={pageNumber}
+            isNextPage={isNextPage}
+            isPrevPage={isPrevPage}
+            isLoading={context.isLoading}
+          />
+        </div>
+      </div>
+      <Outlet />
+    </div>
+  );
+  return;
 }

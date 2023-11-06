@@ -1,6 +1,5 @@
-import { HashRouter } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import ErrorBoundary from './components/error/Error-boundary';
-import { router } from './components/router/router';
 import './index.css';
 
 function App() {
@@ -8,18 +7,18 @@ function App() {
     <ErrorBoundary>
       <div className="app">
         <h1>React APP</h1>
-        {router()}
+        <Outlet />
       </div>
     </ErrorBoundary>
   );
 }
 
-function WrappedApp() {
+/* function WrappedApp() {
   return (
     <HashRouter>
       <App />
     </HashRouter>
   );
-}
+} */
 
-export default WrappedApp;
+export default App;

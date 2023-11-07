@@ -9,8 +9,8 @@ import {
 import DetailedCards from './components/card-details/DetailedCards';
 import Cards from './components/cards/Cards';
 import Home from './pages/home/Home';
-import NotFound from './pages/not-found/NotFound';
 import './index.css';
+import ErrorComponent from './components/error-component/ErrorComponent';
 
 export const PATHS = {
   HOME: '/',
@@ -20,12 +20,15 @@ export const PATHS = {
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path={PATHS.HOME} element={<Home />} errorElement={<NotFound />}>
+    <Route
+      path={PATHS.HOME}
+      element={<Home />}
+      errorElement={<ErrorComponent />}
+    >
       <Route index element={<Cards />} />
       <Route path={PATHS.PAGE} element={<Cards />}>
         <Route path={PATHS.DETAILS} element={<DetailedCards />} />
       </Route>
-      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );

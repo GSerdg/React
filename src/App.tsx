@@ -1,4 +1,4 @@
-import ErrorBoundary from './components/error/ErrorBoundary';
+import ErrorBoundary from './components/error-boundary/ErrorBoundary';
 import Home from './pages/home/Home';
 import './index.css';
 

@@ -4,7 +4,7 @@ interface CardProps {
   cardData: PeopleResult;
 }
 
-export default function CardDetail(props: CardProps) {
+export default function DetailedCard(props: CardProps) {
   const dataTitle = [
     'gender',
     'birth year',

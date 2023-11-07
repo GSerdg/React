@@ -7,9 +7,9 @@ import {
 import { PeopleResult } from '../../types/types';
 import Card from '../card/Card';
 import { useEffect, useState } from 'react';
-import PeopleServise from '../api/people';
-import CardsOnPage from '../cards-on-page/Cards-on-page';
-import CardsPagination from '../cards-pagination/Cards-pagination';
+import PeopleService from '../api/people';
+import CardsCountInput from '../cards-count-input/CardsCountInput';
+import CardsPagination from '../cards-pagination/CardsPagination';
 import navigateToPage from '../../shared/navigate';
 import './cards.css';
 
@@ -44,8 +44,8 @@ export default function Cards() {
 
         context.setIsLoadingState(true);
         const data = searchValue
-          ? await PeopleServise.getPeopleByName(searchValue, pageNumber)
-          : await PeopleServise.getAllPeople(pageNumber);
+          ? await PeopleService.getPeopleByName(searchValue, pageNumber)
+          : await PeopleService.getAllPeople(pageNumber);
 
         setPageNumber(pageNumber);
         setCardsData(data.results);
@@ -64,7 +64,7 @@ export default function Cards() {
 
   const cardsList = cardsData?.map((item, index) => {
     if (index < cardsOnPage) {
-      return <Card cardData={item} key={item.url} counter={cardsOnPage} />;
+      return <Card cardData={item} key={item.url} />;
     }
   });
 
@@ -78,11 +78,14 @@ export default function Cards() {
             target.classList[0] === 'view-cards__list' ||
             target.classList[0] === 'cards'
           ) {
-            navigate(-1);
+            navigate('../');
           }
         }}
       >
-        <CardsOnPage onButtonChange={setCardsOnPage} counter={cardsOnPage} />
+        <CardsCountInput
+          onButtonChange={setCardsOnPage}
+          counter={cardsOnPage}
+        />
         <div className="view-cards__list">
           {context.isLoading ? (
             <div>Loading...</div>
@@ -90,7 +93,7 @@ export default function Cards() {
             <div className="cards">{cardsList}</div>
           )}
           <CardsPagination
-            pageNumber={pageNumber}
+            currentPage={pageNumber}
             isNextPage={isNextPage}
             isPrevPage={isPrevPage}
             isLoading={context.isLoading}

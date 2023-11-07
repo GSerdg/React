@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import './input.css';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PATHS } from '../router/router';
+import { PATHS } from '../../main';
+import './Input.css';
 
 interface InputProps {
   isLoading: boolean;

@@ -1,5 +1,5 @@
 import { MouseEventHandler } from 'react';
-import './pagination-btn.css';
+import './PaginationBtn.css';
 
 interface PaginationBtn {
   onHandleClick: MouseEventHandler<HTMLButtonElement> | undefined;

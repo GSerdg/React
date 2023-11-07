@@ -1,5 +1,5 @@
 import { NavigateFunction } from 'react-router-dom';
-import { PATHS } from '../components/router/router';
+import { PATHS } from '../main';
 
 export default function navigateToPage(
   navigate: NavigateFunction,

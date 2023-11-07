@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import PaginationBtn from '../pagination-btn/Pagination-btn';
+import PaginationBtn from '../pagination-btn/PaginationBtn';
 import Button from '../button/Button';
 import { useNavigate } from 'react-router-dom';
 import navigateToPage from '../../shared/navigate';
@@ -9,9 +9,9 @@ interface CardsOnPageProps {
   counter: number;
 }
 
-export default function CardsOnPage(props: CardsOnPageProps) {
-  const [isPrev, setIsPrev] = useState(true);
-  const [isNext, setIsNext] = useState(false);
+export default function CardsCountInput(props: CardsOnPageProps) {
+  const [isPrevEnabled, setIsPrev] = useState(true);
+  const [isNextEnabled, setIsNext] = useState(false);
   const [counter, setCounter] = useState(props.counter);
 
   const navigate = useNavigate();
@@ -38,14 +38,14 @@ export default function CardsOnPage(props: CardsOnPageProps) {
       <PaginationBtn
         id={'prev'}
         onHandleClick={handleClick}
-        isDisabled={isPrev}
+        isDisabled={isPrevEnabled}
         title={'-'}
       />
       <span className="pagination__page">{counter}</span>
       <PaginationBtn
         id={'next'}
         onHandleClick={handleClick}
-        isDisabled={isNext}
+        isDisabled={isNextEnabled}
         title={'+'}
       />
       <Button

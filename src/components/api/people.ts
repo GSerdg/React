@@ -3,7 +3,7 @@ import { PeopleResponse, PeopleResult } from '../../types/types';
 
 const URL = `https://swapi.dev/api/people`;
 
-export default class PeopleServise {
+export default class PeopleService {
   static async getAllPeople(page: number) {
     const resp: PeopleResponse = (
       await axios.get(URL, {

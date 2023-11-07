@@ -1,6 +1,6 @@
-import ErrorBoundary from './components/error/Error-boundary';
-import './index.css';
+import ErrorBoundary from './components/error/ErrorBoundary';
 import Home from './pages/home/Home';
+import './index.css';
 
 function App() {
   return (
@@ -12,13 +12,5 @@ function App() {
     </ErrorBoundary>
   );
 }
-
-/* function WrappedApp() {
-  return (
-    <HashRouter>
-      <App />
-    </HashRouter>
-  );
-} */
 
 export default App;

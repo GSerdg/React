@@ -2,11 +2,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PeopleResult } from '../../types/types';
 import Button from '../button/Button';
 import { useEffect, useState } from 'react';
-import PeopleServise from '../api/people';
-import CardDetail from '../card/CardDetail';
-import './cardDetails.css';
+import PeopleService from '../api/people';
+import DetailedCard from '../card/DetailedCard';
+import './DetailedCards.css';
 
-export default function CardDetails() {
+export default function DetailedCards() {
   const [detailedCard, setDetailedCard] = useState<PeopleResult>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,7 +17,7 @@ export default function CardDetails() {
     async function getDetailedCard(id: string) {
       try {
         setIsLoading(true);
-        const data = await PeopleServise.getPeopleById(id);
+        const data = await PeopleService.getPeopleById(id);
         setDetailedCard(data);
       } catch (error) {
         console.error(error as Error);
@@ -31,11 +31,11 @@ export default function CardDetails() {
 
   return (
     <div className="card-details">
-      <Button onHandleClick={() => navigate(-1)} title={'Close'} />
+      <Button onHandleClick={() => navigate('../')} title={'Close'} />
       {isLoading ? (
         <div>Loading...</div>
       ) : detailedCard ? (
-        <CardDetail cardData={detailedCard} />
+        <DetailedCard cardData={detailedCard} />
       ) : (
         <div>Loading...</div>
       )}

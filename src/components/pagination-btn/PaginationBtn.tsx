@@ -14,7 +14,7 @@ export default function PaginationBtn(props: PaginationBtn) {
       id={props.id}
       className="pagination__btn"
       onClick={props.onHandleClick}
-      disabled={!props.isDisabled}
+      disabled={props.isDisabled}
     >
       {props.title}
     </button>

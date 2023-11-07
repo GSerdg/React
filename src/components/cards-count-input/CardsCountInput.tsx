@@ -12,24 +12,26 @@ interface CardsOnPageProps {
 export default function CardsCountInput(props: CardsOnPageProps) {
   const [isPrevEnabled, setIsPrev] = useState(true);
   const [isNextEnabled, setIsNext] = useState(false);
-  const [counter, setCounter] = useState(props.counter);
+  const [cardCount, setCardCount] = useState(props.counter);
 
   const navigate = useNavigate();
+  function setPaginationActivity(value: number) {
+    value === 10 ? setIsNext(false) : setIsNext(true);
+    value === 1 ? setIsPrev(false) : setIsPrev(true);
+  }
 
-  function handleClick(event: React.FormEvent<HTMLButtonElement>) {
-    const target = event.target as HTMLButtonElement;
-    let newCounter = props.counter;
+  function handleClickPrev() {
+    const newCounter = cardCount - 1;
 
-    if (target.id === 'prev') {
-      newCounter = counter - 1;
-    }
+    setPaginationActivity(newCounter);
+    setCardCount(newCounter);
+  }
 
-    if (target.id === 'next') {
-      newCounter = counter + 1;
-    }
-    newCounter === 10 ? setIsNext(false) : setIsNext(true);
-    newCounter === 1 ? setIsPrev(false) : setIsPrev(true);
-    setCounter(newCounter);
+  function handleClickNext() {
+    const newCounter = cardCount + 1;
+
+    setPaginationActivity(newCounter);
+    setCardCount(newCounter);
   }
 
   return (
@@ -37,21 +39,21 @@ export default function CardsCountInput(props: CardsOnPageProps) {
       <span>Choose number items on page</span>
       <PaginationBtn
         id={'prev'}
-        onHandleClick={handleClick}
-        isDisabled={isPrevEnabled}
+        onHandleClick={handleClickPrev}
+        isDisabled={!isPrevEnabled}
         title={'-'}
       />
-      <span className="pagination__page">{counter}</span>
+      <span className="pagination__page">{cardCount}</span>
       <PaginationBtn
         id={'next'}
-        onHandleClick={handleClick}
-        isDisabled={isNextEnabled}
+        onHandleClick={handleClickNext}
+        isDisabled={!isNextEnabled}
         title={'+'}
       />
       <Button
         title={'Set'}
         onHandleClick={() => {
-          props.onButtonChange(counter);
+          props.onButtonChange(cardCount);
           navigateToPage(navigate, 1);
         }}
       />

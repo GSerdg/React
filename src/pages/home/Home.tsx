@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <div className="page">
       <Button title={'Error'} onHandleClick={handleClickErrorBtn} />
-      <Input isLoading={isLoading} />
+      <Input searchInput={isLoading} />
       <Outlet context={{ setIsLoadingState, isLoading }} />
     </div>
   );

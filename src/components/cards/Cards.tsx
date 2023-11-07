@@ -21,8 +21,8 @@ interface CardsContext {
 export default function Cards() {
   const context = useOutletContext<CardsContext>();
   const [cardsData, setCardsData] = useState<PeopleResult[]>();
-  const [cardsOnPage, setCardsOnPage] = useState(10);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [cardsPerPage, setCardsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
 
@@ -30,24 +30,28 @@ export default function Cards() {
   const { page: pageParams } = useParams();
 
   useEffect(() => {
+    function getValuesFromParams(params: string): [string, number] {
+      const pageParamsArray = params.split('&').map((item) => item.split('='));
+      const searchValue =
+        pageParamsArray.length === 2 ? pageParamsArray[0][1] : '';
+      const pageNumber =
+        pageParamsArray.length === 2
+          ? +pageParamsArray[1][1]
+          : +pageParamsArray[0][1];
+
+      return [searchValue, pageNumber];
+    }
+
     async function getPeoples(pageParams: string) {
       try {
-        const pageParamsArray = pageParams
-          .split('&')
-          .map((item) => item.split('='));
-        const searchValue =
-          pageParamsArray.length === 2 ? pageParamsArray[0][1] : '';
-        const pageNumber =
-          pageParamsArray.length === 2
-            ? +pageParamsArray[1][1]
-            : +pageParamsArray[0][1];
+        const searchParams = getValuesFromParams(pageParams);
 
         context.setIsLoadingState(true);
-        const data = searchValue
-          ? await PeopleService.getPeopleByName(searchValue, pageNumber)
-          : await PeopleService.getAllPeople(pageNumber);
+        const data = searchParams[0]
+          ? await PeopleService.getPeopleByName(...searchParams)
+          : await PeopleService.getAllPeople(searchParams[1]);
 
-        setPageNumber(pageNumber);
+        setCurrentPage(searchParams[1]);
         setCardsData(data.results);
         setIsNextPage(data?.next === null ? false : true);
         setIsPrevPage(data?.previous === null ? false : true);
@@ -63,7 +67,7 @@ export default function Cards() {
   }, [pageParams]);
 
   const cardsList = cardsData?.map((item, index) => {
-    if (index < cardsOnPage) {
+    if (index < cardsPerPage) {
       return <Card cardData={item} key={item.url} />;
     }
   });
@@ -83,8 +87,8 @@ export default function Cards() {
         }}
       >
         <CardsCountInput
-          onButtonChange={setCardsOnPage}
-          counter={cardsOnPage}
+          onButtonChange={setCardsPerPage}
+          counter={cardsPerPage}
         />
         <div className="view-cards__list">
           {context.isLoading ? (
@@ -93,7 +97,7 @@ export default function Cards() {
             <div className="cards">{cardsList}</div>
           )}
           <CardsPagination
-            currentPage={pageNumber}
+            currentPage={currentPage}
             isNextPage={isNextPage}
             isPrevPage={isPrevPage}
             isLoading={context.isLoading}

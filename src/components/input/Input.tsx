@@ -4,11 +4,11 @@ import { PATHS } from '../../main';
 import './Input.css';
 
 interface InputProps {
-  isLoading: boolean;
+  searchInput: boolean;
 }
 
 export default function Input(props: InputProps) {
-  const [inputValue, SetValue] = useState(
+  const [inputValue, setInputValue] = useState(
     localStorage.getItem('inputValue') || ''
   );
   const navigate = useNavigate();
@@ -25,14 +25,14 @@ export default function Input(props: InputProps) {
       const pageParams = page.split('&').map((item) => item.split('='));
       const value = pageParams.length === 2 ? pageParams[0][1] : '';
 
-      SetValue(value);
+      setInputValue(value);
     }
   }, [page]);
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;
 
-    SetValue(target.value);
+    setInputValue(target.value);
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -49,7 +49,7 @@ export default function Input(props: InputProps) {
     submitDisable = true;
   }
 
-  if (props.isLoading) {
+  if (props.searchInput) {
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
   }

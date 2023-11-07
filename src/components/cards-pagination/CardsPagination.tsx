@@ -12,18 +12,14 @@ interface PaginationProps {
 export default function CardsPagination(props: PaginationProps) {
   const navigate = useNavigate();
 
-  function handleClick(event: React.FormEvent<HTMLButtonElement>) {
-    const target = event.target as HTMLButtonElement;
+  function handleClickPrev() {
+    const newPage = props.currentPage - 1;
 
-    let newPage = props.currentPage;
+    navigateToPage(navigate, newPage);
+  }
 
-    if (target.id === 'prev') {
-      newPage = props.currentPage - 1;
-    }
-
-    if (target.id === 'next') {
-      newPage = props.currentPage + 1;
-    }
+  function handleClickNext() {
+    const newPage = props.currentPage + 1;
 
     navigateToPage(navigate, newPage);
   }
@@ -33,15 +29,15 @@ export default function CardsPagination(props: PaginationProps) {
       <div className="pagination">
         <PaginationBtn
           id={'prev'}
-          onHandleClick={handleClick}
-          isDisabled={props.isPrevPage}
+          onHandleClick={handleClickPrev}
+          isDisabled={!props.isPrevPage}
           title={'<<'}
         />
         <span className="pagination__page">{props.currentPage}</span>
         <PaginationBtn
           id={'next'}
-          onHandleClick={handleClick}
-          isDisabled={props.isNextPage}
+          onHandleClick={handleClickNext}
+          isDisabled={!props.isNextPage}
           title={'>>'}
         />
       </div>

@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PATHS } from '../../main';
 import './Input.css';
+import { InputContext } from '../../pages/home/Home';
 
 interface InputProps {
   searchInput: boolean;
 }
 
 export default function Input(props: InputProps) {
-  const [inputValue, setInputValue] = useState(
-    localStorage.getItem('inputValue') || ''
-  );
+  const inputContext = useContext(InputContext);
   const navigate = useNavigate();
 
   let nameClass = 'finder';
@@ -25,25 +24,30 @@ export default function Input(props: InputProps) {
       const pageParams = page.split('&').map((item) => item.split('='));
       const value = pageParams.length === 2 ? pageParams[0][1] : '';
 
-      setInputValue(value);
+      inputContext.setInputValue(value);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;
 
-    setInputValue(target.value);
+    inputContext.setInputValue(target.value);
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    inputValue
-      ? navigate(`${PATHS.HOME}search=${inputValue}&page=${pageNumber}`)
+    inputContext.inputValue
+      ? navigate(
+          `${PATHS.HOME}search=${inputContext.inputValue}&page=${pageNumber}`
+        )
       : navigate(`${PATHS.HOME}page=${pageNumber}`);
-    localStorage.setItem('inputValue', inputValue);
+    localStorage.setItem('inputValue', inputContext.inputValue);
   }
 
-  if (inputValue.length !== inputValue.trim().length) {
+  if (
+    inputContext.inputValue.length !== inputContext.inputValue.trim().length
+  ) {
     nameClass = 'finder finder_color';
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
@@ -60,7 +64,7 @@ export default function Input(props: InputProps) {
       <input
         className={nameClass}
         type="text"
-        value={inputValue}
+        value={inputContext.inputValue}
         onChange={handleChange}
       />
       <input

@@ -1,10 +1,11 @@
+import { useContext } from 'react';
 import { PeopleResult } from '../../types/types';
+import { CardDataContext } from '../card-details/DetailedCards';
 
-interface CardProps {
-  cardData: PeopleResult;
-}
+export default function DetailedCard() {
+  const cardDataContext = useContext(CardDataContext);
+  const cardData = cardDataContext.detailedCard;
 
-export default function DetailedCard(props: CardProps) {
   const dataTitle = [
     'gender',
     'birth year',
@@ -15,19 +16,21 @@ export default function DetailedCard(props: CardProps) {
     'skin color',
   ];
 
+  if (!cardData) return null;
+
   const elements = dataTitle.map((item, index) => {
     const propsName = item.split(' ').join('_') as keyof PeopleResult;
     return (
       <p className="description__title" key={index}>
-        {item}: {props.cardData[propsName]}
+        {item}: {cardData[propsName]}
       </p>
     );
   });
 
   return (
-    <div className="card card_active">
+    <div className="card">
       <div className="name">
-        <h3 className="name__title">{props.cardData.name}</h3>
+        <h3 className="name__title">{cardData.name}</h3>
       </div>
       <div className="description">{elements}</div>
     </div>

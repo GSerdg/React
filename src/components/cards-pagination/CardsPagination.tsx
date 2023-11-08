@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import PaginationBtn from '../pagination-btn/PaginationBtn';
 import navigateToPage from '../../shared/navigate';
+import { useContext } from 'react';
+import { InputContext } from '../../pages/home/Home';
 
 interface PaginationProps {
   isNextPage: boolean;
@@ -10,18 +12,20 @@ interface PaginationProps {
 }
 
 export default function CardsPagination(props: PaginationProps) {
+  const inputContext = useContext(InputContext);
+
   const navigate = useNavigate();
 
   function handleClickPrev() {
     const newPage = props.currentPage - 1;
 
-    navigateToPage(navigate, newPage);
+    navigateToPage(navigate, inputContext.inputValue, newPage);
   }
 
   function handleClickNext() {
     const newPage = props.currentPage + 1;
 
-    navigateToPage(navigate, newPage);
+    navigateToPage(navigate, inputContext.inputValue, newPage);
   }
 
   return (

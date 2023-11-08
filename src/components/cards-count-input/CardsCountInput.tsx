@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import PaginationBtn from '../pagination-btn/PaginationBtn';
 import Button from '../button/Button';
 import { useNavigate } from 'react-router-dom';
 import navigateToPage from '../../shared/navigate';
+import { InputContext } from '../../pages/home/Home';
 
 interface CardsOnPageProps {
   onButtonChange: (newCounter: number) => void;
@@ -10,6 +11,8 @@ interface CardsOnPageProps {
 }
 
 export default function CardsCountInput(props: CardsOnPageProps) {
+  const inputContext = useContext(InputContext);
+
   const [isPrevEnabled, setIsPrev] = useState(true);
   const [isNextEnabled, setIsNext] = useState(false);
   const [cardCount, setCardCount] = useState(props.counter);
@@ -54,7 +57,7 @@ export default function CardsCountInput(props: CardsOnPageProps) {
         title={'Set'}
         onHandleClick={() => {
           props.onButtonChange(cardCount);
-          navigateToPage(navigate, 1);
+          navigateToPage(navigate, inputContext.inputValue, 1);
         }}
       />
     </div>

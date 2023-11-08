@@ -25,6 +25,7 @@ export default function Cards() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
+  const [isCloseDetailed, setIsCloseDetaled] = useState(false);
 
   const navigate = useNavigate();
   const { page: pageParams } = useParams();
@@ -68,7 +69,7 @@ export default function Cards() {
 
   const cardsList = cardsData?.map((item, index) => {
     if (index < cardsPerPage) {
-      return <Card cardData={item} key={item.url} />;
+      return <Card cardData={item} setIsCloseDetailed={setIsCloseDetaled} />;
     }
   });
 
@@ -82,7 +83,7 @@ export default function Cards() {
             target.classList[0] === 'view-cards__list' ||
             target.classList[0] === 'cards'
           ) {
-            navigate('../');
+            setIsCloseDetaled(true);
           }
         }}
       >
@@ -104,7 +105,7 @@ export default function Cards() {
           />
         </div>
       </div>
-      <Outlet />
+      <Outlet context={{ isCloseDetailed: isCloseDetailed }} />
     </div>
   );
   return;

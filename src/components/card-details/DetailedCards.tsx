@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { PeopleResult } from '../../types/types';
 import Button from '../button/Button';
 import { useEffect, useState } from 'react';
@@ -6,7 +6,13 @@ import PeopleService from '../api/people';
 import DetailedCard from '../card/DetailedCard';
 import './DetailedCards.css';
 
+interface DetailedCardsContext {
+  isCloseDetailed: boolean;
+}
+
 export default function DetailedCards() {
+  const context = useOutletContext<DetailedCardsContext>();
+
   const [detailedCard, setDetailedCard] = useState<PeopleResult>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,7 +35,7 @@ export default function DetailedCards() {
     cardId && getDetailedCard(cardId);
   }, [cardId]);
 
-  return (
+  return context.isCloseDetailed ? null : (
     <div className="card-details">
       <Button onHandleClick={() => navigate('../')} title={'Close'} />
       {isLoading ? (

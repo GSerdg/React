@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PATHS } from '../../main';
-import './Input.css';
 import { InputContext } from '../../pages/home/Home';
+import './Input.css';
 
 interface InputProps {
   searchInput: boolean;

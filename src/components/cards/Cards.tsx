@@ -4,14 +4,14 @@ import {
   useOutletContext,
   useParams,
 } from 'react-router-dom';
-import { PeopleResult } from '../../types/types';
 import Card from '../card/Card';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PeopleService from '../api/people';
 import CardsCountInput from '../cards-count-input/CardsCountInput';
 import CardsPagination from '../cards-pagination/CardsPagination';
 import navigateToPage from '../../shared/navigate';
 import { InputContext } from '../../pages/home/Home';
+import { CardsDataContext } from './CardsWrapper';
 import './cards.css';
 
 interface CardsContext {
@@ -19,19 +19,11 @@ interface CardsContext {
   isLoading: boolean;
 }
 
-interface CardsDataObjContext {
-  cardsData: PeopleResult[] | undefined;
-}
-
-export const CardsDataContext = createContext<CardsDataObjContext>(
-  {} as CardsDataObjContext
-);
-
 export default function Cards() {
   const context = useOutletContext<CardsContext>();
   const inputContext = useContext(InputContext);
+  const cardsDataContext = useContext(CardsDataContext);
 
-  const [cardsData, setCardsData] = useState<PeopleResult[]>();
   const [cardsPerPage, setCardsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [isNextPage, setIsNextPage] = useState(true);
@@ -64,7 +56,7 @@ export default function Cards() {
           : await PeopleService.getAllPeople(searchParams[1]);
 
         setCurrentPage(searchParams[1]);
-        setCardsData(data.results);
+        cardsDataContext.setCardsData(data.results);
         setIsNextPage(data?.next === null ? false : true);
         setIsPrevPage(data?.previous === null ? false : true);
       } catch (error) {
@@ -80,48 +72,45 @@ export default function Cards() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageParams]);
 
-  const cardsList = cardsData?.map((item, index) => {
+  const cardsList = cardsDataContext.cardsData?.map((item, index) => {
     if (index < cardsPerPage) {
       return <Card cardData={item} setIsCloseDetailed={setIsCloseDetaled} />;
     }
   });
 
   return (
-    <CardsDataContext.Provider value={{ cardsData }}>
-      <div className="view-cards">
-        <div
-          className="cards__container"
-          onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            const target = event.target as HTMLElement;
-            if (
-              target.classList[0] === 'view-cards__list' ||
-              target.classList[0] === 'cards'
-            ) {
-              setIsCloseDetaled(true);
-            }
-          }}
-        >
-          <CardsCountInput
-            onButtonChange={setCardsPerPage}
-            counter={cardsPerPage}
+    <div className="view-cards">
+      <div
+        className="cards__container"
+        onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+          const target = event.target as HTMLElement;
+          if (
+            target.classList[0] === 'view-cards__list' ||
+            target.classList[0] === 'cards'
+          ) {
+            setIsCloseDetaled(true);
+          }
+        }}
+      >
+        <CardsCountInput
+          onButtonChange={setCardsPerPage}
+          counter={cardsPerPage}
+        />
+        <div className="view-cards__list">
+          {context.isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <div className="cards">{cardsList}</div>
+          )}
+          <CardsPagination
+            currentPage={currentPage}
+            isNextPage={isNextPage}
+            isPrevPage={isPrevPage}
+            isLoading={context.isLoading}
           />
-          <div className="view-cards__list">
-            {context.isLoading ? (
-              <div>Loading...</div>
-            ) : (
-              <div className="cards">{cardsList}</div>
-            )}
-            <CardsPagination
-              currentPage={currentPage}
-              isNextPage={isNextPage}
-              isPrevPage={isPrevPage}
-              isLoading={context.isLoading}
-            />
-          </div>
         </div>
-        <Outlet context={{ isCloseDetailed: isCloseDetailed, currentPage }} />
       </div>
-    </CardsDataContext.Provider>
+      <Outlet context={{ isCloseDetailed: isCloseDetailed, currentPage }} />
+    </div>
   );
-  return;
 }

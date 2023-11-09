@@ -7,10 +7,10 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import DetailedCards from './components/card-details/DetailedCards';
-import Cards from './components/cards/Cards';
 import Home from './pages/home/Home';
 import './index.css';
 import ErrorComponent from './components/error-component/ErrorComponent';
+import CardsWrapper from './components/cards/CardsWrapper';
 
 export const PATHS = {
   HOME: '/',
@@ -25,8 +25,8 @@ const router = createBrowserRouter(
       element={<Home />}
       errorElement={<ErrorComponent />}
     >
-      <Route index element={<Cards />} />
-      <Route path={PATHS.PAGE} element={<Cards />}>
+      <Route index element={<CardsWrapper />} />
+      <Route path={PATHS.PAGE} element={<CardsWrapper />}>
         <Route path={PATHS.DETAILS} element={<DetailedCards />} />
       </Route>
     </Route>

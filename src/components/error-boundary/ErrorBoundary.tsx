@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import './error-boundary.css';
+import './ErrorBoundary.css';
+
 interface ErrorProps {
   children: JSX.Element;
 }

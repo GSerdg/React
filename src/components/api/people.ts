@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { PeopleResponse, PeopleResult } from '../../types/types';
 
-export default class PeopleServise {
+const URL = `https://swapi.dev/api/people`;
+
+export default class PeopleService {
   static async getAllPeople(page: number) {
     const resp: PeopleResponse = (
-      await axios.get(`https://swapi.dev/api/people`, {
+      await axios.get(URL, {
         params: {
           page,
         },
@@ -16,7 +18,7 @@ export default class PeopleServise {
 
   static async getPeopleByName(name: string, page: number) {
     const resp: PeopleResponse = (
-      await axios.get(`https://swapi.dev/api/people`, {
+      await axios.get(URL, {
         params: {
           search: name,
           page,
@@ -27,8 +29,8 @@ export default class PeopleServise {
     return resp;
   }
 
-  static async getPeopleByLink(link: string) {
-    const resp: PeopleResult = (await axios.get(link)).data;
+  static async getPeopleById(id: string) {
+    const resp: PeopleResult = (await axios.get(`${URL}/${id}`)).data;
 
     return resp;
   }

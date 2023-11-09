@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PATHS } from '../../main';
 import { InputContext } from '../../pages/home/Home';
 import './Input.css';
 
@@ -38,10 +37,8 @@ export default function Input(props: InputProps) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     inputContext.inputValue
-      ? navigate(
-          `${PATHS.HOME}search=${inputContext.inputValue}&page=${pageNumber}`
-        )
-      : navigate(`${PATHS.HOME}page=${pageNumber}`);
+      ? navigate(`/search=${inputContext.inputValue}&page=${pageNumber}`)
+      : navigate(`/page=${pageNumber}`);
     localStorage.setItem('inputValue', inputContext.inputValue);
   }
 

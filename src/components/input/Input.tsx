@@ -1,70 +1,74 @@
-import React from 'react';
-import './input.css';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { PATHS } from '../../main';
+import './Input.css';
 
 interface InputProps {
-  onInputSubmit: (value: string) => void;
+  searchInput: boolean;
 }
 
-interface InputState {
-  value: string;
-}
+export default function Input(props: InputProps) {
+  const [inputValue, setInputValue] = useState(
+    localStorage.getItem('inputValue') || ''
+  );
+  const navigate = useNavigate();
 
-class Input extends React.Component<InputProps, InputState> {
-  constructor(props: InputProps) {
-    super(props);
+  let nameClass = 'finder';
+  let submitClass = 'submit-button';
+  let submitDisable = false;
+  const pageNumber = 1;
 
-    const valueLs = localStorage.getItem('inputValue');
-    valueLs !== null
-      ? (this.state = { value: valueLs })
-      : (this.state = { value: '' });
+  const { page } = useParams();
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  useEffect(() => {
+    if (page) {
+      const pageParams = page.split('&').map((item) => item.split('='));
+      const value = pageParams.length === 2 ? pageParams[0][1] : '';
 
-  componentDidMount(): void {
-    this.props.onInputSubmit(this.state.value);
-  }
-
-  handleChange(event: React.FormEvent<HTMLInputElement>) {
-    const target = event.target as HTMLInputElement;
-    this.setState({ value: target.value });
-  }
-
-  handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    this.props.onInputSubmit(this.state.value);
-  }
-
-  render() {
-    let nameClass = 'finder';
-    let submitClass = 'submit-button';
-    let submitDisable = false;
-    if (this.state.value.length !== this.state.value.trim().length) {
-      nameClass = 'finder finder_color';
-      submitClass = 'submit-button submit-button_disable';
-      submitDisable = true;
+      setInputValue(value);
     }
+  }, [page]);
 
-    return (
-      <form className="form" onSubmit={this.handleSubmit}>
-        <label>Find</label>
-        <input
-          className={nameClass}
-          type="text"
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
-        <input
-          className={submitClass}
-          type="submit"
-          value="Find"
-          disabled={submitDisable}
-        />
-      </form>
-    );
+  function handleChange(event: React.FormEvent<HTMLInputElement>) {
+    const target = event.target as HTMLInputElement;
+
+    setInputValue(target.value);
   }
-}
 
-export default Input;
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    inputValue
+      ? navigate(`${PATHS.HOME}search=${inputValue}&page=${pageNumber}`)
+      : navigate(`${PATHS.HOME}page=${pageNumber}`);
+    localStorage.setItem('inputValue', inputValue);
+  }
+
+  if (inputValue.length !== inputValue.trim().length) {
+    nameClass = 'finder finder_color';
+    submitClass = 'submit-button submit-button_disable';
+    submitDisable = true;
+  }
+
+  if (props.searchInput) {
+    submitClass = 'submit-button submit-button_disable';
+    submitDisable = true;
+  }
+
+  return (
+    <form className="form" onSubmit={handleSubmit}>
+      <label>Find</label>
+      <input
+        className={nameClass}
+        type="text"
+        value={inputValue}
+        onChange={handleChange}
+      />
+      <input
+        className={submitClass}
+        type="submit"
+        value="Find"
+        disabled={submitDisable}
+      />
+    </form>
+  );
+}

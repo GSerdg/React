@@ -1,28 +1,112 @@
-import React from 'react';
+import {
+  Outlet,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from 'react-router-dom';
 import { PeopleResult } from '../../types/types';
 import Card from '../card/Card';
+import { useEffect, useState } from 'react';
+import PeopleService from '../api/people';
+import CardsCountInput from '../cards-count-input/CardsCountInput';
+import CardsPagination from '../cards-pagination/CardsPagination';
+import navigateToPage from '../../shared/navigate';
 import './cards.css';
 
-interface CardsProps {
-  respData: PeopleResult[];
+interface CardsContext {
+  setIsLoadingState: (state: boolean) => void;
+  isLoading: boolean;
 }
 
-interface CardsState {}
+export default function Cards() {
+  const context = useOutletContext<CardsContext>();
+  const [cardsData, setCardsData] = useState<PeopleResult[]>();
+  const [cardsPerPage, setCardsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isNextPage, setIsNextPage] = useState(true);
+  const [isPrevPage, setIsPrevPage] = useState(false);
+  const [isCloseDetailed, setIsCloseDetaled] = useState(false);
 
-class Cards extends React.Component<CardsProps, CardsState> {
-  constructor(props: CardsProps) {
-    super(props);
-  }
+  const navigate = useNavigate();
+  const { page: pageParams } = useParams();
 
-  render() {
-    const data = this.props.respData;
+  useEffect(() => {
+    function getValuesFromParams(params: string): [string, number] {
+      const pageParamsArray = params.split('&').map((item) => item.split('='));
+      const searchValue =
+        pageParamsArray.length === 2 ? pageParamsArray[0][1] : '';
+      const pageNumber =
+        pageParamsArray.length === 2
+          ? +pageParamsArray[1][1]
+          : +pageParamsArray[0][1];
 
-    const cardsList = data.map((item, index) => (
-      <Card cardData={item} key={index} />
-    ));
+      return [searchValue, pageNumber];
+    }
 
-    return <div className="cards">{cardsList}</div>;
-  }
+    async function getPeoples(pageParams: string) {
+      try {
+        const searchParams = getValuesFromParams(pageParams);
+
+        context.setIsLoadingState(true);
+        const data = searchParams[0]
+          ? await PeopleService.getPeopleByName(...searchParams)
+          : await PeopleService.getAllPeople(searchParams[1]);
+
+        setCurrentPage(searchParams[1]);
+        setCardsData(data.results);
+        setIsNextPage(data?.next === null ? false : true);
+        setIsPrevPage(data?.previous === null ? false : true);
+      } catch (error) {
+        console.error(error as Error);
+      } finally {
+        context.setIsLoadingState(false);
+      }
+    }
+
+    pageParams ? getPeoples(pageParams) : navigateToPage(navigate, 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageParams]);
+
+  const cardsList = cardsData?.map((item, index) => {
+    if (index < cardsPerPage) {
+      return <Card cardData={item} setIsCloseDetailed={setIsCloseDetaled} />;
+    }
+  });
+
+  return (
+    <div className="view-cards">
+      <div
+        className="cards__container"
+        onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+          const target = event.target as HTMLElement;
+          if (
+            target.classList[0] === 'view-cards__list' ||
+            target.classList[0] === 'cards'
+          ) {
+            setIsCloseDetaled(true);
+          }
+        }}
+      >
+        <CardsCountInput
+          onButtonChange={setCardsPerPage}
+          counter={cardsPerPage}
+        />
+        <div className="view-cards__list">
+          {context.isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <div className="cards">{cardsList}</div>
+          )}
+          <CardsPagination
+            currentPage={currentPage}
+            isNextPage={isNextPage}
+            isPrevPage={isPrevPage}
+            isLoading={context.isLoading}
+          />
+        </div>
+      </div>
+      <Outlet context={{ isCloseDetailed: isCloseDetailed }} />
+    </div>
+  );
+  return;
 }
-
-export default Cards;

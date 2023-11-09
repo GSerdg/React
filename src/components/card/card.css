@@ -8,6 +8,10 @@
   background-color: #dbdbdb;
 }
 
+.card_active {
+  cursor: pointer;
+}
+
 .name {
   padding: 10px;
 }

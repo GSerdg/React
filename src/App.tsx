@@ -1,5 +1,5 @@
-import ErrorBoundary from './components/error/Error-boundary';
-import Page from './components/page/Page';
+import ErrorBoundary from './components/error-boundary/ErrorBoundary';
+import Home from './pages/home/Home';
 import './index.css';
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
     <ErrorBoundary>
       <div className="app">
         <h1>React APP</h1>
-        <Page />
+        <Home />
       </div>
     </ErrorBoundary>
   );

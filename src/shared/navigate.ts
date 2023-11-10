@@ -1,5 +1,4 @@
 import { NavigateFunction } from 'react-router-dom';
-import { PATHS } from '../main';
 
 export default function navigateToPage(
   navigate: NavigateFunction,
@@ -7,6 +6,6 @@ export default function navigateToPage(
   pageNumber: number
 ) {
   inputValue
-    ? navigate(`${PATHS.HOME}search=${inputValue}&page=${pageNumber}`)
-    : navigate(`${PATHS.HOME}page=${pageNumber}`);
+    ? navigate(`/search=${inputValue}&page=${pageNumber}`)
+    : navigate(`/page=${pageNumber}`);
 }

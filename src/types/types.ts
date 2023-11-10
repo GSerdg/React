@@ -24,4 +24,4 @@ export interface PeopleResult {
   vehicles: string[];
 }
 
-type Gender = 'male' | 'female' | 'n/a';
+type Gender = 'male' | 'female' | 'n/a' | 'none';

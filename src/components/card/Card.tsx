@@ -24,6 +24,7 @@ export default function Card(props: CardProps) {
   const peopleId = props.cardData.url.match(/\d+/);
   return (
     <div
+      data-testid="people-card"
       className="card card_active"
       onClick={() => {
         props.setIsCloseDetailed(false);

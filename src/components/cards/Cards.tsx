@@ -13,6 +13,7 @@ import navigateToPage from '../../shared/navigate';
 import { InputContext } from '../../pages/home/Home';
 import { CardsDataContext } from './CardsWrapper';
 import './cards.css';
+import NotFound from '../../pages/not-found/NotFound';
 
 interface CardsContext {
   setIsLoadingState: (state: boolean) => void;
@@ -61,6 +62,7 @@ export default function Cards() {
         setIsPrevPage(data?.previous === null ? false : true);
       } catch (error) {
         console.error(error as Error);
+        cardsDataContext.setCardsData([]);
       } finally {
         context.setIsLoadingState(false);
       }
@@ -74,7 +76,13 @@ export default function Cards() {
 
   const cardsList = cardsDataContext.cardsData?.map((item, index) => {
     if (index < cardsPerPage) {
-      return <Card cardData={item} setIsCloseDetailed={setIsCloseDetaled} />;
+      return (
+        <Card
+          cardData={item}
+          setIsCloseDetailed={setIsCloseDetaled}
+          key={item.url}
+        />
+      );
     }
   });
 
@@ -100,7 +108,9 @@ export default function Cards() {
           {context.isLoading ? (
             <div>Loading...</div>
           ) : (
-            <div className="cards">{cardsList}</div>
+            <div className="cards">
+              {cardsList && cardsList.length !== 0 ? cardsList : <NotFound />}
+            </div>
           )}
           <CardsPagination
             currentPage={currentPage}

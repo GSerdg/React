@@ -52,7 +52,7 @@ export default function DetailedCards() {
 
   return (
     <CardDataContext.Provider value={{ detailedCard }}>
-      <div className="card-details">
+      <div className="card-details" data-testid={'cardDetailsContainer'}>
         <Button
           onHandleClick={() =>
             navigateToPage(

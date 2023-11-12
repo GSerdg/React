@@ -86,14 +86,15 @@ describe('Detailed Card', () => {
         typeof PeopleService.getPeopleById
       >
     ).mockResolvedValue(response);
+
     navigateToPage as MockedFunction<typeof navigateToPage>;
     card = 4;
+
     render(<Mocktest />);
 
     const closeBtn = screen.getByRole('button');
 
     expect(closeBtn).toHaveTextContent('Close');
-
     await userEvent.click(closeBtn);
     expect(navigateToPage).toHaveBeenCalledTimes(1);
   });
@@ -123,5 +124,18 @@ describe('Detailed Card', () => {
     dataTitle.map((item) => {
       expect(screen.getByText(new RegExp(item))).toBeInTheDocument();
     });
+  });
+
+  it('API call to fetch detailed information', async () => {
+    (
+      PeopleService.getPeopleById as MockedFunction<
+        typeof PeopleService.getPeopleById
+      >
+    ).mockResolvedValue(response);
+    navigateToPage as MockedFunction<typeof navigateToPage>;
+    card = 4;
+    render(<Mocktest />);
+
+    expect(PeopleService.getPeopleById).toHaveBeenCalledTimes(4);
   });
 });

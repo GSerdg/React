@@ -1,12 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import Card from './Card';
 import { BrowserRouter } from 'react-router-dom';
-import { SetStateAction } from 'react';
-
-const mockOutletContext = {
-  isLoading: false,
-};
 
 const Mocktest = () => {
   return (
@@ -33,19 +28,19 @@ const Mocktest = () => {
           starships: [],
           url: 'https://swapi.dev/api/people/2/',
           vehicles: [],
-        }} setIsCloseDetailed={function (value: SetStateAction<boolean>): void {
-          throw new Error('Function not implemented.');
-        } }      />
+        }}
+        setIsCloseDetailed={vi.fn()}
+      />
     </BrowserRouter>
   );
 };
 
-describe('Cards component', () => {
-  it('Render', () => {
-    // ARRANGE
+describe('Card component', () => {
+  it('View all data title', () => {
     render(<Mocktest />);
-    // ACT
-    // EXPECT
-    expect(screen.getByRole('')).toBeInTheDocument();
+
+    expect(screen.getByRole('heading')).toHaveTextContent('C-3PO');
+    expect(screen.getByText(/gender: n\/a/)).toBeInTheDocument();
+    expect(screen.getByText(/birth year: 112BBY/)).toBeInTheDocument();
   });
 });

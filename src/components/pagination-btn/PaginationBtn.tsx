@@ -11,6 +11,7 @@ interface PaginationBtn {
 export default function PaginationBtn(props: PaginationBtn) {
   return (
     <button
+      data-testid={props.id}
       id={props.id}
       className="pagination__btn"
       onClick={props.onHandleClick}

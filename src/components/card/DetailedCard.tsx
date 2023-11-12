@@ -28,7 +28,7 @@ export default function DetailedCard() {
   });
 
   return (
-    <div className="card">
+    <div className="card" data-testid="detailed-card">
       <div className="name">
         <h3 className="name__title">{cardData.name}</h3>
       </div>

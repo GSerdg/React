@@ -6,12 +6,17 @@ import CardsWrapper from './CardsWrapper';
 import PeopleService from '../api/people';
 import { PeopleResponse } from '../../types/types';
 
+let loading = false;
+
 vi.mock('react-router-dom', async (importOriginal) => {
   const mod = await importOriginal<typeof import('react-router-dom')>();
   return {
     ...mod,
     useOutletContext: () => ({
-      isLoading: false,
+      setIsLoadingState(state: boolean) {
+        loading = state;
+      },
+      isLoading: loading,
     }),
     useParams: () => ({
       page: 1,
@@ -31,14 +36,11 @@ const Mocktest = () => {
 
 /* describe('Cards component', () => {
   it('Render', () => {
-    // ARRANGE
     render(<Mocktest />);
-    // ACT
-    // EXPECT
     expect(screen.getAllByRole('button').length).toBe(5);
   });
-});
- */
+}); */
+
 describe('Get cards', () => {
   let responseAll: PeopleResponse;
 
@@ -116,13 +118,9 @@ describe('Get cards', () => {
         typeof PeopleService.getAllPeople
       >
     ).mockResolvedValue(responseAll);
-    // mock.mockResolvedValue(responseAll);
-    /*     const data = await PeopleService.getAllPeople(1);
-    console.log(data);
- */ render(<Mocktest />);
-    // screen.debug();
+    render(<Mocktest />);
     const peoples = await screen.findAllByTestId('people-card');
-    // screen.debug();
+    screen.debug();
     expect(peoples.length).toBe(3);
   });
 });

@@ -37,9 +37,9 @@ describe('Home', () => {
 
   it('throw error', async () => {
     render(<Mocktest />);
+
     const button = screen.getByText(/Error/);
     await userEvent.click(button);
-    screen.debug();
 
     expect(
       screen.getByRole('heading', {

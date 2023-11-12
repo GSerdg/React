@@ -116,6 +116,7 @@ describe('Detailed Card', () => {
       >
     ).mockResolvedValue(response);
     card = 4;
+
     render(<Mocktest />);
 
     const detailedCard = await screen.findByTestId('detailed-card');
@@ -134,6 +135,7 @@ describe('Detailed Card', () => {
     ).mockResolvedValue(response);
     navigateToPage as MockedFunction<typeof navigateToPage>;
     card = 4;
+
     render(<Mocktest />);
 
     expect(PeopleService.getPeopleById).toHaveBeenCalledTimes(4);

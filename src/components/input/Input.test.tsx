@@ -40,6 +40,7 @@ describe('Input', () => {
 
   it('get value localStorage width mount', async () => {
     localStorage.setItem('inputValue', 'Bob');
+
     expect(localStorage.getItem('inputValue')).toBe('Bob');
 
     render(<Mocktest />);

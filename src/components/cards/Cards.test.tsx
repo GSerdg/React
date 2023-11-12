@@ -154,6 +154,7 @@ describe('Get cards', () => {
     for (let i = 0; i < 8; i++) {
       await userEvent.click(screen.getByText('-'));
     }
+
     await userEvent.click(screen.getByText('Set'));
     expect((await screen.findAllByTestId('people-card')).length).toBe(2);
 
@@ -174,6 +175,7 @@ describe('Get cards', () => {
     const header = await screen.findByRole('heading', {
       level: 2,
     });
+
     expect(header).toHaveTextContent(/Page not found/);
   });
 

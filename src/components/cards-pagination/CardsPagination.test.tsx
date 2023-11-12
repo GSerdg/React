@@ -43,7 +43,9 @@ const setupMyTest = () => {
 describe('Cards pagination', () => {
   it('click next button', async () => {
     const { router } = setupMyTest();
+
     expect(router.state.location.pathname).toEqual('/page=3');
+
     const nextBtn = screen.getByTestId('next');
 
     userEvent.click(nextBtn);
@@ -51,9 +53,12 @@ describe('Cards pagination', () => {
       expect(router.state.location.pathname).toEqual('/search=A&page=4');
     });
   });
+
   it('click prev button', async () => {
     const { router } = setupMyTest();
+
     expect(router.state.location.pathname).toEqual('/page=3');
+
     const prevBtn = screen.getByTestId('prev');
 
     userEvent.click(prevBtn);

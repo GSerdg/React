@@ -14,10 +14,8 @@ const Mocktest = () => {
 
 describe('App', () => {
   it('Renders hello world', () => {
-    // ARRANGE
     render(<Mocktest />);
-    // ACT
-    // EXPECT
+
     expect(
       screen.getByRole('heading', {
         level: 1,

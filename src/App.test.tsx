@@ -20,6 +20,6 @@ describe('App', () => {
       screen.getByRole('heading', {
         level: 1,
       })
-    ).toHaveTextContent('React APPs');
+    ).toHaveTextContent('React APP');
   });
 });

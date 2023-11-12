@@ -59,6 +59,7 @@ export default function Input(props: InputProps) {
     <form className="form" onSubmit={handleSubmit}>
       <label>Find</label>
       <input
+        data-testid={'inputField'}
         className={nameClass}
         type="text"
         value={inputContext.inputValue}

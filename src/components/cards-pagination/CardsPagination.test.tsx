@@ -45,10 +45,8 @@ describe('Cards pagination', () => {
     const { router } = setupMyTest();
     expect(router.state.location.pathname).toEqual('/page=3');
     const nextBtn = screen.getByTestId('next');
-    screen.debug();
 
-    await userEvent.click(nextBtn);
-    screen.debug();
+    userEvent.click(nextBtn);
     await waitFor(() => {
       expect(router.state.location.pathname).toEqual('/search=A&page=4');
     });

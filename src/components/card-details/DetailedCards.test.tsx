@@ -1,11 +1,10 @@
 import { MockedFunction, beforeEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
-
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import DetailedCards from './DetailedCards';
 import PeopleService from '../api/people';
 import { PeopleResult } from '../../types/types';
-import { act } from 'react-dom/test-utils';
 import navigateToPage from '../../shared/navigate';
 
 let card: number | undefined = 5;
@@ -70,9 +69,7 @@ describe('Detailed Card', () => {
       >
     ).mockResolvedValue(response);
     card = 4;
-    act(() => {
-      render(<Mocktest />);
-    });
+    render(<Mocktest />);
 
     expect(screen.getByText('Loading...')).toBeInTheDocument();
     expect(screen.queryByTestId('detailed-card')).toBeNull;
@@ -91,15 +88,40 @@ describe('Detailed Card', () => {
     ).mockResolvedValue(response);
     navigateToPage as MockedFunction<typeof navigateToPage>;
     card = 4;
-    act(() => {
-      render(<Mocktest />);
-    });
+    render(<Mocktest />);
 
     const closeBtn = screen.getByRole('button');
 
     expect(closeBtn).toHaveTextContent('Close');
 
-    fireEvent.click(closeBtn);
+    await userEvent.click(closeBtn);
     expect(navigateToPage).toHaveBeenCalledTimes(1);
+  });
+
+  it('View card data', async () => {
+    const dataTitle = [
+      'gender',
+      'birth year',
+      'height',
+      'eye color',
+      'hair color',
+      'mass',
+      'skin color',
+    ];
+
+    (
+      PeopleService.getPeopleById as MockedFunction<
+        typeof PeopleService.getPeopleById
+      >
+    ).mockResolvedValue(response);
+    card = 4;
+    render(<Mocktest />);
+
+    const detailedCard = await screen.findByTestId('detailed-card');
+    expect(detailedCard).toBeInTheDocument;
+
+    dataTitle.map((item) => {
+      expect(screen.getByText(new RegExp(item))).toBeInTheDocument();
+    });
   });
 });

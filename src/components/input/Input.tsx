@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InputContext } from '../../pages/home/Home';
-import './Input.css';
+import './Inputs.css';
 
 interface InputProps {
   searchInput: boolean;

@@ -10,7 +10,9 @@ import DetailedCards from './components/card-details/DetailedCards';
 import './index.css';
 import ErrorComponent from './components/error-component/ErrorComponent';
 import CardsWrapper from './components/cards/CardsWrapper';
+import { Provider } from 'react-redux';
 import App from './App';
+import { store } from './app/store';
 
 export const PATHS = {
   HOME: '/',
@@ -35,6 +37,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

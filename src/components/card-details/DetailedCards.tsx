@@ -1,11 +1,12 @@
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { PeopleResult } from '../../types/types';
 import Button from '../button/Button';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import PeopleService from '../api/people';
 import DetailedCard from '../card/DetailedCard';
 import navigateToPage from '../../shared/navigate';
-import { InputContext } from '../../pages/home/Home';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 import './DetailedCards.css';
 
 interface DetailedCardsContext {
@@ -23,7 +24,7 @@ export const CardDataContext = createContext<CardDataObjContext>(
 
 export default function DetailedCards() {
   const context = useOutletContext<DetailedCardsContext>();
-  const inputContext = useContext(InputContext);
+  const inputValue = useSelector((state: RootState) => state.input.inputValue);
 
   const [detailedCard, setDetailedCard] = useState<PeopleResult>();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,18 +49,14 @@ export default function DetailedCards() {
   }, [cardId]);
 
   context.isCloseDetailed &&
-    navigateToPage(navigate, inputContext.inputValue, context.currentPage);
+    navigateToPage(navigate, inputValue, context.currentPage);
 
   return (
     <CardDataContext.Provider value={{ detailedCard }}>
       <div className="card-details" data-testid={'cardDetailsContainer'}>
         <Button
           onHandleClick={() =>
-            navigateToPage(
-              navigate,
-              inputContext.inputValue,
-              context.currentPage
-            )
+            navigateToPage(navigate, inputValue, context.currentPage)
           }
           title={'Close'}
         />

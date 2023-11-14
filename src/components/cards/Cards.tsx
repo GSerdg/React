@@ -10,10 +10,11 @@ import PeopleService from '../api/people';
 import CardsCountInput from '../cards-count-input/CardsCountInput';
 import CardsPagination from '../cards-pagination/CardsPagination';
 import navigateToPage from '../../shared/navigate';
-import { InputContext } from '../../pages/home/Home';
 import { CardsDataContext } from './CardsWrapper';
-import './cards.css';
 import NotFound from '../../pages/not-found/NotFound';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
+import './cards.css';
 
 interface CardsContext {
   setIsLoadingState: (state: boolean) => void;
@@ -22,7 +23,7 @@ interface CardsContext {
 
 export default function Cards() {
   const context = useOutletContext<CardsContext>();
-  const inputContext = useContext(InputContext);
+  const inputValue = useSelector((state: RootState) => state.input.inputValue);
   const cardsDataContext = useContext(CardsDataContext);
 
   const [cardsPerPage, setCardsPerPage] = useState(10);
@@ -70,7 +71,7 @@ export default function Cards() {
 
     pageParams
       ? getPeoples(pageParams)
-      : navigateToPage(navigate, inputContext.inputValue, 1);
+      : navigateToPage(navigate, inputValue, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageParams]);
 

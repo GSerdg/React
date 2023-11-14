@@ -16,9 +16,6 @@ export const InputContext = createContext<InputObjContext>(
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [inputValue, setInputValue] = useState(
-    localStorage.getItem('inputValue') || ''
-  );
 
   if (error) {
     throw new Error('You generate some error');
@@ -33,12 +30,10 @@ export default function Home() {
   }
 
   return (
-    <InputContext.Provider value={{ inputValue, setInputValue }}>
-      <div className="page">
-        <Button title={'Error'} onHandleClick={handleClickErrorBtn} />
-        <Input searchInput={isLoading} />
-        <Outlet context={{ setIsLoadingState, isLoading }} />
-      </div>
-    </InputContext.Provider>
+    <div className="page">
+      <Button title={'Error'} onHandleClick={handleClickErrorBtn} />
+      <Input searchInput={isLoading} />
+      <Outlet context={{ setIsLoadingState, isLoading }} />
+    </div>
   );
 }

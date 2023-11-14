@@ -1,6 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { InputContext } from '../../pages/home/Home';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
+import { setInputValue } from '../../app/inputSlice';
 import './Inputs.css';
 
 interface InputProps {
@@ -8,7 +10,8 @@ interface InputProps {
 }
 
 export default function Input(props: InputProps) {
-  const inputContext = useContext(InputContext);
+  const inputValue = useSelector((state: RootState) => state.input.inputValue);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   let nameClass = 'finder';
@@ -23,28 +26,25 @@ export default function Input(props: InputProps) {
       const pageParams = page.split('&').map((item) => item.split('='));
       const value = pageParams.length === 2 ? pageParams[0][1] : '';
 
-      inputContext.setInputValue(value);
+      dispatch(setInputValue(value));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;
-
-    inputContext.setInputValue(target.value);
+    dispatch(setInputValue(target.value));
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    inputContext.inputValue
-      ? navigate(`/search=${inputContext.inputValue}&page=${pageNumber}`)
+    inputValue
+      ? navigate(`/search=${inputValue}&page=${pageNumber}`)
       : navigate(`/page=${pageNumber}`);
-    localStorage.setItem('inputValue', inputContext.inputValue);
+    localStorage.setItem('inputValue', inputValue);
   }
 
-  if (
-    inputContext.inputValue.length !== inputContext.inputValue.trim().length
-  ) {
+  if (inputValue.length !== inputValue.trim().length) {
     nameClass = 'finder finder_color';
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
@@ -62,7 +62,7 @@ export default function Input(props: InputProps) {
         data-testid={'inputField'}
         className={nameClass}
         type="text"
-        value={inputContext.inputValue}
+        value={inputValue}
         onChange={handleChange}
       />
       <input

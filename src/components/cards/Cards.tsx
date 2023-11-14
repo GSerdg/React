@@ -24,9 +24,11 @@ interface CardsContext {
 export default function Cards() {
   const context = useOutletContext<CardsContext>();
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
+  const cardsPerPage = useSelector(
+    (state: RootState) => state.cardsPerPage.cardsPerPageValue
+  );
   const cardsDataContext = useContext(CardsDataContext);
 
-  const [cardsPerPage, setCardsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
@@ -101,10 +103,7 @@ export default function Cards() {
           }
         }}
       >
-        <CardsCountInput
-          onButtonChange={setCardsPerPage}
-          counter={cardsPerPage}
-        />
+        <CardsCountInput />
         <div className="view-cards__list">
           {context.isLoading ? (
             <div>Loading...</div>

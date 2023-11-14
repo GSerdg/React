@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export interface CounterState {
+export interface InputState {
   inputValue: string;
 }
 
-const initialState: CounterState = {
+const initialState: InputState = {
   inputValue: localStorage.getItem('inputValue') || '',
 };
 

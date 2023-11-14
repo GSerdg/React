@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import inputReducer from './inputSlice';
+import cardsPerPageReducer from './cardsPerPageSlice';
 
 export const store = configureStore({
   reducer: {
     input: inputReducer,
+    cardsPerPage: cardsPerPageReducer,
   },
 });
 

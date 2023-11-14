@@ -3,19 +3,19 @@ import PaginationBtn from '../pagination-btn/PaginationBtn';
 import Button from '../button/Button';
 import { useNavigate } from 'react-router-dom';
 import navigateToPage from '../../shared/navigate';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
+import { setCardsPerPage } from '../../app/cardsPerPageSlice';
 
-interface CardsOnPageProps {
-  onButtonChange: (newCounter: number) => void;
-  counter: number;
-}
-
-export default function CardsCountInput(props: CardsOnPageProps) {
+export default function CardsCountInput() {
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
+  const cardsPerPage = useSelector(
+    (state: RootState) => state.cardsPerPage.cardsPerPageValue
+  );
+  const dispatch = useDispatch();
   const [isPrevEnabled, setIsPrev] = useState(true);
   const [isNextEnabled, setIsNext] = useState(false);
-  const [cardCount, setCardCount] = useState(props.counter);
+  const [cardCount, setCardCount] = useState(cardsPerPage);
 
   const navigate = useNavigate();
   function setPaginationActivity(value: number) {
@@ -56,7 +56,7 @@ export default function CardsCountInput(props: CardsOnPageProps) {
       <Button
         title={'Set'}
         onHandleClick={() => {
-          props.onButtonChange(cardCount);
+          dispatch(setCardsPerPage(cardCount));
           navigateToPage(navigate, inputValue, 1);
         }}
       />

@@ -27,7 +27,7 @@ describe('Home', () => {
     expect(button[1]).toHaveAttribute('value', 'Find');
   });
 
-  it('Have text input', () => {
+  it('Should have search input', () => {
     render(<Mocktest />);
 
     const input = screen.getByTestId('inputField');
@@ -35,7 +35,7 @@ describe('Home', () => {
     expect(input).toBeInTheDocument();
   });
 
-  it('throw error', async () => {
+  it('Should throw error', async () => {
     render(<Mocktest />);
 
     const button = screen.getByText(/Error/);

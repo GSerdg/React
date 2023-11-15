@@ -19,27 +19,27 @@ export default function CardsPagination(props: PaginationProps) {
   function handleClickPrev() {
     const newPage = props.currentPage - 1;
 
-    navigateToPage(navigate, inputContext.inputValue, newPage);
+    navigateToPage(navigate, inputContext?.inputValue, newPage);
   }
 
   function handleClickNext() {
     const newPage = props.currentPage + 1;
 
-    navigateToPage(navigate, inputContext.inputValue, newPage);
+    navigateToPage(navigate, inputContext?.inputValue, newPage);
   }
 
   return (
     !props.isLoading && (
       <div className="pagination">
         <PaginationBtn
-          id={'prev'}
+          testid={'prev'}
           onHandleClick={handleClickPrev}
           isDisabled={!props.isPrevPage}
           title={'<<'}
         />
         <span className="pagination__page">{props.currentPage}</span>
         <PaginationBtn
-          id={'next'}
+          testid={'next'}
           onHandleClick={handleClickNext}
           isDisabled={!props.isNextPage}
           title={'>>'}

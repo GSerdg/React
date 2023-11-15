@@ -6,7 +6,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import DetailedCards from './components/card-details/DetailedCards';
+import DetailedCards from './components/card-details/DetailedCard';
 import './index.css';
 import ErrorComponent from './components/error-component/ErrorComponent';
 import CardsWrapper from './components/cards/CardsWrapper';

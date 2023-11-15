@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { PeopleResult } from '../../types/types';
-import { CardDataContext } from '../card-details/DetailedCards';
+import { CardDataContext } from '../card-details/DetailedCard';
 
 export default function DetailedCard() {
   const cardDataContext = useContext(CardDataContext);

@@ -6,20 +6,17 @@ import PeopleService from '../api/people';
 import DetailedCard from '../card/DetailedCard';
 import navigateToPage from '../../shared/navigate';
 import { InputContext } from '../../pages/home/Home';
-import './DetailedCards.css';
+import './DetailedCard.css';
 
 interface DetailedCardsContext {
-  isCloseDetailed: boolean;
   currentPage: number;
 }
 
-interface CardDataObjContext {
+interface CardData {
   detailedCard: PeopleResult | undefined;
 }
 
-export const CardDataContext = createContext<CardDataObjContext>(
-  {} as CardDataObjContext
-);
+export const CardDataContext = createContext<CardData | undefined>(undefined);
 
 export default function DetailedCards() {
   const context = useOutletContext<DetailedCardsContext>();
@@ -47,20 +44,17 @@ export default function DetailedCards() {
     cardId && getDetailedCard(cardId);
   }, [cardId]);
 
-  context.isCloseDetailed &&
-    navigateToPage(navigate, inputContext.inputValue, context.currentPage);
-
   return (
     <CardDataContext.Provider value={{ detailedCard }}>
       <div className="card-details" data-testid={'cardDetailsContainer'}>
         <Button
-          onHandleClick={() =>
+          onHandleClick={() => {
             navigateToPage(
               navigate,
-              inputContext.inputValue,
+              inputContext?.inputValue,
               context.currentPage
-            )
-          }
+            );
+          }}
           title={'Close'}
         />
         {isLoading ? (

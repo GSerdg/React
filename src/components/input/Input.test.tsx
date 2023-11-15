@@ -20,7 +20,7 @@ const Mocktest = () => {
 };
 
 describe('Input', () => {
-  it('set value in localStorage', async () => {
+  it('should set value in localStorage', async () => {
     render(<Mocktest />);
 
     expect(localStorage.getItem('inputValue')).toBe(null);
@@ -38,7 +38,7 @@ describe('Input', () => {
     expect(localStorage.getItem('inputValue')).toBe('An');
   });
 
-  it('get value localStorage width mount', async () => {
+  it('should get value localStorage width mount', async () => {
     localStorage.setItem('inputValue', 'Bob');
 
     expect(localStorage.getItem('inputValue')).toBe('Bob');

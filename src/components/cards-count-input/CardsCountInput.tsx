@@ -41,14 +41,14 @@ export default function CardsCountInput(props: CardsOnPageProps) {
     <div className="pagination">
       <span>Choose number items on page</span>
       <PaginationBtn
-        id={'prev'}
+        testid={'prev'}
         onHandleClick={handleClickPrev}
         isDisabled={!isPrevEnabled}
         title={'-'}
       />
       <span className="pagination__page">{cardCount}</span>
       <PaginationBtn
-        id={'next'}
+        testid={'next'}
         onHandleClick={handleClickNext}
         isDisabled={!isNextEnabled}
         title={'+'}
@@ -57,7 +57,7 @@ export default function CardsCountInput(props: CardsOnPageProps) {
         title={'Set'}
         onHandleClick={() => {
           props.onButtonChange(cardCount);
-          navigateToPage(navigate, inputContext.inputValue, 1);
+          navigateToPage(navigate, inputContext?.inputValue, 1);
         }}
       />
     </div>

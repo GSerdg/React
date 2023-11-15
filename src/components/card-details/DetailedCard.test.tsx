@@ -2,7 +2,7 @@ import { MockedFunction, beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, useParams } from 'react-router-dom';
-import DetailedCards from './DetailedCard';
+import { DetailedCards } from './DetailedCard';
 import PeopleService from '../api/people';
 import navigateToPage from '../../shared/navigate';
 import { responseById } from '../../test/mockData';
@@ -136,6 +136,8 @@ describe('Detailed Card', () => {
 
     render(<Mocktest />);
 
+    const detailedCard = await screen.findByTestId('detailed-card');
+    expect(detailedCard).toBeInTheDocument;
     expect(PeopleService.getPeopleById).toHaveBeenCalledTimes(4);
   });
 });

@@ -3,7 +3,6 @@ import { PeopleResult } from '../../types/types';
 import Button from '../button/Button';
 import { createContext, useContext, useEffect, useState } from 'react';
 import PeopleService from '../api/people';
-import DetailedCard from '../card/DetailedCard';
 import navigateToPage from '../../shared/navigate';
 import { InputContext } from '../../pages/home/Home';
 import './DetailedCard.css';
@@ -18,7 +17,7 @@ interface CardData {
 
 export const CardDataContext = createContext<CardData | undefined>(undefined);
 
-export default function DetailedCards() {
+export function DetailedCards() {
   const context = useOutletContext<DetailedCardsContext>();
   const inputContext = useContext(InputContext);
 
@@ -66,5 +65,40 @@ export default function DetailedCards() {
         )}
       </div>
     </CardDataContext.Provider>
+  );
+}
+
+export function DetailedCard() {
+  const cardDataContext = useContext(CardDataContext);
+  const cardData = cardDataContext?.detailedCard;
+
+  const dataTitle = [
+    'gender',
+    'birth year',
+    'height',
+    'eye color',
+    'hair color',
+    'mass',
+    'skin color',
+  ];
+
+  if (!cardData) return null;
+
+  const elements = dataTitle.map((item, index) => {
+    const propsName = item.split(' ').join('_') as keyof PeopleResult;
+    return (
+      <p className="description__title" key={index}>
+        {item}: {cardData[propsName]}
+      </p>
+    );
+  });
+
+  return (
+    <div className="card" data-testid="detailed-card">
+      <div className="name">
+        <h3 className="name__title">{cardData.name}</h3>
+      </div>
+      <div className="description">{elements}</div>
+    </div>
   );
 }

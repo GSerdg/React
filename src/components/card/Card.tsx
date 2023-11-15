@@ -4,7 +4,6 @@ import './card.css';
 
 interface CardProps {
   cardData: PeopleResult;
-  setIsCloseDetailed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Card(props: CardProps) {
@@ -24,9 +23,9 @@ export default function Card(props: CardProps) {
   const peopleId = props.cardData.url.match(/\d+/);
   return (
     <div
+      data-testid="people-card"
       className="card card_active"
       onClick={() => {
-        props.setIsCloseDetailed(false);
         navigate(`./${peopleId}`);
       }}
     >

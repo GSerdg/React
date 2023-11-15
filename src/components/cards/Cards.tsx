@@ -4,14 +4,16 @@ import {
   useOutletContext,
   useParams,
 } from 'react-router-dom';
-import { PeopleResult } from '../../types/types';
 import Card from '../card/Card';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PeopleService from '../api/people';
 import CardsCountInput from '../cards-count-input/CardsCountInput';
 import CardsPagination from '../cards-pagination/CardsPagination';
 import navigateToPage from '../../shared/navigate';
+import { InputContext } from '../../pages/home/Home';
+import { CardsDataContext } from './CardsWrapper';
 import './cards.css';
+import NotFound from '../../pages/not-found/NotFound';
 
 interface CardsContext {
   setIsLoadingState: (state: boolean) => void;
@@ -20,12 +22,13 @@ interface CardsContext {
 
 export default function Cards() {
   const context = useOutletContext<CardsContext>();
-  const [cardsData, setCardsData] = useState<PeopleResult[]>();
+  const inputContext = useContext(InputContext);
+  const cardsDataContext = useContext(CardsDataContext);
+
   const [cardsPerPage, setCardsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
-  const [isCloseDetailed, setIsCloseDetaled] = useState(false);
 
   const navigate = useNavigate();
   const { page: pageParams } = useParams();
@@ -53,23 +56,26 @@ export default function Cards() {
           : await PeopleService.getAllPeople(searchParams[1]);
 
         setCurrentPage(searchParams[1]);
-        setCardsData(data.results);
+        cardsDataContext?.setCardsData(data.results);
         setIsNextPage(data?.next === null ? false : true);
         setIsPrevPage(data?.previous === null ? false : true);
       } catch (error) {
         console.error(error as Error);
+        cardsDataContext?.setCardsData([]);
       } finally {
         context.setIsLoadingState(false);
       }
     }
 
-    pageParams ? getPeoples(pageParams) : navigateToPage(navigate, 1);
+    pageParams
+      ? getPeoples(pageParams)
+      : navigateToPage(navigate, inputContext?.inputValue, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageParams]);
 
-  const cardsList = cardsData?.map((item, index) => {
+  const cardsList = cardsDataContext?.cardsData?.map((item, index) => {
     if (index < cardsPerPage) {
-      return <Card cardData={item} setIsCloseDetailed={setIsCloseDetaled} />;
+      return <Card cardData={item} key={item.url} />;
     }
   });
 
@@ -83,7 +89,7 @@ export default function Cards() {
             target.classList[0] === 'view-cards__list' ||
             target.classList[0] === 'cards'
           ) {
-            setIsCloseDetaled(true);
+            navigateToPage(navigate, inputContext?.inputValue, currentPage);
           }
         }}
       >
@@ -95,7 +101,9 @@ export default function Cards() {
           {context.isLoading ? (
             <div>Loading...</div>
           ) : (
-            <div className="cards">{cardsList}</div>
+            <div className="cards">
+              {cardsList && cardsList.length !== 0 ? cardsList : <NotFound />}
+            </div>
           )}
           <CardsPagination
             currentPage={currentPage}
@@ -105,8 +113,11 @@ export default function Cards() {
           />
         </div>
       </div>
-      <Outlet context={{ isCloseDetailed: isCloseDetailed }} />
+      <Outlet
+        context={{
+          currentPage,
+        }}
+      />
     </div>
   );
-  return;
 }

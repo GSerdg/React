@@ -6,11 +6,11 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import DetailedCards from './components/card-details/DetailedCards';
-import Cards from './components/cards/Cards';
-import Home from './pages/home/Home';
+import DetailedCards from './components/card-details/DetailedCard';
 import './index.css';
 import ErrorComponent from './components/error-component/ErrorComponent';
+import CardsWrapper from './components/cards/CardsWrapper';
+import App from './App';
 
 export const PATHS = {
   HOME: '/',
@@ -22,11 +22,11 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
       path={PATHS.HOME}
-      element={<Home />}
+      element={<App />}
       errorElement={<ErrorComponent />}
     >
-      <Route index element={<Cards />} />
-      <Route path={PATHS.PAGE} element={<Cards />}>
+      <Route index element={<CardsWrapper />} />
+      <Route path={PATHS.PAGE} element={<CardsWrapper />}>
         <Route path={PATHS.DETAILS} element={<DetailedCards />} />
       </Route>
     </Route>

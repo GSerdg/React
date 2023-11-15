@@ -5,7 +5,7 @@ import CardsWrapper from './CardsWrapper';
 import PeopleService from '../api/people';
 import { PeopleResponse } from '../../types/types';
 import { userEvent } from '@testing-library/user-event';
-import DetailedCards from '../card-details/DetailedCard';
+import { DetailedCards } from '../card-details/DetailedCard';
 import { responseAll, responseById } from '../../test/mockData';
 
 vi.mock('react-router-dom', async (importOriginal) => {

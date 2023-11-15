@@ -13,7 +13,7 @@ const Mocktest = () => {
 };
 
 describe('App', () => {
-  it('Renders hello world', () => {
+  it('Should renders', () => {
     render(<Mocktest />);
 
     expect(

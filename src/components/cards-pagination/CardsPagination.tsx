@@ -31,14 +31,14 @@ export default function CardsPagination(props: PaginationProps) {
     !props.isLoading && (
       <div className="pagination">
         <PaginationBtn
-          id={'prev'}
+          testid={'prev'}
           onHandleClick={handleClickPrev}
           isDisabled={!props.isPrevPage}
           title={'<<'}
         />
         <span className="pagination__page">{props.currentPage}</span>
         <PaginationBtn
-          id={'next'}
+          testid={'next'}
           onHandleClick={handleClickNext}
           isDisabled={!props.isNextPage}
           title={'>>'}

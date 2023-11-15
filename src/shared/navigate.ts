@@ -2,7 +2,7 @@ import { NavigateFunction } from 'react-router-dom';
 
 export default function navigateToPage(
   navigate: NavigateFunction,
-  inputValue: string,
+  inputValue: string | undefined,
   pageNumber: number
 ) {
   inputValue

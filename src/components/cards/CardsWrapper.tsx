@@ -7,8 +7,8 @@ interface CardsDataObjContext {
   setCardsData: (state: PeopleResult[]) => void;
 }
 
-export const CardsDataContext = createContext<CardsDataObjContext>(
-  {} as CardsDataObjContext
+export const CardsDataContext = createContext<CardsDataObjContext | undefined>(
+  undefined
 );
 
 export default function CardsWrapper() {

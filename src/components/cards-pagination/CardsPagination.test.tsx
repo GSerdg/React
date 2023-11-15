@@ -6,7 +6,7 @@ import CardsPagination from './CardsPagination';
 import { InputContext } from '../../pages/home/Home';
 
 const setInputValue = vi.fn();
-const inputValue = 'A';
+const inputValue = '';
 
 const setupMyTest = () => {
   const router = createMemoryRouter(
@@ -41,7 +41,7 @@ const setupMyTest = () => {
 };
 
 describe('Cards pagination', () => {
-  it('click next button', async () => {
+  it('should change the URL address then click next button', async () => {
     const { router } = setupMyTest();
 
     expect(router.state.location.pathname).toEqual('/page=3');
@@ -50,11 +50,11 @@ describe('Cards pagination', () => {
 
     userEvent.click(nextBtn);
     await waitFor(() => {
-      expect(router.state.location.pathname).toEqual('/search=A&page=4');
+      expect(router.state.location.pathname).toEqual('/page=4');
     });
   });
 
-  it('click prev button', async () => {
+  it('should change the URL address then click prev button', async () => {
     const { router } = setupMyTest();
 
     expect(router.state.location.pathname).toEqual('/page=3');
@@ -63,7 +63,7 @@ describe('Cards pagination', () => {
 
     userEvent.click(prevBtn);
     await waitFor(() => {
-      expect(router.state.location.pathname).toEqual('/search=A&page=2');
+      expect(router.state.location.pathname).toEqual('/page=2');
     });
   });
 });

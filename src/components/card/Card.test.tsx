@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import Card from './Card';
 import { BrowserRouter } from 'react-router-dom';
@@ -29,14 +29,13 @@ const Mocktest = () => {
           url: 'https://swapi.dev/api/people/2/',
           vehicles: [],
         }}
-        setIsCloseDetailed={vi.fn()}
       />
     </BrowserRouter>
   );
 };
 
 describe('Card component', () => {
-  it('View all data title', () => {
+  it('Should view all data title', () => {
     render(<Mocktest />);
 
     expect(screen.getByRole('heading')).toHaveTextContent('C-3PO');

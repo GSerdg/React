@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
@@ -13,6 +13,8 @@ export default function Input(props: InputProps) {
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [valueState, setValueState] = useState(inputValue);
 
   let nameClass = 'finder';
   let submitClass = 'submit-button';
@@ -33,18 +35,19 @@ export default function Input(props: InputProps) {
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;
-    dispatch(setInputValue(target.value));
+    setValueState(target.value);
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    inputValue
-      ? navigate(`/search=${inputValue}&page=${pageNumber}`)
+    valueState
+      ? navigate(`/search=${valueState}&page=${pageNumber}`)
       : navigate(`/page=${pageNumber}`);
-    localStorage.setItem('inputValue', inputValue);
+    localStorage.setItem('inputValue', valueState);
+    dispatch(setInputValue(valueState));
   }
 
-  if (inputValue.length !== inputValue.trim().length) {
+  if (valueState.length !== valueState.trim().length) {
     nameClass = 'finder finder_color';
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
@@ -62,7 +65,7 @@ export default function Input(props: InputProps) {
         data-testid={'inputField'}
         className={nameClass}
         type="text"
-        value={inputValue}
+        value={valueState}
         onChange={handleChange}
       />
       <input

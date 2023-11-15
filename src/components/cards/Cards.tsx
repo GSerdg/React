@@ -32,7 +32,6 @@ export default function Cards() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
-  const [isCloseDetailed, setIsCloseDetaled] = useState(false);
 
   const navigate = useNavigate();
   const { page: pageParams } = useParams();
@@ -60,12 +59,12 @@ export default function Cards() {
           : await PeopleService.getAllPeople(searchParams[1]);
 
         setCurrentPage(searchParams[1]);
-        cardsDataContext.setCardsData(data.results);
+        cardsDataContext?.setCardsData(data.results);
         setIsNextPage(data?.next === null ? false : true);
         setIsPrevPage(data?.previous === null ? false : true);
       } catch (error) {
         console.error(error as Error);
-        cardsDataContext.setCardsData([]);
+        cardsDataContext?.setCardsData([]);
       } finally {
         context.setIsLoadingState(false);
       }
@@ -77,15 +76,9 @@ export default function Cards() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageParams]);
 
-  const cardsList = cardsDataContext.cardsData?.map((item, index) => {
+  const cardsList = cardsDataContext?.cardsData?.map((item, index) => {
     if (index < cardsPerPage) {
-      return (
-        <Card
-          cardData={item}
-          setIsCloseDetailed={setIsCloseDetaled}
-          key={item.url}
-        />
-      );
+      return <Card cardData={item} key={item.url} />;
     }
   });
 
@@ -99,7 +92,7 @@ export default function Cards() {
             target.classList[0] === 'view-cards__list' ||
             target.classList[0] === 'cards'
           ) {
-            setIsCloseDetaled(true);
+            navigateToPage(navigate, inputValue, currentPage);
           }
         }}
       >
@@ -120,7 +113,11 @@ export default function Cards() {
           />
         </div>
       </div>
-      <Outlet context={{ isCloseDetailed: isCloseDetailed, currentPage }} />
+      <Outlet
+        context={{
+          currentPage,
+        }}
+      />
     </div>
   );
 }

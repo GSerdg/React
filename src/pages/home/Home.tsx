@@ -9,8 +9,8 @@ interface InputObjContext {
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const InputContext = createContext<InputObjContext>(
-  {} as InputObjContext
+export const InputContext = createContext<InputObjContext | undefined>(
+  undefined
 );
 
 export default function Home() {

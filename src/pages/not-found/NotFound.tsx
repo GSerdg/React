@@ -5,7 +5,7 @@ export default function NotFound() {
   const navigate = useNavigate();
   return (
     <>
-      <h2>Page not found</h2>
+      <h2>Not found</h2>
       <Button
         onHandleClick={() => {
           localStorage.setItem('inputValue', '');

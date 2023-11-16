@@ -5,16 +5,16 @@ import {
   useParams,
 } from 'react-router-dom';
 import Card from '../card/Card';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PeopleService from '../api/people';
 import CardsCountInput from '../cards-count-input/CardsCountInput';
 import CardsPagination from '../cards-pagination/CardsPagination';
 import navigateToPage from '../../shared/navigate';
-import { CardsDataContext } from './CardsWrapper';
 import NotFound from '../../pages/not-found/NotFound';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import './cards.css';
+import { setCardsData } from '../../app/cardsSlice';
 
 interface CardsContext {
   setIsLoadingState: (state: boolean) => void;
@@ -23,16 +23,17 @@ interface CardsContext {
 
 export default function Cards() {
   const context = useOutletContext<CardsContext>();
+
+  const cardsData = useSelector((state: RootState) => state.cards.cardsData);
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
   const cardsPerPage = useSelector(
-    (state: RootState) => state.cardsPerPage.cardsPerPageValue
+    (state: RootState) => state.cards.cardsPerPageValue
   );
-  const cardsDataContext = useContext(CardsDataContext);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { page: pageParams } = useParams();
 
@@ -59,12 +60,12 @@ export default function Cards() {
           : await PeopleService.getAllPeople(searchParams[1]);
 
         setCurrentPage(searchParams[1]);
-        cardsDataContext?.setCardsData(data.results);
+        dispatch(setCardsData(data.results));
         setIsNextPage(data?.next === null ? false : true);
         setIsPrevPage(data?.previous === null ? false : true);
       } catch (error) {
         console.error(error as Error);
-        cardsDataContext?.setCardsData([]);
+        dispatch(setCardsData([]));
       } finally {
         context.setIsLoadingState(false);
       }
@@ -76,7 +77,7 @@ export default function Cards() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageParams]);
 
-  const cardsList = cardsDataContext?.cardsData?.map((item, index) => {
+  const cardsList = cardsData?.map((item, index) => {
     if (index < cardsPerPage) {
       return <Card cardData={item} key={item.url} />;
     }

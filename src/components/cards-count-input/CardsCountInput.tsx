@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import navigateToPage from '../../shared/navigate';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { setCardsPerPage } from '../../app/cardsPerPageSlice';
+import { setCardsPerPage } from '../../app/cardsSlice';
 
 export default function CardsCountInput() {
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
   const cardsPerPage = useSelector(
-    (state: RootState) => state.cardsPerPage.cardsPerPageValue
+    (state: RootState) => state.cards.cardsPerPageValue
   );
   const dispatch = useDispatch();
   const [isPrevEnabled, setIsPrev] = useState(true);

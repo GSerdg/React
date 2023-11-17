@@ -4,11 +4,15 @@ import { PeopleResult } from '../types/types';
 export interface CardsState {
   cardsData: PeopleResult[] | undefined;
   cardsPerPageValue: number;
+  // isNextPage: boolean;
+  // isPrevPage: boolean;
 }
 
 const initialState: CardsState = {
   cardsData: undefined,
   cardsPerPageValue: 10,
+  // isNextPage: true,
+  // isPrevPage: false,
 };
 
 export const cardsSlice = createSlice({
@@ -21,6 +25,13 @@ export const cardsSlice = createSlice({
     setCardsPerPage: (state, action) => {
       state.cardsPerPageValue = action.payload;
     },
+    /*     setIsNextPage: (state, action) => {
+      state.isNextPage = action.payload;
+    },
+    setIsPrevPage: (state, action) => {
+      state.isPrevPage = action.payload;
+    },
+ */
   },
 });
 

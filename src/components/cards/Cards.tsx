@@ -1,30 +1,17 @@
-import {
-  Outlet,
-  useNavigate,
-  useOutletContext,
-  useParams,
-} from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import Card from '../card/Card';
+import * as React from 'react';
 import { useEffect, useState } from 'react';
-import PeopleService from '../api/people';
+import { useGetAllPeopleQuery } from '../api/people';
 import CardsCountInput from '../cards-count-input/CardsCountInput';
 import CardsPagination from '../cards-pagination/CardsPagination';
 import navigateToPage from '../../shared/navigate';
 import NotFound from '../../pages/not-found/NotFound';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import './cards.css';
-import { setCardsData } from '../../app/cardsSlice';
-
-interface CardsContext {
-  setIsLoadingState: (state: boolean) => void;
-  isLoading: boolean;
-}
 
 export default function Cards() {
-  const context = useOutletContext<CardsContext>();
-
-  const cardsData = useSelector((state: RootState) => state.cards.cardsData);
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
   const cardsPerPage = useSelector(
     (state: RootState) => state.cards.cardsPerPageValue
@@ -33,9 +20,15 @@ export default function Cards() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { page: pageParams } = useParams();
+
+  const { data, isFetching } = useGetAllPeopleQuery(currentPage);
+
+  useEffect(() => {
+    setIsNextPage(data?.next === null ? false : true);
+    setIsPrevPage(data?.previous === null ? false : true);
+  }, [data]);
 
   useEffect(() => {
     function getValuesFromParams(params: string): [string, number] {
@@ -51,24 +44,14 @@ export default function Cards() {
     }
 
     async function getPeoples(pageParams: string) {
-      try {
-        const searchParams = getValuesFromParams(pageParams);
+      const searchParams = getValuesFromParams(pageParams);
 
-        context.setIsLoadingState(true);
-        const data = searchParams[0]
+      //context.setIsLoadingState(true);
+      /* const data = searchParams[0]
           ? await PeopleService.getPeopleByName(...searchParams)
           : await PeopleService.getAllPeople(searchParams[1]);
-
-        setCurrentPage(searchParams[1]);
-        dispatch(setCardsData(data.results));
-        setIsNextPage(data?.next === null ? false : true);
-        setIsPrevPage(data?.previous === null ? false : true);
-      } catch (error) {
-        console.error(error as Error);
-        dispatch(setCardsData([]));
-      } finally {
-        context.setIsLoadingState(false);
-      }
+ */
+      setCurrentPage(searchParams[1]);
     }
 
     pageParams
@@ -77,7 +60,7 @@ export default function Cards() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageParams]);
 
-  const cardsList = cardsData?.map((item, index) => {
+  const cardsList = data?.results.map((item, index) => {
     if (index < cardsPerPage) {
       return <Card cardData={item} key={item.url} />;
     }
@@ -99,7 +82,7 @@ export default function Cards() {
       >
         <CardsCountInput />
         <div className="view-cards__list">
-          {context.isLoading ? (
+          {isFetching ? (
             <div>Loading...</div>
           ) : (
             <div className="cards">
@@ -110,7 +93,7 @@ export default function Cards() {
             currentPage={currentPage}
             isNextPage={isNextPage}
             isPrevPage={isPrevPage}
-            isLoading={context.isLoading}
+            isLoading={isFetching}
           />
         </div>
       </div>

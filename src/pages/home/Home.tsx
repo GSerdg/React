@@ -21,10 +21,6 @@ export default function Home() {
     throw new Error('You generate some error');
   }
 
-  function setIsLoadingState(state: boolean) {
-    setIsLoading(state);
-  }
-
   function handleClickErrorBtn() {
     setError(true);
   }
@@ -33,7 +29,7 @@ export default function Home() {
     <div className="page">
       <Button title={'Error'} onHandleClick={handleClickErrorBtn} />
       <Input searchInput={isLoading} />
-      <Outlet context={{ setIsLoadingState, isLoading }} />
+      <Outlet />
     </div>
   );
 }

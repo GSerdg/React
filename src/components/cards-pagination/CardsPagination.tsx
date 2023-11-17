@@ -3,6 +3,7 @@ import PaginationBtn from '../pagination-btn/PaginationBtn';
 import navigateToPage from '../../shared/navigate';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
+import { useGetAllPeopleQuery } from '../api/people';
 
 interface PaginationProps {
   isNextPage: boolean;
@@ -12,6 +13,8 @@ interface PaginationProps {
 }
 
 export default function CardsPagination(props: PaginationProps) {
+  const { isFetching } = useGetAllPeopleQuery(props.currentPage);
+
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
   const navigate = useNavigate();
 
@@ -28,7 +31,7 @@ export default function CardsPagination(props: PaginationProps) {
   }
 
   return (
-    !props.isLoading && (
+    !isFetching && (
       <div className="pagination">
         <PaginationBtn
           testid={'prev'}

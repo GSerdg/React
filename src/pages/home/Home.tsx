@@ -14,7 +14,6 @@ export const InputContext = createContext<InputObjContext | undefined>(
 );
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
   if (error) {
@@ -28,7 +27,7 @@ export default function Home() {
   return (
     <div className="page">
       <Button title={'Error'} onHandleClick={handleClickErrorBtn} />
-      <Input searchInput={isLoading} />
+      <Input />
       <Outlet />
     </div>
   );

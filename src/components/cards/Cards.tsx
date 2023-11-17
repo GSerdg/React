@@ -7,8 +7,11 @@ import CardsCountInput from '../cards-count-input/CardsCountInput';
 import CardsPagination from '../cards-pagination/CardsPagination';
 import navigateToPage from '../../shared/navigate';
 import NotFound from '../../pages/not-found/NotFound';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
+import { setIsFetchingCards } from '../../app/apiSlice';
+import { setInputValue } from '../../app/inputSlice';
+import { skipToken } from '@reduxjs/toolkit/query';
 import './cards.css';
 
 export default function Cards() {
@@ -16,14 +19,21 @@ export default function Cards() {
   const cardsPerPage = useSelector(
     (state: RootState) => state.cards.cardsPerPageValue
   );
+  const dispatch = useDispatch();
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>();
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
+  const [fetchParams, setFetchParams] = useState<string>();
+
   const navigate = useNavigate();
   const { page: pageParams } = useParams();
 
-  const { data, isFetching } = useGetAllPeopleQuery(currentPage);
+  const { data, isFetching } = useGetAllPeopleQuery(fetchParams ?? skipToken);
+
+  useEffect(() => {
+    dispatch(setIsFetchingCards(isFetching));
+  });
 
   useEffect(() => {
     setIsNextPage(data?.next === null ? false : true);
@@ -31,7 +41,7 @@ export default function Cards() {
   }, [data]);
 
   useEffect(() => {
-    function getValuesFromParams(params: string): [string, number] {
+    function getValuesFromParams(params: string) {
       const pageParamsArray = params.split('&').map((item) => item.split('='));
       const searchValue =
         pageParamsArray.length === 2 ? pageParamsArray[0][1] : '';
@@ -40,22 +50,13 @@ export default function Cards() {
           ? +pageParamsArray[1][1]
           : +pageParamsArray[0][1];
 
-      return [searchValue, pageNumber];
-    }
-
-    async function getPeoples(pageParams: string) {
-      const searchParams = getValuesFromParams(pageParams);
-
-      //context.setIsLoadingState(true);
-      /* const data = searchParams[0]
-          ? await PeopleService.getPeopleByName(...searchParams)
-          : await PeopleService.getAllPeople(searchParams[1]);
- */
-      setCurrentPage(searchParams[1]);
+      setCurrentPage(pageNumber);
+      dispatch(setInputValue(searchValue));
+      setFetchParams(pageParams);
     }
 
     pageParams
-      ? getPeoples(pageParams)
+      ? getValuesFromParams(pageParams)
       : navigateToPage(navigate, inputValue, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageParams]);
@@ -76,7 +77,7 @@ export default function Cards() {
             target.classList[0] === 'view-cards__list' ||
             target.classList[0] === 'cards'
           ) {
-            navigateToPage(navigate, inputValue, currentPage);
+            currentPage && navigateToPage(navigate, inputValue, currentPage);
           }
         }}
       >
@@ -93,7 +94,6 @@ export default function Cards() {
             currentPage={currentPage}
             isNextPage={isNextPage}
             isPrevPage={isPrevPage}
-            isLoading={isFetching}
           />
         </div>
       </div>

@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { setInputValue } from '../../app/inputSlice';
 import './Inputs.css';
 
-interface InputProps {
-  searchInput: boolean;
-}
-
-export default function Input(props: InputProps) {
+export default function Input() {
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
-  const dispatch = useDispatch();
+  const isFetching = useSelector(
+    (state: RootState) => state.api.isFetchingCards
+  );
   const navigate = useNavigate();
 
   const [valueState, setValueState] = useState(inputValue);
@@ -28,9 +25,9 @@ export default function Input(props: InputProps) {
       const pageParams = page.split('&').map((item) => item.split('='));
       const value = pageParams.length === 2 ? pageParams[0][1] : '';
 
-      dispatch(setInputValue(value));
+      setValueState(value);
+      localStorage.setItem('inputValue', value);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
@@ -43,8 +40,7 @@ export default function Input(props: InputProps) {
     valueState
       ? navigate(`/search=${valueState}&page=${pageNumber}`)
       : navigate(`/page=${pageNumber}`);
-    localStorage.setItem('inputValue', valueState);
-    dispatch(setInputValue(valueState));
+    //dispatch(setInputValue(valueState));
   }
 
   if (valueState.length !== valueState.trim().length) {
@@ -53,7 +49,7 @@ export default function Input(props: InputProps) {
     submitDisable = true;
   }
 
-  if (props.searchInput) {
+  if (isFetching) {
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
   }

@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import inputReducer from './inputSlice';
 import cardsReducer from './cardsSlice';
+import apiReducer from './apiSlice';
 import { peopleApi } from '../components/api/people';
 
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
     [peopleApi.reducerPath]: peopleApi.reducer,
     input: inputReducer,
     cards: cardsReducer,
+    api: apiReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(peopleApi.middleware),

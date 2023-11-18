@@ -1,14 +1,11 @@
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { PeopleResult } from '../../types/types';
 import Button from '../button/Button';
-import { useEffect, useState } from 'react';
-import { useGetPeopleByIdQuery } from '../api/people';
 import navigateToPage from '../../shared/navigate';
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import './DetailedCard.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { setIsFetchingDetailed } from '../../app/apiSlice';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
+import DetailedCardPostDetails from '../post-details/DetailedCardPostDetails';
+import './DetailedCard.css';
 
 interface DetailedCardsContext {
   currentPage: number;
@@ -17,19 +14,7 @@ interface DetailedCardsContext {
 export function DetailedCards() {
   const context = useOutletContext<DetailedCardsContext>();
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
-  const dispatch = useDispatch();
-
-  const [detailedCard, setDetailedCard] = useState<PeopleResult>();
-
   const navigate = useNavigate();
-  const { cardId } = useParams();
-
-  const { data, isFetching } = useGetPeopleByIdQuery(cardId ?? skipToken);
-
-  useEffect(() => {
-    setDetailedCard(data);
-    dispatch(setIsFetchingDetailed(isFetching));
-  }, [data, dispatch, isFetching]);
 
   return (
     <div className="card-details" data-testid={'cardDetailsContainer'}>
@@ -39,13 +24,7 @@ export function DetailedCards() {
         }}
         title={'Close'}
       />
-      {isFetching ? (
-        <div>Loading...</div>
-      ) : detailedCard ? (
-        <DetailedCard cardData={detailedCard} />
-      ) : (
-        <div>Loading...</div>
-      )}
+      <DetailedCardPostDetails />
     </div>
   );
 }

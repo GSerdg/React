@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { PeopleResponse, PeopleResult } from '../../types/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
@@ -39,36 +38,3 @@ export const peopleApi = createApi({
 });
 
 export const { useGetAllPeopleQuery, useGetPeopleByIdQuery } = peopleApi;
-
-export default class PeopleService {
-  static async getAllPeople(page: number) {
-    const resp: PeopleResponse = (
-      await axios.get(URL, {
-        params: {
-          page,
-        },
-      })
-    ).data;
-
-    return resp;
-  }
-
-  static async getPeopleByName(name: string, page: number) {
-    const resp: PeopleResponse = (
-      await axios.get(URL, {
-        params: {
-          search: name,
-          page,
-        },
-      })
-    ).data;
-
-    return resp;
-  }
-
-  static async getPeopleById(id: string) {
-    const resp: PeopleResult = (await axios.get(`${URL}/${id}`)).data;
-
-    return resp;
-  }
-}

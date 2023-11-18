@@ -6,8 +6,11 @@ import './Inputs.css';
 
 export default function Input() {
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
-  const isFetching = useSelector(
+  const isFetchingCards = useSelector(
     (state: RootState) => state.api.isFetchingCards
+  );
+  const isFetchingDetailed = useSelector(
+    (state: RootState) => state.api.isFetchingDetailed
   );
   const navigate = useNavigate();
 
@@ -49,7 +52,7 @@ export default function Input() {
     submitDisable = true;
   }
 
-  if (isFetching) {
+  if (isFetchingCards || isFetchingDetailed) {
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
   }

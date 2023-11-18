@@ -12,6 +12,13 @@ export default function CardsCountInput() {
   const cardsPerPage = useSelector(
     (state: RootState) => state.cards.cardsPerPageValue
   );
+  const isFetchingCards = useSelector(
+    (state: RootState) => state.api.isFetchingCards
+  );
+  const isFetchingDetailed = useSelector(
+    (state: RootState) => state.api.isFetchingDetailed
+  );
+
   const dispatch = useDispatch();
   const [isPrevEnabled, setIsPrev] = useState(true);
   const [isNextEnabled, setIsNext] = useState(false);
@@ -55,10 +62,14 @@ export default function CardsCountInput() {
       />
       <Button
         title={'Set'}
+        className={
+          isFetchingCards || isFetchingDetailed ? 'button_disable' : ''
+        }
         onHandleClick={() => {
           dispatch(setCardsPerPage(cardCount));
           navigateToPage(navigate, inputValue, 1);
         }}
+        isDisabled={isFetchingCards || isFetchingDetailed}
       />
     </div>
   );

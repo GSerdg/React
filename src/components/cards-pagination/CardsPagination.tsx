@@ -12,7 +12,7 @@ interface PaginationProps {
 
 export default function CardsPagination(props: PaginationProps) {
   const inputValue = useSelector((state: RootState) => state.input.inputValue);
-  const isFetching = useSelector(
+  const isFetchingCards = useSelector(
     (state: RootState) => state.api.isFetchingCards
   );
 
@@ -35,7 +35,7 @@ export default function CardsPagination(props: PaginationProps) {
   }
 
   return (
-    !isFetching && (
+    !isFetchingCards && (
       <div className="pagination">
         <PaginationBtn
           testid={'prev'}

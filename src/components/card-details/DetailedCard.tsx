@@ -1,14 +1,14 @@
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { PeopleResult } from '../../types/types';
 import Button from '../button/Button';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetPeopleByIdQuery } from '../api/people';
 import navigateToPage from '../../shared/navigate';
-import { InputContext } from '../../pages/home/Home';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import './DetailedCard.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setIsFetchingDetailed } from '../../app/apiSlice';
+import { RootState } from '../../app/store';
 
 interface DetailedCardsContext {
   currentPage: number;
@@ -16,7 +16,7 @@ interface DetailedCardsContext {
 
 export function DetailedCards() {
   const context = useOutletContext<DetailedCardsContext>();
-  const inputContext = useContext(InputContext);
+  const inputValue = useSelector((state: RootState) => state.input.inputValue);
   const dispatch = useDispatch();
 
   const [detailedCard, setDetailedCard] = useState<PeopleResult>();
@@ -35,11 +35,7 @@ export function DetailedCards() {
     <div className="card-details" data-testid={'cardDetailsContainer'}>
       <Button
         onHandleClick={() => {
-          navigateToPage(
-            navigate,
-            inputContext?.inputValue,
-            context.currentPage
-          );
+          navigateToPage(navigate, inputValue, context.currentPage);
         }}
         title={'Close'}
       />

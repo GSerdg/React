@@ -15,7 +15,7 @@ const Mocktest = () => {
 describe('App', () => {
   it('Should renders', () => {
     render(<Mocktest />);
-
+    screen.debug();
     expect(
       screen.getByRole('heading', {
         level: 1,

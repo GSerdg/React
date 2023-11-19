@@ -1,12 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import CardsPagination from './CardsPagination';
-import { InputContext } from '../../pages/home/Home';
-
-const setInputValue = vi.fn();
-const inputValue = '';
+import { renderWithProviders } from '../../test/testUtils';
 
 const setupMyTest = () => {
   const router = createMemoryRouter(
@@ -18,14 +15,11 @@ const setupMyTest = () => {
       {
         path: '/page=3',
         element: (
-          <InputContext.Provider value={{ inputValue, setInputValue }}>
-            <CardsPagination
-              currentPage={3}
-              isNextPage={true}
-              isPrevPage={true}
-              isLoading={false}
-            />
-          </InputContext.Provider>
+          <CardsPagination
+            currentPage={3}
+            isNextPage={true}
+            isPrevPage={true}
+          />
         ),
       },
     ],
@@ -35,7 +29,7 @@ const setupMyTest = () => {
     }
   );
 
-  render(<RouterProvider router={router} />);
+  renderWithProviders(<RouterProvider router={router} />);
 
   return { router };
 };

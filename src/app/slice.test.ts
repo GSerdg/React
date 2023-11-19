@@ -9,7 +9,6 @@ import apiReducer, {
 describe('Input slice', () => {
   it('should return default state width empty action', () => {
     const result = inputReducer(undefined, { type: '' });
-
     expect(result).toEqual({ inputValue: '' });
   });
 

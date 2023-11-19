@@ -5,7 +5,6 @@ import { RootState } from '../../app/store';
 import './Inputs.css';
 
 export default function Input() {
-  const inputValue = useSelector((state: RootState) => state.input.inputValue);
   const isFetchingCards = useSelector(
     (state: RootState) => state.api.isFetchingCards
   );
@@ -14,7 +13,9 @@ export default function Input() {
   );
   const navigate = useNavigate();
 
-  const [valueState, setValueState] = useState(inputValue);
+  const [valueState, setValueState] = useState(
+    localStorage.getItem('inputValue')
+  );
 
   let nameClass = 'finder';
   let submitClass = 'submit-button';
@@ -43,10 +44,10 @@ export default function Input() {
     valueState
       ? navigate(`/search=${valueState}&page=${pageNumber}`)
       : navigate(`/page=${pageNumber}`);
-    //dispatch(setInputValue(valueState));
+    localStorage.setItem('inputValue', valueState || '');
   }
 
-  if (valueState.length !== valueState.trim().length) {
+  if (valueState?.length !== valueState?.trim().length) {
     nameClass = 'finder finder_color';
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
@@ -64,7 +65,7 @@ export default function Input() {
         data-testid={'inputField'}
         className={nameClass}
         type="text"
-        value={valueState}
+        value={valueState || ''}
         onChange={handleChange}
       />
       <input

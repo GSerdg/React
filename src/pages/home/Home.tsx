@@ -1,18 +1,18 @@
-import { createContext, useState } from 'react';
+import { useState } from 'react';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import { Outlet } from 'react-router-dom';
 import './home.css';
 
-interface InputObjContext {
+/* interface InputObjContext {
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
 }
-
-export const InputContext = createContext<InputObjContext | undefined>(
+ */
+/* export const InputContext = createContext<InputObjContext | undefined>(
   undefined
 );
-
+ */
 export default function Home() {
   const [error, setError] = useState(false);
 

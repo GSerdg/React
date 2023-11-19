@@ -13,10 +13,11 @@ export default function DetailedCardPostDetails() {
   const { data, isFetching, error } = useGetPeopleByIdQuery(
     cardId ?? skipToken
   );
-  console.log('aaaaaaaaaaaaa', data);
+
   useEffect(() => {
     dispatch(setIsFetchingDetailed(isFetching));
   }, [dispatch, isFetching]);
+
   if (isFetching) {
     return <div>Loading...</div>;
   }

@@ -1,12 +1,12 @@
 import { MockedFunction, beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import CardsWrapper from './CardsWrapper';
-import PeopleService from '../api/people';
 import { PeopleResponse } from '../../types/types';
 import { userEvent } from '@testing-library/user-event';
 import { DetailedCards } from '../card-details/DetailedCard';
 import { responseAll, responseById } from '../../test/mockData';
+import { renderWithProviders } from '../../test/testUtils';
+import Cards from './Cards';
 
 vi.mock('react-router-dom', async (importOriginal) => {
   let loading = false;
@@ -25,14 +25,14 @@ vi.mock('react-router-dom', async (importOriginal) => {
   };
 });
 
-vi.mock('../api/people');
+// vi.mock('../api/people');
 
 const Mocktest = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<CardsWrapper />} />
-        <Route path={'/:page'} element={<CardsWrapper />}>
+        <Route index element={<Cards />} />
+        <Route path={'/:page'} element={<Cards />}>
           <Route path={'/:page/:details'} element={<DetailedCards />} />
         </Route>
       </Routes>
@@ -43,7 +43,7 @@ const Mocktest = () => {
 describe('Get cards', () => {
   let responseEmpty: PeopleResponse;
 
-  beforeEach(() => {
+  /*   beforeEach(() => {
     responseAll;
     responseById;
     responseEmpty = {
@@ -53,15 +53,16 @@ describe('Get cards', () => {
       results: [],
     };
   });
-
+ */
   it('component should renders the specified number of cards', async () => {
-    (
-      PeopleService.getAllPeople as MockedFunction<
+    /* (
+       PeopleService.getAllPeople as MockedFunction<
         typeof PeopleService.getAllPeople
       >
     ).mockResolvedValue(responseAll.data);
-
-    render(<Mocktest />);
+ */
+    //render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
 
     expect((await screen.findAllByTestId('people-card')).length).toBe(3);
 

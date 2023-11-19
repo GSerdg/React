@@ -11,7 +11,7 @@ import './index.css';
 import ErrorComponent from './components/error-component/ErrorComponent';
 import { Provider } from 'react-redux';
 import App from './App';
-import { store } from './app/store';
+import { setupStore } from './app/store';
 import Cards from './components/cards/Cards';
 
 export const PATHS = {
@@ -37,7 +37,7 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Provider store={store}>
+    <Provider store={setupStore()}>
       <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>

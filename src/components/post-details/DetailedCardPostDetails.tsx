@@ -16,7 +16,6 @@ export default function DetailedCardPostDetails() {
   useEffect(() => {
     dispatch(setIsFetchingDetailed(isFetching));
   }, [dispatch, isFetching]);
-
   if (isFetching) {
     return <div>Loading...</div>;
   }

@@ -50,13 +50,13 @@ describe('Detailed Card', () => {
     renderWithProviders(<Mocktest />);
     screen.debug();
     expect(screen.getByText('Loading...')).toBeInTheDocument();
-    // expect(screen.queryByTestId('detailed-card')).toBeNull();
+    expect(screen.queryByTestId('detailed-card')).toBeNull();
 
-    // const detailedCard = await screen.findByTestId('detailed-card');
-    // screen.debug();
+    const detailedCard = await screen.findByTestId('detailed-card');
+    screen.debug();
 
-    // expect(screen.queryByText('Loading...')).toBeNull();
-    // expect(detailedCard).toBeInTheDocument();
+    expect(screen.queryByText('Loading...')).toBeNull();
+    expect(detailedCard).toBeInTheDocument();
   });
 
   /*   it('Should close detailed card', async () => {

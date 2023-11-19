@@ -1,9 +1,12 @@
 import '@testing-library/jest-dom/vitest';
 import { afterAll, afterEach, beforeAll } from 'vitest';
 import { server } from './test/server';
+import nodeFetch, { Request, Response } from 'node-fetch';
+
+Object.assign(global, { fetch: nodeFetch, Request, Response });
 
 // Enable API mocking before tests.
-beforeAll(() => server.listen());
+beforeAll(() => server.listen(/* { onUnhandledRequest: 'bypass' } */));
 
 // Reset any runtime request handlers we may add during the tests.
 afterEach(() => server.resetHandlers());

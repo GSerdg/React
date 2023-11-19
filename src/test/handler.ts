@@ -2,8 +2,9 @@ import { HttpResponse, delay, http } from 'msw';
 import { responseById } from './mockData';
 
 export const handlers = [
-  http.get('/swapi.dev/api/people/*', async () => {
+  http.get('https://swapi.dev/api/people/4', async () => {
     await delay(150);
-    return HttpResponse.json(responseById.data);
+    console.log(HttpResponse.json(responseById.data));
+    return HttpResponse.json(responseById);
   }),
 ];

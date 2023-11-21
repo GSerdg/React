@@ -8,8 +8,8 @@ import { peopleApi } from '../components/api/people';
 import inputReducer from '../app/inputSlice';
 import cardsReducer from '../app/cardsSlice';
 import apiReducer from '../app/apiSlice';
-
 import type { AppStore, RootState } from '../app/store';
+
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   preloadedState?: PreloadedState<RootState>;
   store?: AppStore;
@@ -33,8 +33,7 @@ export function renderWithProviders(
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ) {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
+  function Wrapper({ children }: PropsWithChildren): JSX.Element {
     return <Provider store={store}>{children}</Provider>;
   }
 

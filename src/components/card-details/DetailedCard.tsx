@@ -2,9 +2,8 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { PeopleResult } from '../../types/types';
 import Button from '../button/Button';
 import navigateToPage from '../../shared/navigate';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
 import DetailedCardPostDetails from '../post-details/DetailedCardPostDetails';
+import { useSelector } from '../../shared/useSelector';
 import './DetailedCard.css';
 
 interface DetailedCardsContext {
@@ -13,7 +12,7 @@ interface DetailedCardsContext {
 
 export function DetailedCards() {
   const context = useOutletContext<DetailedCardsContext>();
-  const inputValue = useSelector((state: RootState) => state.input.inputValue);
+  const inputValue = useSelector((state) => state.input.inputValue);
   const navigate = useNavigate();
 
   return (

@@ -3,20 +3,16 @@ import PaginationBtn from '../pagination-btn/PaginationBtn';
 import Button from '../button/Button';
 import { useNavigate } from 'react-router-dom';
 import navigateToPage from '../../shared/navigate';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
+import { useDispatch } from 'react-redux';
 import { setCardsPerPage } from '../../app/cardsSlice';
+import { useSelector } from '../../shared/useSelector';
 
 export default function CardsCountInput() {
-  const inputValue = useSelector((state: RootState) => state.input.inputValue);
-  const cardsPerPage = useSelector(
-    (state: RootState) => state.cards.cardsPerPageValue
-  );
-  const isFetchingCards = useSelector(
-    (state: RootState) => state.api.isFetchingCards
-  );
+  const inputValue = useSelector((state) => state.input.inputValue);
+  const cardsPerPage = useSelector((state) => state.cards.cardsPerPageValue);
+  const isFetchingCards = useSelector((state) => state.api.isFetchingCards);
   const isFetchingDetailed = useSelector(
-    (state: RootState) => state.api.isFetchingDetailed
+    (state) => state.api.isFetchingDetailed
   );
 
   const dispatch = useDispatch();
@@ -44,6 +40,11 @@ export default function CardsCountInput() {
     setCardCount(newCounter);
   }
 
+  function handleClickSet() {
+    dispatch(setCardsPerPage(cardCount));
+    navigateToPage(navigate, inputValue, 1);
+  }
+
   return (
     <div className="pagination">
       <span>Choose number items on page</span>
@@ -62,13 +63,7 @@ export default function CardsCountInput() {
       />
       <Button
         title={'Set'}
-        className={
-          isFetchingCards || isFetchingDetailed ? 'button_disable' : ''
-        }
-        onHandleClick={() => {
-          dispatch(setCardsPerPage(cardCount));
-          navigateToPage(navigate, inputValue, 1);
-        }}
+        onHandleClick={handleClickSet}
         isDisabled={isFetchingCards || isFetchingDetailed}
       />
     </div>

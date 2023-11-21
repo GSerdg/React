@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
+import { useSelector } from '../../shared/useSelector';
 import './Inputs.css';
 
 export default function Input() {
-  const isFetchingCards = useSelector(
-    (state: RootState) => state.api.isFetchingCards
-  );
+  const isFetchingCards = useSelector((state) => state.api.isFetchingCards);
   const isFetchingDetailed = useSelector(
-    (state: RootState) => state.api.isFetchingDetailed
+    (state) => state.api.isFetchingDetailed
   );
   const navigate = useNavigate();
 

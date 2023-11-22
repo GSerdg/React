@@ -13,7 +13,7 @@ const setupMyTest = () => {
         element: <>Navigated from Start</>,
       },
       {
-        path: '/page=3',
+        path: '/:page',
         element: (
           <CardsPagination
             currentPage={3}

@@ -2,9 +2,8 @@
 @import url(../components/button/button.css);
 @import url(../components/input/Inputs.css);
 
-
 .app {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

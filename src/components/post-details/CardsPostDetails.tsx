@@ -2,17 +2,14 @@ import Card from '../card/Card';
 import NotFound from '../../pages/not-found/NotFound';
 import { useGetAllPeopleQuery } from '../api/people';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { RootState } from '../../app/store';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../shared/useSelector';
 
 interface CardsPostDetailsProps {
   fetchParams: string | undefined;
 }
 
 export default function CardsPostDetails(props: CardsPostDetailsProps) {
-  const cardsPerPage = useSelector(
-    (state: RootState) => state.cards.cardsPerPageValue
-  );
+  const cardsPerPage = useSelector((state) => state.cards.cardsPerPageValue);
 
   const { data, isFetching, error } = useGetAllPeopleQuery(
     props.fetchParams ?? skipToken

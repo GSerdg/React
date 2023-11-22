@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import PaginationBtn from '../pagination-btn/PaginationBtn';
 import navigateToPage from '../../shared/navigate';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
+import { useSelector } from '../../shared/useSelector';
 
 interface PaginationProps {
   isNextPage: boolean;
@@ -11,10 +10,8 @@ interface PaginationProps {
 }
 
 export default function CardsPagination(props: PaginationProps) {
-  const inputValue = useSelector((state: RootState) => state.input.inputValue);
-  const isFetchingCards = useSelector(
-    (state: RootState) => state.api.isFetchingCards
-  );
+  const inputValue = useSelector((state) => state.input.inputValue);
+  const isFetchingCards = useSelector((state) => state.api.isFetchingCards);
 
   const navigate = useNavigate();
 

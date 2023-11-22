@@ -5,16 +5,16 @@ import { useGetAllPeopleQuery } from '../api/people';
 import CardsCountInput from '../cards-count-input/CardsCountInput';
 import CardsPagination from '../cards-pagination/CardsPagination';
 import navigateToPage from '../../shared/navigate';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
+import { useDispatch } from 'react-redux';
 import { setIsFetchingCards } from '../../app/apiSlice';
 import { setInputValue } from '../../app/inputSlice';
 import { skipToken } from '@reduxjs/toolkit/query';
 import CardsPostDetails from '../post-details/CardsPostDetails';
+import { useSelector } from '../../shared/useSelector';
 import './cards.css';
 
 export default function Cards() {
-  const inputValue = useSelector((state: RootState) => state.input.inputValue);
+  const inputValue = useSelector((state) => state.input.inputValue);
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState<number>();

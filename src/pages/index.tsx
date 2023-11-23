@@ -1,15 +1,26 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
-import Home from '@/components/home/Home';
+// // import Home from '@/components/home/Home';
 
-const inter = Inter({ subsets: ['latin'] });
+// export default function App() {
+//   return (
+//     <></>
+//     /*     <div className="app">
+//       <h1>React APP</h1>
+//       <Home />
+//     </div>
+//  */
+//   );
+// }
+import type { ReactElement } from 'react';
+// import CardsLayout from '@/components/layouts/CardsLayout';
+import HomeLayout from '@/components/layouts/HomeLayout';
+import type { NextPageWithLayout } from './_app';
 
-export default function App() {
-  return (
-    <div className="app">
-      <h1>React APP</h1>
-      <Home />
-    </div>
-  );
-}
+const Page: NextPageWithLayout = () => {
+  return <></>;
+};
+
+Page.getLayout = function getLayout(page: ReactElement) {
+  return <HomeLayout>{page}</HomeLayout>;
+};
+
+export default Page;

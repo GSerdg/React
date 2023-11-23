@@ -1,5 +1,5 @@
 import Card from '../card/Card';
-import NotFound from '../../pages/not-found/NotFound';
+import NotFound from '../not-found/NotFound';
 import { useGetAllPeopleQuery } from '../api/people';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useSelector } from '../../shared/useSelector';

@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import PaginationBtn from '../pagination-btn/PaginationBtn';
 import navigateToPage from '../../shared/navigate';
 import { useSelector } from '../../shared/useSelector';
+import { useRouter } from 'next/router';
 
 interface PaginationProps {
   isNextPage: boolean;
@@ -13,13 +13,13 @@ export default function CardsPagination(props: PaginationProps) {
   const inputValue = useSelector((state) => state.input.inputValue);
   const isFetchingCards = useSelector((state) => state.api.isFetchingCards);
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   function handleClickPrev() {
     if (props.currentPage) {
       const newPage = props.currentPage - 1;
 
-      navigateToPage(navigate, inputValue, newPage);
+      navigateToPage(router, inputValue, newPage);
     }
   }
 
@@ -27,7 +27,7 @@ export default function CardsPagination(props: PaginationProps) {
     if (props.currentPage) {
       const newPage = props.currentPage + 1;
 
-      navigateToPage(navigate, inputValue, newPage);
+      navigateToPage(router, inputValue, newPage);
     }
   }
 

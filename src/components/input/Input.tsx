@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from 'react';
-// import { useNavigate, useParams } from 'react-router-dom';
-// import { useSelector } from '../../shared/useSelector';
-// import './Inputs.css';
+import { useSelector } from '../../shared/useSelector';
+import { useRouter } from 'next/router';
 
 export default function Input() {
-  /* const isFetchingCards = useSelector((state) => state.api.isFetchingCards);
+  const inputValue = useSelector((state) => state.input.inputValue);
+  const isFetchingCards = useSelector((state) => state.api.isFetchingCards);
   const isFetchingDetailed = useSelector(
     (state) => state.api.isFetchingDetailed
   );
-  const navigate = useNavigate(); */
-
-  const [valueState, setValueState] = useState(
-    ''
-    /* localStorage.getItem('inputValue') */
-  );
+  //const navigate = useNavigate();
+  const router = useRouter();
+  const [valueState, setValueState] = useState(inputValue);
 
   let nameClass = 'finder';
   let submitClass = 'submit-button';
   let submitDisable = false;
   const pageNumber = 1;
 
-  // const { page } = useParams();
+  //const { page } = useParams();
 
-  /* useEffect(() => {
-    if (page) {
-      const pageParams = page.split('&').map((item) => item.split('='));
+  useEffect(() => {
+    const { searchParams } = router.query;
+    console.log('input', searchParams);
+    if (searchParams && typeof searchParams === 'string') {
+      const pageParams = searchParams.split('&').map((item) => item.split('='));
       const value = pageParams.length === 2 ? pageParams[0][1] : '';
 
       setValueState(value);
       localStorage.setItem('inputValue', value);
     }
-  }, [page]); */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.searchParams]);
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;
@@ -39,9 +39,9 @@ export default function Input() {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    /* valueState
-      ? navigate(`/search=${valueState}&page=${pageNumber}`)
-      : navigate(`/page=${pageNumber}`); */
+    valueState
+      ? router.push(`/search=${valueState}&page=${pageNumber}`)
+      : router.push(`/page=${pageNumber}`);
     localStorage.setItem('inputValue', valueState || '');
   }
 
@@ -51,10 +51,10 @@ export default function Input() {
     submitDisable = true;
   }
 
-  /* if (isFetchingCards || isFetchingDetailed) {
+  if (isFetchingCards || isFetchingDetailed) {
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
-  } */
+  }
 
   return (
     <form className="form" onSubmit={handleSubmit}>

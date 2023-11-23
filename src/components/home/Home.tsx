@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Input from '../../components/input/Input';
-import Button from '../../components/button/Button';
+import Input from '@/components/input/Input';
+import Button from '@/components/button/Button';
 // import { Outlet } from 'react-router-dom';
 // import './home.css';
 
@@ -19,7 +19,6 @@ export default function Home() {
     <div className="page">
       <Button title={'Error'} onHandleClick={handleClickErrorBtn} />
       <Input />
-      {/* <Cards /> */}
     </div>
   );
 }

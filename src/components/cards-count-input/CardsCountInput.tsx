@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import PaginationBtn from '../pagination-btn/PaginationBtn';
 import Button from '../button/Button';
-import { useNavigate } from 'react-router-dom';
 import navigateToPage from '../../shared/navigate';
 import { useDispatch } from 'react-redux';
-import { setCardsPerPage } from '../../app/cardsSlice';
+import { setCardsPerPage } from '../../store/cardsSlice';
 import { useSelector } from '../../shared/useSelector';
+import { useRouter } from 'next/router';
 
 export default function CardsCountInput() {
   const inputValue = useSelector((state) => state.input.inputValue);
@@ -20,7 +20,8 @@ export default function CardsCountInput() {
   const [isNextEnabled, setIsNext] = useState(false);
   const [cardCount, setCardCount] = useState(cardsPerPage);
 
-  const navigate = useNavigate();
+  const router = useRouter();
+
   function setPaginationActivity(value: number) {
     value === 10 ? setIsNext(false) : setIsNext(true);
     value === 1 ? setIsPrev(false) : setIsPrev(true);
@@ -42,7 +43,7 @@ export default function CardsCountInput() {
 
   function handleClickSet() {
     dispatch(setCardsPerPage(cardCount));
-    navigateToPage(navigate, inputValue, 1);
+    navigateToPage(router, inputValue, 1);
   }
 
   return (

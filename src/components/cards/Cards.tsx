@@ -1,31 +1,31 @@
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useGetAllPeopleQuery } from '../api/people';
-import CardsCountInput from '../cards-count-input/CardsCountInput';
-import CardsPagination from '../cards-pagination/CardsPagination';
 import navigateToPage from '../../shared/navigate';
 import { useDispatch } from 'react-redux';
-import { setIsFetchingCards } from '../../app/apiSlice';
-import { setInputValue } from '../../app/inputSlice';
+import { setIsFetchingCards } from '../../store/apiSlice';
+import { setInputValue } from '../../store/inputSlice';
 import { skipToken } from '@reduxjs/toolkit/query';
-import CardsPostDetails from '../post-details/CardsPostDetails';
 import { useSelector } from '../../shared/useSelector';
-import './cards.css';
+import { useRouter } from 'next/router';
+import CardsCountInput from '../cards-count-input/CardsCountInput';
+import CardsPostDetails from '../post-details/CardsPostDetails';
+import CardsPagination from '../cards-pagination/CardsPagination';
+import { setCurrentPage } from '@/store/cardsSlice';
 
 export default function Cards() {
   const inputValue = useSelector((state) => state.input.inputValue);
+  const currentPage = useSelector((state) => state.cards.currentPage);
   const dispatch = useDispatch();
 
-  const [currentPage, setCurrentPage] = useState<number>();
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
   const [fetchParams, setFetchParams] = useState<string>();
 
-  const navigate = useNavigate();
-  const { page: pageParams } = useParams();
+  const router = useRouter();
 
   const { data, isFetching } = useGetAllPeopleQuery(fetchParams ?? skipToken);
+  console.log('cards fetch', fetchParams);
   useEffect(() => {
     dispatch(setIsFetchingCards(isFetching));
   });
@@ -36,6 +36,8 @@ export default function Cards() {
   }, [data]);
 
   useEffect(() => {
+    const { searchParams } = router.query;
+
     function getValuesFromParams(params: string) {
       const pageParamsArray = params.split('&').map((item) => item.split('='));
       const searchValue =
@@ -45,16 +47,16 @@ export default function Cards() {
           ? +pageParamsArray[1][1]
           : +pageParamsArray[0][1];
 
-      setCurrentPage(pageNumber);
+      dispatch(setCurrentPage(pageNumber));
       dispatch(setInputValue(searchValue));
-      setFetchParams(pageParams);
+      setFetchParams(params);
     }
-
-    pageParams
-      ? getValuesFromParams(pageParams)
-      : navigateToPage(navigate, inputValue, 1);
+    console.log('cards', searchParams);
+    searchParams && typeof searchParams === 'string'
+      ? getValuesFromParams(searchParams)
+      : navigateToPage(router, inputValue, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageParams]);
+  }, [router.query.searchParams]);
 
   return (
     <div className="view-cards">
@@ -66,14 +68,14 @@ export default function Cards() {
             target.classList[0] === 'view-cards__list' ||
             target.classList[0] === 'cards'
           ) {
-            currentPage && navigateToPage(navigate, inputValue, currentPage);
+            currentPage && navigateToPage(router, inputValue, currentPage);
           }
         }}
       >
         <CardsCountInput />
         <div className="view-cards__list">
           <div className="cards">
-            <CardsPostDetails fetchParams={fetchParams} />
+            {<CardsPostDetails fetchParams={fetchParams} />}
           </div>
           <CardsPagination
             currentPage={currentPage}
@@ -82,11 +84,11 @@ export default function Cards() {
           />
         </div>
       </div>
-      <Outlet
+      {/*       <Outlet
         context={{
           currentPage,
         }}
-      />
+      /> */}
     </div>
   );
 }

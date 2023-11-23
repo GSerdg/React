@@ -1,17 +1,18 @@
 import { useGetPeopleByIdQuery } from '../api/people';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useParams } from 'react-router-dom';
 import { DetailedCard } from '../card-details/DetailedCard';
 import { useEffect } from 'react';
-import { setIsFetchingDetailed } from '../../app/apiSlice';
+import { setIsFetchingDetailed } from '../../store/apiSlice';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 
 export default function DetailedCardPostDetails() {
-  const { cardId } = useParams();
+  const router = useRouter();
+  console.log(router);
   const dispatch = useDispatch();
 
   const { data, isFetching, error } = useGetPeopleByIdQuery(
-    cardId ?? skipToken
+    (router.query.id as string) ?? skipToken
   );
 
   useEffect(() => {

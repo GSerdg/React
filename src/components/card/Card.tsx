@@ -1,4 +1,4 @@
-import { PeopleResult } from '../../types/types';
+import { PeopleResult } from '@/types/types';
 import { useRouter } from 'next/router';
 
 interface CardProps {

@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import Input from '@/components/input/Input';
 import Button from '@/components/button/Button';
-// import { Outlet } from 'react-router-dom';
-// import './home.css';
 
 export default function Home() {
   const [error, setError] = useState(false);

@@ -6,7 +6,6 @@
 @import url(../components/card/card.css);
 @import url(../components/card-details/DetailedCard.css);
 
-
 .app {
   display: flex;
   flex-direction: column;

@@ -1,5 +1,4 @@
 import cl from 'classnames';
-// import './button.css';
 
 interface ButtonProps {
   onHandleClick: () => void;

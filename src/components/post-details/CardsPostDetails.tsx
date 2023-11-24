@@ -1,8 +1,8 @@
-import Card from '../card/Card';
-import NotFound from '../not-found/NotFound';
-import { useGetAllPeopleQuery } from '../api/people';
+import Card from '@/components/card/Card';
+import NotFound from '@/components/not-found/NotFound';
+import { useGetAllPeopleQuery } from '@/components/api/people';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useSelector } from '../../shared/useSelector';
+import { useSelector } from '@/shared/useSelector';
 
 interface CardsPostDetailsProps {
   fetchParams: string | undefined;

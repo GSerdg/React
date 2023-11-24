@@ -3,10 +3,7 @@ import { NextPageWithLayout } from '@/pages/_app';
 import HomeLayout from '@/components/layouts/HomeLayout';
 import { ReactElement } from 'react';
 import { wrapper } from '@/store/store';
-import {
-  getAllPeople,
-  getRunningQueriesThunk,
-} from '../../components/api/people';
+import { getAllPeople, getRunningQueriesThunk } from '@/components/api/people';
 
 const OutletCards: NextPageWithLayout = () => {
   return <Cards />;

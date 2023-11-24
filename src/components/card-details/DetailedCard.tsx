@@ -1,14 +1,10 @@
-import { PeopleResult } from '../../types/types';
-import Button from '../button/Button';
-import navigateToPage from '../../shared/navigate';
-import DetailedCardPostDetails from '../post-details/DetailedCardPostDetails';
-import { useSelector } from '../../shared/useSelector';
+import { PeopleResult } from '@/types/types';
+import Button from '@/components/button/Button';
+import navigateToPage from '@/shared/navigate';
+import DetailedCardPostDetails from '@/components/post-details/DetailedCardPostDetails';
+import { useSelector } from '@/shared/useSelector';
 import { useRouter } from 'next/router';
 
-/* interface DetailedCardsContext {
-  currentPage: number;
-}
- */
 export function DetailedCards() {
   const currentPage = useSelector((state) => state.cards.currentPage);
   const inputValue = useSelector((state) => state.input.inputValue);

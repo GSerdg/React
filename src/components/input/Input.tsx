@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from '../../shared/useSelector';
+import { useSelector } from '@/shared/useSelector';
 import { useRouter } from 'next/router';
 
 export default function Input() {
@@ -8,7 +8,6 @@ export default function Input() {
   const isFetchingDetailed = useSelector(
     (state) => state.api.isFetchingDetailed
   );
-  //const navigate = useNavigate();
   const router = useRouter();
   const [valueState, setValueState] = useState(inputValue);
 
@@ -17,11 +16,8 @@ export default function Input() {
   let submitDisable = false;
   const pageNumber = 1;
 
-  //const { page } = useParams();
-
   useEffect(() => {
     const { searchParams } = router.query;
-    console.log('input', searchParams);
     if (searchParams && typeof searchParams === 'string') {
       const pageParams = searchParams.split('&').map((item) => item.split('='));
       const value = pageParams.length === 2 ? pageParams[0][1] : '';

@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { useGetAllPeopleQuery } from '../api/people';
-import navigateToPage from '../../shared/navigate';
+import { useGetAllPeopleQuery } from '@/components/api/people';
+import navigateToPage from '@/shared/navigate';
 import { useDispatch } from 'react-redux';
-import { setIsFetchingCards } from '../../store/apiSlice';
-import { setInputValue } from '../../store/inputSlice';
+import { setIsFetchingCards } from '@/store/apiSlice';
+import { setInputValue } from '@/store/inputSlice';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useSelector } from '../../shared/useSelector';
+import { useSelector } from '@/shared/useSelector';
 import { useRouter } from 'next/router';
-import CardsCountInput from '../cards-count-input/CardsCountInput';
-import CardsPostDetails from '../post-details/CardsPostDetails';
-import CardsPagination from '../cards-pagination/CardsPagination';
+import CardsCountInput from '@/components/cards-count-input/CardsCountInput';
+import CardsPostDetails from '@/components/post-details/CardsPostDetails';
+import CardsPagination from '@/components/cards-pagination/CardsPagination';
 import { setCurrentPage } from '@/store/cardsSlice';
 
 export default function Cards() {
@@ -20,7 +20,6 @@ export default function Cards() {
 
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
-  // const [fetchParams, setFetchParams] = useState<string>();
 
   const router = useRouter();
   const searchParams = router.query.searchParams;
@@ -29,7 +28,6 @@ export default function Cards() {
     typeof searchParams === 'string' ? searchParams : skipToken
   );
 
-  // console.log('cards fetch', fetchParams);
   useEffect(() => {
     dispatch(setIsFetchingCards(isFetching));
   });
@@ -51,9 +49,7 @@ export default function Cards() {
 
       dispatch(setCurrentPage(pageNumber));
       dispatch(setInputValue(searchValue));
-      // setFetchParams(params);
     }
-    // console.log('cards', searchParams);
     searchParams && typeof searchParams === 'string'
       ? getValuesFromParams(searchParams)
       : navigateToPage(router, inputValue, 1);
@@ -61,36 +57,34 @@ export default function Cards() {
   }, [searchParams]);
 
   return (
-    <div className="view-cards">
-      <div
-        className="cards__container"
-        onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-          const target = event.target as HTMLElement;
-          if (
-            target.classList[0] === 'view-cards__list' ||
-            target.classList[0] === 'cards'
-          ) {
-            currentPage && navigateToPage(router, inputValue, currentPage);
+    <div
+      className="cards__container"
+      onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const target = event.target as HTMLElement;
+        if (
+          target.classList[0] === 'view-cards__list' ||
+          target.classList[0] === 'cards'
+        ) {
+          currentPage && navigateToPage(router, inputValue, currentPage);
+        }
+      }}
+    >
+      <CardsCountInput />
+      <div className="view-cards__list">
+        <div className="cards">
+          {
+            <CardsPostDetails
+              fetchParams={
+                typeof searchParams === 'string' ? searchParams : undefined
+              }
+            />
           }
-        }}
-      >
-        <CardsCountInput />
-        <div className="view-cards__list">
-          <div className="cards">
-            {
-              <CardsPostDetails
-                fetchParams={
-                  typeof searchParams === 'string' ? searchParams : undefined
-                }
-              />
-            }
-          </div>
-          <CardsPagination
-            currentPage={currentPage}
-            isNextPage={isNextPage}
-            isPrevPage={isPrevPage}
-          />
         </div>
+        <CardsPagination
+          currentPage={currentPage}
+          isNextPage={isNextPage}
+          isPrevPage={isPrevPage}
+        />
       </div>
     </div>
   );

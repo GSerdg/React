@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import PaginationBtn from '../pagination-btn/PaginationBtn';
-import Button from '../button/Button';
-import navigateToPage from '../../shared/navigate';
+import PaginationBtn from '@/components/pagination-btn/PaginationBtn';
+import Button from '@/components/button/Button';
+import navigateToPage from '@/shared/navigate';
 import { useDispatch } from 'react-redux';
-import { setCardsPerPage } from '../../store/cardsSlice';
-import { useSelector } from '../../shared/useSelector';
+import { setCardsPerPage } from '@/store/cardsSlice';
+import { useSelector } from '@/shared/useSelector';
 import { useRouter } from 'next/router';
 
 export default function CardsCountInput() {

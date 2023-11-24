@@ -1,6 +1,6 @@
-import PaginationBtn from '../pagination-btn/PaginationBtn';
-import navigateToPage from '../../shared/navigate';
-import { useSelector } from '../../shared/useSelector';
+import PaginationBtn from '@/components/pagination-btn/PaginationBtn';
+import navigateToPage from '@/shared/navigate';
+import { useSelector } from '@/shared/useSelector';
 import { useRouter } from 'next/router';
 
 interface PaginationProps {

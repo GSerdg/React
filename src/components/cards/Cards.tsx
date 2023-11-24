@@ -20,12 +20,16 @@ export default function Cards() {
 
   const [isNextPage, setIsNextPage] = useState(true);
   const [isPrevPage, setIsPrevPage] = useState(false);
-  const [fetchParams, setFetchParams] = useState<string>();
+  // const [fetchParams, setFetchParams] = useState<string>();
 
   const router = useRouter();
+  const searchParams = router.query.searchParams;
 
-  const { data, isFetching } = useGetAllPeopleQuery(fetchParams ?? skipToken);
-  console.log('cards fetch', fetchParams);
+  const { data, isFetching } = useGetAllPeopleQuery(
+    typeof searchParams === 'string' ? searchParams : skipToken
+  );
+
+  // console.log('cards fetch', fetchParams);
   useEffect(() => {
     dispatch(setIsFetchingCards(isFetching));
   });
@@ -36,8 +40,6 @@ export default function Cards() {
   }, [data]);
 
   useEffect(() => {
-    const { searchParams } = router.query;
-
     function getValuesFromParams(params: string) {
       const pageParamsArray = params.split('&').map((item) => item.split('='));
       const searchValue =
@@ -49,14 +51,14 @@ export default function Cards() {
 
       dispatch(setCurrentPage(pageNumber));
       dispatch(setInputValue(searchValue));
-      setFetchParams(params);
+      // setFetchParams(params);
     }
-    console.log('cards', searchParams);
+    // console.log('cards', searchParams);
     searchParams && typeof searchParams === 'string'
       ? getValuesFromParams(searchParams)
       : navigateToPage(router, inputValue, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.searchParams]);
+  }, [searchParams]);
 
   return (
     <div className="view-cards">
@@ -75,7 +77,13 @@ export default function Cards() {
         <CardsCountInput />
         <div className="view-cards__list">
           <div className="cards">
-            {<CardsPostDetails fetchParams={fetchParams} />}
+            {
+              <CardsPostDetails
+                fetchParams={
+                  typeof searchParams === 'string' ? searchParams : undefined
+                }
+              />
+            }
           </div>
           <CardsPagination
             currentPage={currentPage}
@@ -84,11 +92,6 @@ export default function Cards() {
           />
         </div>
       </div>
-      {/*       <Outlet
-        context={{
-          currentPage,
-        }}
-      /> */}
     </div>
   );
 }

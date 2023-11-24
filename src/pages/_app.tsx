@@ -19,8 +19,8 @@ import '@/styles/globals.css';
 import type { ReactElement, ReactNode } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-import { Provider } from 'react-redux';
-import { setupStore } from '@/store/store';
+// import { Provider } from 'react-redux';
+import { /* setupStore, */ wrapper } from '@/store/store';
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<
   P,
@@ -33,13 +33,15 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+export function App({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <Provider store={setupStore()}>
-      {getLayout(<Component {...pageProps} />)}
-    </Provider>
+    // <Provider store={setupStore()}>
+    <>{getLayout(<Component {...pageProps} />)}</>
+    // </Provider>
   );
 }
+
+export default wrapper.withRedux(App);

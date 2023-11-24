@@ -10,7 +10,7 @@ export default function Layout({
     <div className="app">
       <h1>React APP</h1>
       <Home />
-      {children}
+      <div className="view-cards">{children}</div>
     </div>
   );
 }

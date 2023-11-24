@@ -7,7 +7,7 @@ export interface CardsState {
 
 const initialState: CardsState = {
   cardsPerPageValue: 10,
-  currentPage: undefined,
+  currentPage: 1,
 };
 
 export const cardsSlice = createSlice({

@@ -10,12 +10,20 @@
 //  */
 //   );
 // }
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
 // import CardsLayout from '@/components/layouts/CardsLayout';
 import HomeLayout from '@/components/layouts/HomeLayout';
 import type { NextPageWithLayout } from './_app';
+import { useRouter } from 'next/router';
 
 const Page: NextPageWithLayout = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push(`/page=1`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return <></>;
 };
 
@@ -24,3 +32,9 @@ Page.getLayout = function getLayout(page: ReactElement) {
 };
 
 export default Page;
+
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}

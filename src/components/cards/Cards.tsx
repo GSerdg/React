@@ -14,7 +14,6 @@ export default function Cards() {
 
   const router = useRouter();
   const searchParams = router.query.searchParams;
-
   const { data } = useGetAllPeopleQuery(
     typeof searchParams === 'string' ? searchParams : skipToken
   );

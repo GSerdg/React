@@ -29,12 +29,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     if (typeof name === 'string') {
       store.dispatch(getAllPeople.initiate(name));
-      console.log('name');
     }
 
     if (typeof id === 'string') {
       store.dispatch(getPeopleById.initiate(id));
-      console.log('iddddd');
     }
 
     await Promise.all(store.dispatch(getRunningQueriesThunk()));

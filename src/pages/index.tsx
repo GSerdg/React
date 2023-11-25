@@ -22,9 +22,3 @@ Page.getLayout = function getLayout(page: ReactElement) {
 };
 
 export default Page;
-
-export async function getStaticProps() {
-  return {
-    props: {},
-  };
-}

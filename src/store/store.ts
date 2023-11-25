@@ -1,7 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import inputReducer from './inputSlice';
 import cardsReducer from './cardsSlice';
-import apiReducer from './apiSlice';
 import { peopleApi } from '@/components/api/people';
 import { createWrapper } from 'next-redux-wrapper';
 
@@ -9,7 +8,6 @@ const rootReducer = combineReducers({
   [peopleApi.reducerPath]: peopleApi.reducer,
   input: inputReducer,
   cards: cardsReducer,
-  api: apiReducer,
 });
 export function setupStore() {
   return configureStore({

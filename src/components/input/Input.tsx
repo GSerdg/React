@@ -1,15 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from '@/shared/useSelector';
 import { useRouter } from 'next/router';
+import { useGetAllPeopleQuery, useGetPeopleByIdQuery } from '../api/people';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useDispatch } from 'react-redux';
+import { setCurrentPage } from '@/store/cardsSlice';
+import { setInputValue } from '@/store/inputSlice';
+import navigateToPage from '@/shared/navigate';
 
 export default function Input() {
   const inputValue = useSelector((state) => state.input.inputValue);
-  const isFetchingCards = useSelector((state) => state.api.isFetchingCards);
-  const isFetchingDetailed = useSelector(
-    (state) => state.api.isFetchingDetailed
-  );
+  const dispatch = useDispatch();
+
   const router = useRouter();
+  const searchParams = router.query.searchParams;
+
   const [valueState, setValueState] = useState(inputValue);
+  const isFetchingCards = useGetAllPeopleQuery(
+    (searchParams as string) ?? skipToken
+  ).isFetching;
+  const isFetchingDetailed = useGetPeopleByIdQuery(
+    (router.query.id as string) ?? skipToken
+  ).isFetching;
 
   let nameClass = 'finder';
   let submitClass = 'submit-button';
@@ -17,16 +29,26 @@ export default function Input() {
   const pageNumber = 1;
 
   useEffect(() => {
-    const { searchParams } = router.query;
-    if (searchParams && typeof searchParams === 'string') {
-      const pageParams = searchParams.split('&').map((item) => item.split('='));
-      const value = pageParams.length === 2 ? pageParams[0][1] : '';
+    function getValuesFromParams(params: string) {
+      const pageParamsArray = params.split('&').map((item) => item.split('='));
+      const searchValue =
+        pageParamsArray.length === 2 ? pageParamsArray[0][1] : '';
+      const pageNumber =
+        pageParamsArray.length === 2
+          ? +pageParamsArray[1][1]
+          : +pageParamsArray[0][1];
 
-      setValueState(value);
-      localStorage.setItem('inputValue', value);
+      setValueState(searchValue);
+      dispatch(setCurrentPage(pageNumber));
+      dispatch(setInputValue(searchValue));
+      localStorage.setItem('inputValue', searchValue);
     }
+
+    searchParams && typeof searchParams === 'string'
+      ? getValuesFromParams(searchParams)
+      : navigateToPage(router, inputValue, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.searchParams]);
+  }, [searchParams]);
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;

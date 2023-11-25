@@ -6,14 +6,15 @@ import { useDispatch } from 'react-redux';
 import { setCardsPerPage } from '@/store/cardsSlice';
 import { useSelector } from '@/shared/useSelector';
 import { useRouter } from 'next/router';
+import { skipToken } from '@reduxjs/toolkit/query';
+import {
+  useGetAllPeopleQuery,
+  useGetPeopleByIdQuery,
+} from '@/components/api/people';
 
 export default function CardsCountInput() {
   const inputValue = useSelector((state) => state.input.inputValue);
   const cardsPerPage = useSelector((state) => state.cards.cardsPerPageValue);
-  const isFetchingCards = useSelector((state) => state.api.isFetchingCards);
-  const isFetchingDetailed = useSelector(
-    (state) => state.api.isFetchingDetailed
-  );
 
   const dispatch = useDispatch();
   const [isPrevEnabled, setIsPrev] = useState(true);
@@ -21,6 +22,14 @@ export default function CardsCountInput() {
   const [cardCount, setCardCount] = useState(cardsPerPage);
 
   const router = useRouter();
+  const searchParams = router.query.searchParams;
+
+  const isFetchingCards = useGetAllPeopleQuery(
+    (searchParams as string) ?? skipToken
+  ).isFetching;
+  const isFetchingDetailed = useGetPeopleByIdQuery(
+    (router.query.id as string) ?? skipToken
+  ).isFetching;
 
   function setPaginationActivity(value: number) {
     value === 10 ? setIsNext(false) : setIsNext(true);

@@ -11,13 +11,8 @@ interface CardsPostDetailsProps {
 export default function CardsPostDetails(props: CardsPostDetailsProps) {
   const cardsPerPage = useSelector((state) => state.cards.cardsPerPageValue);
 
-  const { data, isFetching, error } = useGetAllPeopleQuery(
-    props.fetchParams ?? skipToken
-  );
+  const { data, error } = useGetAllPeopleQuery(props.fetchParams ?? skipToken);
 
-  if (isFetching) {
-    return <div>Loading...</div>;
-  }
   if (error) {
     if ('status' in error) {
       const errMsg =

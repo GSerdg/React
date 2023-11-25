@@ -1,7 +1,9 @@
 import PaginationBtn from '@/components/pagination-btn/PaginationBtn';
 import navigateToPage from '@/shared/navigate';
 import { useSelector } from '@/shared/useSelector';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useRouter } from 'next/router';
+import { useGetAllPeopleQuery } from '@/components/api/people';
 
 interface PaginationProps {
   isNextPage: boolean;
@@ -11,9 +13,13 @@ interface PaginationProps {
 
 export default function CardsPagination(props: PaginationProps) {
   const inputValue = useSelector((state) => state.input.inputValue);
-  const isFetchingCards = useSelector((state) => state.api.isFetchingCards);
 
   const router = useRouter();
+  const searchParams = router.query.searchParams;
+
+  const isFetchingCards = useGetAllPeopleQuery(
+    (searchParams as string) ?? skipToken
+  ).isFetching;
 
   function handleClickPrev() {
     if (props.currentPage) {

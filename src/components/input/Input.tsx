@@ -46,7 +46,11 @@ export default function Input() {
 
     searchParams && typeof searchParams === 'string'
       ? getValuesFromParams(searchParams)
-      : navigateToPage(router, inputValue, 1);
+      : navigateToPage(
+          router,
+          localStorage.getItem('inputValue') || inputValue,
+          1
+        );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 

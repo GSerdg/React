@@ -9,18 +9,6 @@ import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtim
 import createMockRouter from '@/test/mockRouter';
 import { NextRouter } from 'next/router';
 
-/* vi.mock('react-router-dom', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('react-router-dom')>();
-  return {
-    ...mod,
-    useOutletContext: () => ({
-      isCloseDetailed: false,
-      currentPage: 1,
-    }),
-    useParams: vi.fn(),
-  };
-});
- */
 vi.mock('../../shared/navigate');
 
 const Mocktest = () => {
@@ -34,26 +22,8 @@ const Mocktest = () => {
 };
 
 describe('Detailed Card', () => {
-  /* it('Should view loading', async () => {
-    (useParams as MockedFunction<typeof useParams>).mockImplementation(() => {
-      return { cardId: '4' };
-    });
-    renderWithProviders(<Mocktest />);
-
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
-    expect(screen.queryByTestId('detailed-card')).toBeNull();
-
-    const detailedCard = await screen.findByTestId('detailed-card');
-
-    expect(screen.queryByText('Loading...')).toBeNull();
-    expect(detailedCard).toBeInTheDocument();
-  }); */
-
   it('Should close detailed card', async () => {
     navigateToPage as MockedFunction<typeof navigateToPage>;
-    /* (useParams as MockedFunction<typeof useParams>).mockImplementation(() => {
-      return { cardId: '4' };
-    }); */
 
     renderWithProviders(<Mocktest />);
 
@@ -86,10 +56,6 @@ describe('Detailed Card', () => {
       responseById.data.skin_color,
     ];
 
-    /*     (useParams as MockedFunction<typeof useParams>).mockImplementation(() => {
-      return { cardId: '4' };
-    });
- */
     renderWithProviders(<Mocktest />);
 
     const detailedCard = await screen.findByTestId('detailed-card');
@@ -103,16 +69,7 @@ describe('Detailed Card', () => {
   });
 
   it('Should fetch detailed information', async () => {
-    navigateToPage as MockedFunction<typeof navigateToPage>;
-
-    /*     (useParams as MockedFunction<typeof useParams>).mockImplementation(() => {
-      return { cardId: '4' };
-    });
- */
     renderWithProviders(<Mocktest />);
-
-    // Наличие флага isFetching говорит о том, что хук сработал и запрос отправлен
-    // expect(screen.getByText('Loading...')).toBeInTheDocument();
 
     const detailedCard = await screen.findByTestId('detailed-card');
 

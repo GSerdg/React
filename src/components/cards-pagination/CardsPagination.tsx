@@ -36,7 +36,6 @@ export default function CardsPagination(props: PaginationProps) {
       navigateToPage(router, inputValue, newPage);
     }
   }
-
   return (
     !isFetchingCards && (
       <div className="pagination">

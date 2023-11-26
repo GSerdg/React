@@ -55,16 +55,21 @@ describe('Get cards', () => {
     expect(header).toHaveTextContent(/Not found/);
   });
 
-  // it('should open a detailed card when clicking on a card', async () => {
-  //   renderWithProviders(<Mocktest1 />);
+  it('should open a detailed card when clicking on a card', async () => {
+    const router = createMockRouter({
+      query: { searchParams: 'page=1', id: '22' },
+    }) as NextRouter;
 
-  //   const card = await screen.findAllByTestId('people-card');
+    renderWithProviders(
+      <RouterContext.Provider value={router}>
+        <Cards />
+      </RouterContext.Provider>
+    );
 
-  //   expect(screen.queryByTestId('cardDetailsContainer')).toBeNull();
-  //   await userEvent.click(card[0]);
-  //   expect(vi.fn()).toHaveBeenCalled();
-  //   // expect(
-  //   //   await screen.findByTestId('cardDetailsContainer')
-  //   // ).toBeInTheDocument();
-  // });
+    const card = await screen.findAllByTestId('people-card');
+
+    expect(screen.queryByTestId('cardDetailsContainer')).toBeNull();
+    await userEvent.click(card[0]);
+    expect(router.push).toHaveBeenCalledWith('/page=1/22');
+  });
 });

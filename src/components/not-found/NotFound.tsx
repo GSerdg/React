@@ -1,15 +1,15 @@
-import { useNavigate } from 'react-router-dom';
-import Button from '../../components/button/Button';
+import { useRouter } from 'next/router';
+import Button from '@/components/button/Button';
 
 export default function NotFound() {
-  const navigate = useNavigate();
+  const router = useRouter();
   return (
     <>
       <h2>Not found</h2>
       <Button
         onHandleClick={() => {
           localStorage.setItem('inputValue', '');
-          navigate('/page=1');
+          router.push('/page=1');
         }}
         title={'Back to home'}
       />

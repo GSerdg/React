@@ -1,13 +1,12 @@
-import { useNavigate } from 'react-router-dom';
-import { PeopleResult } from '../../types/types';
-import './card.css';
+import { PeopleResult } from '@/types/types';
+import { useRouter } from 'next/router';
 
 interface CardProps {
   cardData: PeopleResult;
 }
 
 export default function Card(props: CardProps) {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const dataTitle = ['gender', 'birth year'];
 
@@ -26,7 +25,7 @@ export default function Card(props: CardProps) {
       data-testid="people-card"
       className="card card_active"
       onClick={() => {
-        navigate(`./${peopleId}`);
+        router.push(`/${router.query.searchParams}/${peopleId}`);
       }}
     >
       <div className="name">

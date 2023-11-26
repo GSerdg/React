@@ -1,19 +1,26 @@
 import { describe, expect, it } from 'vitest';
 import { screen } from '@testing-library/react';
-
-import Home from './Home';
-import { BrowserRouter } from 'react-router-dom';
+import Home from '@/components/home/Home';
 import { userEvent } from '@testing-library/user-event';
-import ErrorBoundary from '../../components/error-boundary/ErrorBoundary';
 import { renderWithProviders } from '../../test/testUtils';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import createMockRouter from '@/test/mockRouter';
+import { NextRouter } from 'next/router';
+import ErrorBoundary from '@/components/error-boundary/ErrorBoundary';
 
 const Mocktest = () => {
   return (
-    <BrowserRouter>
-      <ErrorBoundary>
-        <Home />
-      </ErrorBoundary>
-    </BrowserRouter>
+    <>
+      <RouterContext.Provider
+        value={
+          createMockRouter({ query: { searchParams: 'page=1' } }) as NextRouter
+        }
+      >
+        <ErrorBoundary>
+          <Home />
+        </ErrorBoundary>
+      </RouterContext.Provider>
+    </>
   );
 };
 

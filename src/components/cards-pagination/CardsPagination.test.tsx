@@ -1,63 +1,44 @@
 import { describe, expect, it } from 'vitest';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import CardsPagination from './CardsPagination';
 import { renderWithProviders } from '../../test/testUtils';
-
-const setupMyTest = () => {
-  const router = createMemoryRouter(
-    [
-      {
-        path: '/',
-        element: <>Navigated from Start</>,
-      },
-      {
-        path: '/page=3',
-        element: (
-          <CardsPagination
-            currentPage={3}
-            isNextPage={true}
-            isPrevPage={true}
-          />
-        ),
-      },
-    ],
-    {
-      initialEntries: ['/page=3'],
-      initialIndex: 0,
-    }
-  );
-
-  renderWithProviders(<RouterProvider router={router} />);
-
-  return { router };
-};
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import createMockRouter from '@/test/mockRouter';
+import { NextRouter } from 'next/router';
 
 describe('Cards pagination', () => {
   it('should change the URL address then click next button', async () => {
-    const { router } = setupMyTest();
+    const router = createMockRouter({
+      query: { searchParams: 'page=3' },
+    }) as NextRouter;
 
-    expect(router.state.location.pathname).toEqual('/page=3');
+    renderWithProviders(
+      <RouterContext.Provider value={router}>
+        <CardsPagination isNextPage={true} isPrevPage={true} currentPage={3} />
+      </RouterContext.Provider>
+    );
 
-    const nextBtn = screen.getByTestId('next');
+    const nextBtn = await screen.findByTestId('next');
 
-    userEvent.click(nextBtn);
-    await waitFor(() => {
-      expect(router.state.location.pathname).toEqual('/page=4');
-    });
+    await userEvent.click(nextBtn);
+    expect(router.push).toHaveBeenCalledWith('/page=4');
   });
 
   it('should change the URL address then click prev button', async () => {
-    const { router } = setupMyTest();
+    const router = createMockRouter({
+      query: { searchParams: 'page=3' },
+    }) as NextRouter;
 
-    expect(router.state.location.pathname).toEqual('/page=3');
+    renderWithProviders(
+      <RouterContext.Provider value={router}>
+        <CardsPagination isNextPage={true} isPrevPage={true} currentPage={3} />
+      </RouterContext.Provider>
+    );
 
-    const prevBtn = screen.getByTestId('prev');
+    const prevBtn = await screen.findByTestId('prev');
 
-    userEvent.click(prevBtn);
-    await waitFor(() => {
-      expect(router.state.location.pathname).toEqual('/page=2');
-    });
+    await userEvent.click(prevBtn);
+    expect(router.push).toHaveBeenCalledWith('/page=2');
   });
 });

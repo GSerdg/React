@@ -4,12 +4,11 @@ import type { RenderOptions } from '@testing-library/react';
 import { configureStore } from '@reduxjs/toolkit';
 import type { PreloadedState } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import { peopleApi } from '../components/api/people';
-import inputReducer from '../app/inputSlice';
-import cardsReducer from '../app/cardsSlice';
-import apiReducer from '../app/apiSlice';
+import { peopleApi } from '@/components/api/people';
+import inputReducer from '@/store/inputSlice';
+import cardsReducer from '@/store/cardsSlice';
+import type { AppStore, RootState } from '@/store/store';
 
-import type { AppStore, RootState } from '../app/store';
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   preloadedState?: PreloadedState<RootState>;
   store?: AppStore;
@@ -24,7 +23,6 @@ export function renderWithProviders(
         [peopleApi.reducerPath]: peopleApi.reducer,
         input: inputReducer,
         cards: cardsReducer,
-        api: apiReducer,
       },
       preloadedState,
       middleware: (getDefaultMiddleware) =>
@@ -33,8 +31,7 @@ export function renderWithProviders(
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ) {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
+  function Wrapper({ children }: PropsWithChildren): JSX.Element {
     return <Provider store={store}>{children}</Provider>;
   }
 

@@ -1,26 +1,20 @@
-import { useNavigate, useOutletContext } from 'react-router-dom';
-import { PeopleResult } from '../../types/types';
-import Button from '../button/Button';
-import navigateToPage from '../../shared/navigate';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
-import DetailedCardPostDetails from '../post-details/DetailedCardPostDetails';
-import './DetailedCard.css';
-
-interface DetailedCardsContext {
-  currentPage: number;
-}
+import { PeopleResult } from '@/types/types';
+import Button from '@/components/button/Button';
+import navigateToPage from '@/shared/navigate';
+import DetailedCardPostDetails from '@/components/post-details/DetailedCardPostDetails';
+import { useSelector } from '@/shared/useSelector';
+import { useRouter } from 'next/router';
 
 export function DetailedCards() {
-  const context = useOutletContext<DetailedCardsContext>();
-  const inputValue = useSelector((state: RootState) => state.input.inputValue);
-  const navigate = useNavigate();
+  const currentPage = useSelector((state) => state.cards.currentPage);
+  const inputValue = useSelector((state) => state.input.inputValue);
+  const router = useRouter();
 
   return (
     <div className="card-details" data-testid={'cardDetailsContainer'}>
       <Button
         onHandleClick={() => {
-          navigateToPage(navigate, inputValue, context.currentPage);
+          navigateToPage(router, inputValue, currentPage as number);
         }}
         title={'Close'}
       />

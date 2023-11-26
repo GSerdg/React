@@ -1,44 +1,35 @@
 import { describe, expect, it } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
 import Input from './Input';
-import { renderWithProviders } from '../../test/testUtils';
+import { renderWithProviders } from '@/test/testUtils';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import createMockRouter from '@/test/mockRouter';
+import { NextRouter } from 'next/router';
 
 const Mocktest = () => {
   return (
-    <BrowserRouter>
+    <RouterContext.Provider
+      value={
+        createMockRouter({ query: { searchParams: 'page=1' } }) as NextRouter
+      }
+    >
       <Input />
-    </BrowserRouter>
+    </RouterContext.Provider>
   );
 };
 
 describe('Input', () => {
-  it('should set value in localStorage', async () => {
+  it('should change value in form', async () => {
     renderWithProviders(<Mocktest />);
 
-    expect(localStorage.getItem('inputValue')).toBe(null);
-
+    await userEvent.type(screen.getByTestId('inputField'), 'Ann');
     await userEvent.click(screen.getByRole('button'));
-    expect(localStorage.getItem('inputValue')).toBe('');
-
-    await userEvent.type(screen.getByTestId('inputField'), 'A');
-    await userEvent.click(screen.getByRole('button'));
-    expect(localStorage.getItem('inputValue')).toBe('A');
+    expect(screen.getByTestId('inputField')).toHaveValue('Ann');
 
     await userEvent.clear(screen.getByTestId('inputField'));
     await userEvent.type(screen.getByTestId('inputField'), 'An');
     await userEvent.click(screen.getByRole('button'));
-    expect(localStorage.getItem('inputValue')).toBe('An');
-  });
-
-  it('should get value localStorage width mount', async () => {
-    localStorage.setItem('inputValue', 'Bob');
-
-    expect(localStorage.getItem('inputValue')).toBe('Bob');
-
-    renderWithProviders(<Mocktest />);
-
-    expect(screen.getByTestId('inputField')).toHaveAttribute('value', 'Bob');
+    expect(screen.getByTestId('inputField')).toHaveValue('An');
   });
 });

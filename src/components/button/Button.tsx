@@ -1,18 +1,17 @@
-import './button.css';
+import cl from 'classnames';
 
 interface ButtonProps {
   onHandleClick: () => void;
   title: string;
   isDisabled?: boolean;
-  className?: string;
 }
 
 export default function Button(props: ButtonProps) {
   return (
     <button
       onClick={props.onHandleClick}
-      className={`button ${props.className || ''}`}
-      disabled={props.isDisabled || false}
+      className={cl('button', { ['button_disabled']: props.isDisabled })}
+      disabled={props.isDisabled}
     >
       {props.title}
     </button>

@@ -1,8 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-import PaginationBtn from '../pagination-btn/PaginationBtn';
-import navigateToPage from '../../shared/navigate';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
+import PaginationBtn from '@/components/pagination-btn/PaginationBtn';
+import navigateToPage from '@/shared/navigate';
+import { useSelector } from '@/shared/useSelector';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useRouter } from 'next/router';
+import { useGetAllPeopleQuery } from '@/components/api/people';
 
 interface PaginationProps {
   isNextPage: boolean;
@@ -11,18 +12,20 @@ interface PaginationProps {
 }
 
 export default function CardsPagination(props: PaginationProps) {
-  const inputValue = useSelector((state: RootState) => state.input.inputValue);
-  const isFetchingCards = useSelector(
-    (state: RootState) => state.api.isFetchingCards
-  );
+  const inputValue = useSelector((state) => state.input.inputValue);
 
-  const navigate = useNavigate();
+  const router = useRouter();
+  const searchParams = router.query.searchParams;
+
+  const isFetchingCards = useGetAllPeopleQuery(
+    (searchParams as string) ?? skipToken
+  ).isFetching;
 
   function handleClickPrev() {
     if (props.currentPage) {
       const newPage = props.currentPage - 1;
 
-      navigateToPage(navigate, inputValue, newPage);
+      navigateToPage(router, inputValue, newPage);
     }
   }
 
@@ -30,10 +33,9 @@ export default function CardsPagination(props: PaginationProps) {
     if (props.currentPage) {
       const newPage = props.currentPage + 1;
 
-      navigateToPage(navigate, inputValue, newPage);
+      navigateToPage(router, inputValue, newPage);
     }
   }
-
   return (
     !isFetchingCards && (
       <div className="pagination">

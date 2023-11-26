@@ -5,7 +5,7 @@ export interface InputState {
 }
 
 const initialState: InputState = {
-  inputValue: localStorage.getItem('inputValue') || '',
+  inputValue: '',
 };
 
 export const inputSlice = createSlice({

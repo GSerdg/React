@@ -1,11 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import Card from './Card';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import createMockRouter from '@/test/mockRouter';
+import { NextRouter } from 'next/router';
 
 const Mocktest = () => {
   return (
-    <BrowserRouter>
+    <RouterContext.Provider
+      value={
+        createMockRouter({ query: { searchParams: 'page=1' } }) as NextRouter
+      }
+    >
       <Card
         cardData={{
           birth_year: '112BBY',
@@ -30,7 +36,7 @@ const Mocktest = () => {
           vehicles: [],
         }}
       />
-    </BrowserRouter>
+    </RouterContext.Provider>
   );
 };
 

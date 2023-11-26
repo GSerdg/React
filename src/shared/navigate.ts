@@ -1,11 +1,11 @@
-import { NavigateFunction } from 'react-router-dom';
+import { NextRouter } from 'next/router';
 
 export default function navigateToPage(
-  navigate: NavigateFunction,
+  router: NextRouter,
   inputValue: string | undefined,
   pageNumber: number
 ) {
   inputValue
-    ? navigate(`/search=${inputValue}&page=${pageNumber}`)
-    : navigate(`/page=${pageNumber}`);
+    ? router.push(`/search=${inputValue}&page=${pageNumber}`)
+    : router.push(`/page=${pageNumber}`);
 }

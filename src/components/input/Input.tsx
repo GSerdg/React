@@ -1,17 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { InputContext } from '../../pages/home/Home';
+import { useSelector } from '../../shared/useSelector';
 import './Inputs.css';
 
-interface InputProps {
-  searchInput: boolean;
-}
-
-export default function Input(props: InputProps) {
-  const inputContext = useContext(InputContext);
+export default function Input() {
+  const isFetchingCards = useSelector((state) => state.api.isFetchingCards);
+  const isFetchingDetailed = useSelector(
+    (state) => state.api.isFetchingDetailed
+  );
   const navigate = useNavigate();
 
-  const [inputValue, setInputValue] = useState(inputContext?.inputValue);
+  const [valueState, setValueState] = useState(
+    localStorage.getItem('inputValue')
+  );
 
   let nameClass = 'finder';
   let submitClass = 'submit-button';
@@ -25,33 +26,31 @@ export default function Input(props: InputProps) {
       const pageParams = page.split('&').map((item) => item.split('='));
       const value = pageParams.length === 2 ? pageParams[0][1] : '';
 
-      inputContext?.setInputValue(value);
+      setValueState(value);
+      localStorage.setItem('inputValue', value);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const target = event.target as HTMLInputElement;
-
-    setInputValue(target.value);
+    setValueState(target.value);
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    inputValue
-      ? navigate(`/search=${inputValue}&page=${pageNumber}`)
+    valueState
+      ? navigate(`/search=${valueState}&page=${pageNumber}`)
       : navigate(`/page=${pageNumber}`);
-    localStorage.setItem('inputValue', inputValue || '');
-    inputContext?.setInputValue(inputValue || '');
+    localStorage.setItem('inputValue', valueState || '');
   }
 
-  if (inputValue?.length !== inputValue?.trim().length) {
+  if (valueState?.length !== valueState?.trim().length) {
     nameClass = 'finder finder_color';
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
   }
 
-  if (props.searchInput) {
+  if (isFetchingCards || isFetchingDetailed) {
     submitClass = 'submit-button submit-button_disable';
     submitDisable = true;
   }
@@ -63,7 +62,7 @@ export default function Input(props: InputProps) {
         data-testid={'inputField'}
         className={nameClass}
         type="text"
-        value={inputValue}
+        value={valueState || ''}
         onChange={handleChange}
       />
       <input

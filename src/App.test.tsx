@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import { renderWithProviders } from './test/testUtils';
 
 const Mocktest = () => {
   return (
@@ -14,7 +15,7 @@ const Mocktest = () => {
 
 describe('App', () => {
   it('Should renders', () => {
-    render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
 
     expect(
       screen.getByRole('heading', {

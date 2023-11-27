@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
-
+import { screen } from '@testing-library/react';
 import Home from './Home';
 import { BrowserRouter } from 'react-router-dom';
 import { userEvent } from '@testing-library/user-event';
 import ErrorBoundary from '../../components/error-boundary/ErrorBoundary';
+import { renderWithProviders } from '../../test/testUtils';
 
 const Mocktest = () => {
   return (
@@ -18,7 +18,7 @@ const Mocktest = () => {
 
 describe('Home', () => {
   it('Have 2 buttons, form', () => {
-    render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
 
     const button = screen.getAllByRole('button');
 
@@ -28,7 +28,7 @@ describe('Home', () => {
   });
 
   it('Should have search input', () => {
-    render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
 
     const input = screen.getByTestId('inputField');
 
@@ -36,7 +36,7 @@ describe('Home', () => {
   });
 
   it('Should throw error', async () => {
-    render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
 
     const button = screen.getByText(/Error/);
     await userEvent.click(button);

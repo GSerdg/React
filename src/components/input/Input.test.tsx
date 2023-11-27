@@ -1,27 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import { InputContext } from '../../pages/home/Home';
 import Input from './Input';
-import { useState } from 'react';
+import { renderWithProviders } from '../../test/testUtils';
 
 const Mocktest = () => {
-  const [inputValue, setInputValue] = useState(
-    localStorage.getItem('inputValue') || ''
-  );
   return (
     <BrowserRouter>
-      <InputContext.Provider value={{ inputValue, setInputValue }}>
-        <Input searchInput={false} />
-      </InputContext.Provider>
+      <Input />
     </BrowserRouter>
   );
 };
 
 describe('Input', () => {
   it('should set value in localStorage', async () => {
-    render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
 
     expect(localStorage.getItem('inputValue')).toBe(null);
 
@@ -43,7 +37,7 @@ describe('Input', () => {
 
     expect(localStorage.getItem('inputValue')).toBe('Bob');
 
-    render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
 
     expect(screen.getByTestId('inputField')).toHaveAttribute('value', 'Bob');
   });

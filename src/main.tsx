@@ -6,11 +6,13 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import DetailedCards from './components/card-details/DetailedCard';
+import { DetailedCards } from './components/card-details/DetailedCard';
 import './index.css';
 import ErrorComponent from './components/error-component/ErrorComponent';
-import CardsWrapper from './components/cards/CardsWrapper';
+import { Provider } from 'react-redux';
 import App from './App';
+import { setupStore } from './app/store';
+import Cards from './components/cards/Cards';
 
 export const PATHS = {
   HOME: '/',
@@ -25,8 +27,8 @@ const router = createBrowserRouter(
       element={<App />}
       errorElement={<ErrorComponent />}
     >
-      <Route index element={<CardsWrapper />} />
-      <Route path={PATHS.PAGE} element={<CardsWrapper />}>
+      <Route index element={<Cards />} />
+      <Route path={PATHS.PAGE} element={<Cards />}>
         <Route path={PATHS.DETAILS} element={<DetailedCards />} />
       </Route>
     </Route>
@@ -35,6 +37,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={setupStore()}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

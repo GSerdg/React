@@ -124,3 +124,12 @@ export const responseById: { data: PeopleResult } = {
     vehicles: [],
   },
 };
+
+export const responseEmpty: { data: PeopleResponse } = {
+  data: {
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
+  },
+};

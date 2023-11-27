@@ -1,10 +1,10 @@
-import { MockedFunction, beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { MockedFunction, describe, expect, it, vi } from 'vitest';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, useParams } from 'react-router-dom';
 import { DetailedCards } from './DetailedCard';
-import PeopleService from '../api/people';
 import navigateToPage from '../../shared/navigate';
+import { renderWithProviders } from '../../test/testUtils';
 import { responseById } from '../../test/mockData';
 
 vi.mock('react-router-dom', async (importOriginal) => {
@@ -19,7 +19,6 @@ vi.mock('react-router-dom', async (importOriginal) => {
   };
 });
 
-vi.mock('../api/people');
 vi.mock('../../shared/navigate');
 
 const Mocktest = () => {
@@ -31,22 +30,11 @@ const Mocktest = () => {
 };
 
 describe('Detailed Card', () => {
-  beforeEach(() => {
-    responseById;
-  });
-
   it('Should view loading', async () => {
-    (
-      PeopleService.getPeopleById as MockedFunction<
-        typeof PeopleService.getPeopleById
-      >
-    ).mockResolvedValue(responseById.data);
-
     (useParams as MockedFunction<typeof useParams>).mockImplementation(() => {
       return { cardId: '4' };
     });
-
-    render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
 
     expect(screen.getByText('Loading...')).toBeInTheDocument();
     expect(screen.queryByTestId('detailed-card')).toBeNull();
@@ -58,24 +46,18 @@ describe('Detailed Card', () => {
   });
 
   it('Should close detailed card', async () => {
-    (
-      PeopleService.getPeopleById as MockedFunction<
-        typeof PeopleService.getPeopleById
-      >
-    ).mockResolvedValue(responseById.data);
-
     navigateToPage as MockedFunction<typeof navigateToPage>;
-
     (useParams as MockedFunction<typeof useParams>).mockImplementation(() => {
       return { cardId: '4' };
     });
 
-    render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
 
     const closeBtn = screen.getByRole('button');
-
     expect(closeBtn).toHaveTextContent('Close');
+
     await userEvent.click(closeBtn);
+
     expect(navigateToPage).toHaveBeenCalledTimes(1);
   });
 
@@ -100,17 +82,11 @@ describe('Detailed Card', () => {
       responseById.data.skin_color,
     ];
 
-    (
-      PeopleService.getPeopleById as MockedFunction<
-        typeof PeopleService.getPeopleById
-      >
-    ).mockResolvedValue(responseById.data);
-
     (useParams as MockedFunction<typeof useParams>).mockImplementation(() => {
       return { cardId: '4' };
     });
 
-    render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
 
     const detailedCard = await screen.findByTestId('detailed-card');
     expect(detailedCard).toBeInTheDocument;
@@ -123,21 +99,19 @@ describe('Detailed Card', () => {
   });
 
   it('Should fetch detailed information', async () => {
-    (
-      PeopleService.getPeopleById as MockedFunction<
-        typeof PeopleService.getPeopleById
-      >
-    ).mockResolvedValue(responseById.data);
     navigateToPage as MockedFunction<typeof navigateToPage>;
 
     (useParams as MockedFunction<typeof useParams>).mockImplementation(() => {
       return { cardId: '4' };
     });
 
-    render(<Mocktest />);
+    renderWithProviders(<Mocktest />);
+
+    // Наличие флага isFetching говорит о том, что хук сработал и запрос отправлен
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
 
     const detailedCard = await screen.findByTestId('detailed-card');
+
     expect(detailedCard).toBeInTheDocument;
-    expect(PeopleService.getPeopleById).toHaveBeenCalledTimes(4);
   });
 });

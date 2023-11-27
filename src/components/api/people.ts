@@ -1,37 +1,19 @@
-import axios from 'axios';
 import { PeopleResponse, PeopleResult } from '../../types/types';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const URL = `https://swapi.dev/api/people`;
+const URL = `https://swapi.dev/api`;
 
-export default class PeopleService {
-  static async getAllPeople(page: number) {
-    const resp: PeopleResponse = (
-      await axios.get(URL, {
-        params: {
-          page,
-        },
-      })
-    ).data;
+export const peopleApi = createApi({
+  reducerPath: 'peopleApi',
+  baseQuery: fetchBaseQuery({ baseUrl: URL }),
+  endpoints: (builder) => ({
+    getAllPeople: builder.query<PeopleResponse, string>({
+      query: (params) => `people?${params}`,
+    }),
+    getPeopleById: builder.query<PeopleResult, string>({
+      query: (id) => `people/${id}`,
+    }),
+  }),
+});
 
-    return resp;
-  }
-
-  static async getPeopleByName(name: string, page: number) {
-    const resp: PeopleResponse = (
-      await axios.get(URL, {
-        params: {
-          search: name,
-          page,
-        },
-      })
-    ).data;
-
-    return resp;
-  }
-
-  static async getPeopleById(id: string) {
-    const resp: PeopleResult = (await axios.get(`${URL}/${id}`)).data;
-
-    return resp;
-  }
-}
+export const { useGetAllPeopleQuery, useGetPeopleByIdQuery } = peopleApi;

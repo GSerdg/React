@@ -6,7 +6,7 @@ function App() {
   return (
     <ErrorBoundary>
       <div className="app">
-        <h1>React APP</h1>
+        <h1>React FORM</h1>
         <Home />
       </div>
     </ErrorBoundary>

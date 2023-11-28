@@ -10,10 +10,14 @@ import ErrorComponent from './components/error-component/ErrorComponent';
 import { Provider } from 'react-redux';
 import App from './App';
 import { setupStore } from './app/store';
+import FormUncontrolled from './components/form-uncontrolled/FormUncontrolled';
+import FormHook from './components/form-hook/FormHook';
 import './index.css';
 
 export const PATHS = {
   HOME: '/',
+  UNCONTROLLED: 'formUncontrolled',
+  HOOK: 'formReactHook',
 };
 
 const router = createBrowserRouter(
@@ -22,7 +26,10 @@ const router = createBrowserRouter(
       path={PATHS.HOME}
       element={<App />}
       errorElement={<ErrorComponent />}
-    ></Route>
+    >
+      <Route path={PATHS.UNCONTROLLED} element={<FormUncontrolled />} />
+      <Route path={PATHS.HOOK} element={<FormHook />} />
+    </Route>
   )
 );
 

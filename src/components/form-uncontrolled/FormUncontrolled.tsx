@@ -1,31 +1,148 @@
 import { useRef } from 'react';
-import { nameValidation } from '../../shared/validation';
+import {
+  acceptValidation,
+  ageValidation,
+  emailValidation,
+  imageValidation,
+  nameValidation,
+  passwordValidation,
+  repeatPasswordValidation,
+} from '../../shared/validation';
 import './Form-uncontrolled.css';
 
 export default function FormUncontrolled() {
   const nameRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
+  const ageRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
+  const emailRef: React.MutableRefObject<null | HTMLInputElement> =
+    useRef(null);
+  const passwordRef: React.MutableRefObject<null | HTMLInputElement> =
+    useRef(null);
+  const repeatPasswordRef: React.MutableRefObject<null | HTMLInputElement> =
+    useRef(null);
+  const acceptRef: React.MutableRefObject<null | HTMLInputElement> =
+    useRef(null);
+  const imageRef: React.MutableRefObject<null | HTMLInputElement> =
+    useRef(null);
 
-  function checkName() {
-    const name = nameRef.current?.value;
-    if (!name) return;
-
-    const validation = nameValidation({ title: name });
-    const titleElement = nameRef.current?.nextElementSibling as HTMLDivElement;
+  function editDom(
+    validation:
+      | string
+      | {
+          title: string | number | boolean | File[];
+        }
+      | {
+          password?: string | undefined;
+          repeatPassword: string;
+        },
+    refElement: React.MutableRefObject<HTMLInputElement | null>
+  ) {
+    const titleElement = refElement.current
+      ?.nextElementSibling as HTMLDivElement;
 
     if (typeof validation === 'string') {
       titleElement.innerText = validation;
       titleElement.hidden = false;
-      nameRef.current?.classList.add('field__input_color');
+      refElement.current?.classList.add('field__input_color');
     } else {
       titleElement.hidden = true;
-      nameRef.current?.classList.remove('field__input_color');
+      refElement.current?.classList.remove('field__input_color');
     }
+  }
+
+  function checkName() {
+    const name = nameRef.current?.value;
+    if (name === undefined) return;
+
+    const validation = nameValidation({ title: name });
+
+    editDom(validation, nameRef);
+  }
+
+  function checkAge() {
+    const age = ageRef.current?.value;
+    if (age === undefined) return;
+
+    let validation:
+      | string
+      | {
+          title: string | number;
+        };
+
+    age === ''
+      ? (validation = 'Enter yuor age')
+      : (validation = ageValidation({ title: age }));
+
+    editDom(validation, ageRef);
+  }
+
+  function checkEmail() {
+    const email = emailRef.current?.value;
+    if (email === undefined) return;
+
+    const validation = emailValidation({ title: email });
+
+    editDom(validation, emailRef);
+  }
+
+  function checkPassword() {
+    const password = passwordRef.current?.value;
+    if (password === undefined) return;
+
+    const validation = passwordValidation({ title: password });
+
+    editDom(validation, passwordRef);
+  }
+
+  function checkRepeatPassword() {
+    const password = passwordRef.current?.value;
+    const repeatPassword = repeatPasswordRef.current?.value;
+
+    if (!password || !repeatPassword) return;
+    const validation = repeatPasswordValidation({
+      password: password,
+      repeatPassword: repeatPassword,
+    });
+
+    editDom(validation, repeatPasswordRef);
+  }
+
+  function checkAccept() {
+    const isAccept = acceptRef.current?.checked;
+    if (isAccept === undefined) return;
+
+    const validation = acceptValidation({ title: isAccept });
+
+    editDom(validation, acceptRef);
+  }
+
+  function checkImage() {
+    const image = imageRef.current?.files;
+    if (!image) return;
+
+    let validation:
+      | string
+      | {
+          title: File[];
+        };
+
+    image[0]
+      ? (validation = imageValidation({ title: Array.from(image) }))
+      : (validation = 'Choose some image');
+
+    editDom(validation, imageRef);
   }
 
   function handleClick(event: React.FormEvent<HTMLInputElement>) {
     event.preventDefault();
     checkName();
+    checkAge();
+    checkEmail();
+    checkPassword();
+    checkRepeatPassword();
+    checkAccept();
+    checkImage();
   }
+
   return (
     <form className="form">
       <fieldset className="form-uncontrolled">
@@ -37,44 +154,57 @@ export default function FormUncontrolled() {
               ref={nameRef}
               name="name"
               type="text"
-              /* required */
             />
             <div className="input__validate" hidden></div>
           </div>
         </label>
         <label className="form__field">
           <span className="field__title">Age</span>
-          <input
-            className="field__input"
-            name="age"
-            type="date" /* required */
-          />
+          <div className="input-container">
+            <input
+              className="field__input field__input_width"
+              ref={ageRef}
+              name="age"
+              type="number"
+            />
+            <div className="input__validate" hidden></div>
+          </div>
         </label>
         <label className="form__field">
           <span className="field__title">Email</span>
-          <input
-            className="field__input"
-            name="email"
-            type="email" /* required */
-          />
+          <div className="input-container">
+            <input
+              className="field__input field__input_width"
+              ref={emailRef}
+              name="email"
+              type="email"
+            />
+            <div className="input__validate" hidden></div>
+          </div>
         </label>
         <label className="form__field">
           <span className="field__title">Password</span>
-          <input
-            className="field__input"
-            name="passwd"
-            type="password"
-            /* required */
-          />
+          <div className="input-container">
+            <input
+              className="field__input field__input_width"
+              ref={passwordRef}
+              name="password"
+              type="password"
+            />
+            <div className="input__validate" hidden></div>
+          </div>
         </label>
         <label className="form__field">
-          <span className="field__title">Replase password</span>
-          <input
-            className="field__input"
-            name="passwdRepl"
-            type="password"
-            /* required */
-          />
+          <span className="field__title">Repeat password</span>
+          <div className="input-container">
+            <input
+              className="field__input field__input_width"
+              ref={repeatPasswordRef}
+              name="passwdRepl"
+              type="password"
+            />
+            <div className="input__validate" hidden></div>
+          </div>
         </label>
         <div className="form__field">
           <span className="field__title">Choise your gender</span>
@@ -86,6 +216,7 @@ export default function FormUncontrolled() {
               name="gender"
               type="radio"
               value={'male'}
+              defaultChecked
             />
             <label htmlFor="f">female</label>
             <input
@@ -99,22 +230,29 @@ export default function FormUncontrolled() {
         </div>
         <label className="form__field">
           <span className="field__title">Accept our T&C</span>
-          <div className="field__input">
+          <div className="input-container">
             <input
-              className="field__input_check"
+              className="field__input field__input_check"
+              ref={acceptRef}
               name="checkbox"
               type="checkbox"
             />
+            <div className="input__validate" hidden></div>
           </div>
         </label>
         <label htmlFor="file" className="form__field">
           <span className="field__title">Input your image</span>
-          <input
-            className="field__input field__input_fontsize"
-            id="file"
-            name="image"
-            type="file"
-          />
+          <div className="input-container">
+            <input
+              className="field__input field__input_fontsize"
+              style={{ width: '100%', border: 'none' }}
+              ref={imageRef}
+              id="file"
+              name="image"
+              type="file"
+            />
+            <div className="input__validate" hidden></div>
+          </div>
         </label>
         <label className="form__field">
           <span className="field__title">Country</span>
@@ -123,7 +261,6 @@ export default function FormUncontrolled() {
             name="country"
             type="text"
             autoComplete="country-name"
-            /* required */
           />
         </label>
         <input

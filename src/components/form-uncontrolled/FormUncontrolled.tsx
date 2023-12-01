@@ -9,6 +9,7 @@ import {
   repeatPasswordValidation,
 } from '../../shared/validation';
 import './Form-uncontrolled.css';
+import CountryList from '../countryList/CountryList';
 
 export default function FormUncontrolled() {
   const nameRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
@@ -23,6 +24,11 @@ export default function FormUncontrolled() {
     useRef(null);
   const imageRef: React.MutableRefObject<null | HTMLInputElement> =
     useRef(null);
+  const countryRef: React.MutableRefObject<null | HTMLInputElement> =
+    useRef(null);
+
+  // const [inputCountry, setInputCountry] = useState('');
+  // const [countryValue, setCountryValue] = useState('');
 
   function editDom(
     validation:
@@ -143,6 +149,13 @@ export default function FormUncontrolled() {
     checkImage();
   }
 
+  /*   function handleChangeCountry(event: React.FormEvent<HTMLInputElement>) {
+    const target = event.target as HTMLInputElement;
+    const value = target.value;
+    setInputCountry(value);
+  }
+ */
+
   return (
     <form className="form">
       <fieldset className="form-uncontrolled">
@@ -258,10 +271,13 @@ export default function FormUncontrolled() {
           <span className="field__title">Country</span>
           <input
             className="field__input"
+            ref={countryRef}
+            list="countryList"
             name="country"
             type="text"
-            autoComplete="country-name"
+            // onChange={handleChangeCountry}
           />
+          <CountryList />
         </label>
         <input
           className="submit-button"

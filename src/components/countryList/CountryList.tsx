@@ -1,4 +1,4 @@
-import { countryesArray } from '../../shared/autocomplite';
+import { useSelector } from '../../shared/useSelector';
 
 /* interface CountryListProps {
   input: string;
@@ -38,7 +38,9 @@ export default function CountryList(props: CountryListProps) {
 } */
 
 export default function CountryList() {
-  const optionList = countryesArray.map((item, index) => (
+  const countriesArray = useSelector((state) => state.countries.countries);
+
+  const optionList = countriesArray.map((item, index) => (
     <option value={item} key={index} />
   ));
   return <datalist id="countryList">{optionList}</datalist>;

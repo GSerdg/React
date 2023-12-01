@@ -4,9 +4,11 @@ import {
   configureStore,
 } from '@reduxjs/toolkit';
 import formUncontrolledReducer from './formUncontrolledSlice';
+import countriesReducer from './countriesSlice';
 
 const rootReducer = combineReducers({
   formUncontrolled: formUncontrolledReducer,
+  countries: countriesReducer,
 });
 export function setupStore(preloadedState?: PreloadedState<RootState>) {
   return configureStore({

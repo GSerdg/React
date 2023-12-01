@@ -1,8 +1,4 @@
-/* interface ObjectInterface {
-  [key: string]: number;
-}
- */
-export const countryesArray = [
+export const countriesArray = [
   'Australia',
   'Austria',
   'Azerbaijan',
@@ -250,8 +246,3 @@ export const countryesArray = [
   'Jamaica',
   'Japan',
 ];
-
-/* export const countryesKeys = countryesArray.reduce((object, item, index) => {
-  return { ...object, [item]: index };
-}, {} as ObjectInterface);
- */

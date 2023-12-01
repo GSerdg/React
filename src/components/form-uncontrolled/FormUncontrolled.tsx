@@ -10,6 +10,9 @@ import {
 } from '../../shared/validation';
 import './Form-uncontrolled.css';
 import CountryList from '../countryList/CountryList';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setFormUncontrolledData } from '../../app/formUncontrolledSlice';
 
 export default function FormUncontrolled() {
   const nameRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
@@ -26,9 +29,12 @@ export default function FormUncontrolled() {
     useRef(null);
   const countryRef: React.MutableRefObject<null | HTMLInputElement> =
     useRef(null);
+  const maleRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
+  const femaleRef: React.MutableRefObject<null | HTMLInputElement> =
+    useRef(null);
 
-  // const [inputCountry, setInputCountry] = useState('');
-  // const [countryValue, setCountryValue] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function editDom(
     validation:
@@ -49,9 +55,11 @@ export default function FormUncontrolled() {
       titleElement.innerText = validation;
       titleElement.hidden = false;
       refElement.current?.classList.add('field__input_color');
+      return false;
     } else {
       titleElement.hidden = true;
       refElement.current?.classList.remove('field__input_color');
+      return true;
     }
   }
 
@@ -61,7 +69,7 @@ export default function FormUncontrolled() {
 
     const validation = nameValidation({ title: name });
 
-    editDom(validation, nameRef);
+    return editDom(validation, nameRef);
   }
 
   function checkAge() {
@@ -78,7 +86,7 @@ export default function FormUncontrolled() {
       ? (validation = 'Enter yuor age')
       : (validation = ageValidation({ title: age }));
 
-    editDom(validation, ageRef);
+    return editDom(validation, ageRef);
   }
 
   function checkEmail() {
@@ -87,7 +95,7 @@ export default function FormUncontrolled() {
 
     const validation = emailValidation({ title: email });
 
-    editDom(validation, emailRef);
+    return editDom(validation, emailRef);
   }
 
   function checkPassword() {
@@ -96,7 +104,7 @@ export default function FormUncontrolled() {
 
     const validation = passwordValidation({ title: password });
 
-    editDom(validation, passwordRef);
+    return editDom(validation, passwordRef);
   }
 
   function checkRepeatPassword() {
@@ -109,7 +117,7 @@ export default function FormUncontrolled() {
       repeatPassword: repeatPassword,
     });
 
-    editDom(validation, repeatPasswordRef);
+    return editDom(validation, repeatPasswordRef);
   }
 
   function checkAccept() {
@@ -118,7 +126,7 @@ export default function FormUncontrolled() {
 
     const validation = acceptValidation({ title: isAccept });
 
-    editDom(validation, acceptRef);
+    return editDom(validation, acceptRef);
   }
 
   function checkImage() {
@@ -135,26 +143,42 @@ export default function FormUncontrolled() {
       ? (validation = imageValidation({ title: Array.from(image) }))
       : (validation = 'Choose some image');
 
-    editDom(validation, imageRef);
+    return editDom(validation, imageRef);
   }
 
   function handleClick(event: React.FormEvent<HTMLInputElement>) {
     event.preventDefault();
-    checkName();
-    checkAge();
-    checkEmail();
-    checkPassword();
-    checkRepeatPassword();
-    checkAccept();
-    checkImage();
-  }
+    const validate = [
+      checkName(),
+      checkAge(),
+      checkEmail(),
+      checkPassword(),
+      checkRepeatPassword(),
+      checkAccept(),
+      checkImage(),
+    ];
 
-  /*   function handleChangeCountry(event: React.FormEvent<HTMLInputElement>) {
-    const target = event.target as HTMLInputElement;
-    const value = target.value;
-    setInputCountry(value);
+    if (validate.every((item) => item == true)) {
+      const gender = () => {
+        if (maleRef.current?.checked) return 'male';
+        if (femaleRef.current?.checked) return 'female';
+        return undefined;
+      };
+
+      dispatch(
+        setFormUncontrolledData({
+          name: nameRef.current?.value,
+          age: ageRef.current?.value,
+          email: emailRef.current?.value,
+          password: passwordRef.current?.value,
+          gender: gender(),
+          accept: true,
+          country: countryRef.current?.value,
+        })
+      );
+      navigate('/');
+    }
   }
- */
 
   return (
     <form className="form">
@@ -225,6 +249,7 @@ export default function FormUncontrolled() {
             <label htmlFor="m">male</label>
             <input
               className="field__input_check"
+              ref={maleRef}
               id="m"
               name="gender"
               type="radio"
@@ -234,6 +259,7 @@ export default function FormUncontrolled() {
             <label htmlFor="f">female</label>
             <input
               className="field__input_check"
+              ref={femaleRef}
               id="f"
               name="gender"
               type="radio"
@@ -275,7 +301,6 @@ export default function FormUncontrolled() {
             list="countryList"
             name="country"
             type="text"
-            // onChange={handleChangeCountry}
           />
           <CountryList />
         </label>

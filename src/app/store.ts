@@ -3,14 +3,10 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
-import inputReducer from './inputSlice';
-import cardsReducer from './cardsSlice';
-import apiReducer from './apiSlice';
+import formUncontrolledReducer from './formUncontrolledSlice';
 
 const rootReducer = combineReducers({
-  input: inputReducer,
-  cards: cardsReducer,
-  api: apiReducer,
+  formUncontrolled: formUncontrolledReducer,
 });
 export function setupStore(preloadedState?: PreloadedState<RootState>) {
   return configureStore({

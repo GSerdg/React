@@ -90,9 +90,14 @@ const imageSchema = yup.object().shape({
     ),
 });
 
+const countrySchema = yup.object().shape({
+  title: yup.string().required('Enter your country'),
+});
+
 function checkImageWeight(image?: File[]): boolean {
   let isValid = true;
   if (image) {
+    console.log(image);
     const size = image[0].size / 1024 / 1024;
     if (size > 5) {
       isValid = false;
@@ -173,6 +178,15 @@ export function acceptValidation(value: yup.InferType<typeof acceptSchema>) {
 export function imageValidation(value: yup.InferType<typeof imageSchema>) {
   try {
     const validate = imageSchema.validateSync(value);
+    return validate;
+  } catch (error) {
+    return (error as Error).message;
+  }
+}
+
+export function countryValidation(value: yup.InferType<typeof countrySchema>) {
+  try {
+    const validate = countrySchema.validateSync(value);
     return validate;
   } catch (error) {
     return (error as Error).message;

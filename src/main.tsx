@@ -12,10 +12,12 @@ import App from './App';
 import { setupStore } from './app/store';
 import FormUncontrolled from './components/form-uncontrolled/FormUncontrolled';
 import FormHook from './components/form-hook/FormHook';
+import SubmitForms from './components/submit-forms/SubmitForms';
 import './index.css';
 
 export const PATHS = {
   HOME: '/',
+  MAIN: 'main',
   UNCONTROLLED: 'formUncontrolled',
   HOOK: 'formReactHook',
 };
@@ -27,6 +29,7 @@ const router = createBrowserRouter(
       element={<App />}
       errorElement={<ErrorComponent />}
     >
+      <Route index element={<SubmitForms />} />
       <Route path={PATHS.UNCONTROLLED} element={<FormUncontrolled />} />
       <Route path={PATHS.HOOK} element={<FormHook />} />
     </Route>

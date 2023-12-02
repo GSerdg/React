@@ -18,16 +18,15 @@ const initialState: FormState = {
   value: [],
 };
 
-export const formUncontrolledSlice = createSlice({
-  name: 'formUncontrolled',
+export const formSlice = createSlice({
+  name: 'form',
   initialState,
   reducers: {
-    setFormUncontrolledData: (state, action) => {
-      console.log(action.payload);
+    setFormData: (state, action) => {
       state.value.push(action.payload);
     },
   },
 });
 
-export const { setFormUncontrolledData } = formUncontrolledSlice.actions;
-export default formUncontrolledSlice.reducer;
+export const { setFormData } = formSlice.actions;
+export default formSlice.reducer;

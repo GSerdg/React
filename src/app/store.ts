@@ -3,11 +3,11 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
-import formUncontrolledReducer from './formSlice';
+import formReducer from './formSlice';
 import countriesReducer from './countriesSlice';
 
 const rootReducer = combineReducers({
-  formUncontrolled: formUncontrolledReducer,
+  form: formReducer,
   countries: countriesReducer,
 });
 export function setupStore(preloadedState?: PreloadedState<RootState>) {

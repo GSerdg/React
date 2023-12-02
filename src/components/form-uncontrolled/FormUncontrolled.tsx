@@ -2,17 +2,19 @@ import { useRef } from 'react';
 import {
   acceptValidation,
   ageValidation,
+  countryValidation,
   emailValidation,
   imageValidation,
   nameValidation,
   passwordValidation,
   repeatPasswordValidation,
-} from '../../shared/validation';
+} from '../../shared/validationUncontrolled';
 import './Form-uncontrolled.css';
-import CountryList from '../countryList/CountryList';
+import CountryOptions from '../country-options/CountryOptions';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setFormUncontrolledData } from '../../app/formSlice';
+import { setFormData } from '../../app/formSlice';
+import * as yup from 'yup';
 
 export default function FormUncontrolled() {
   const nameRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
@@ -146,7 +148,17 @@ export default function FormUncontrolled() {
     return editDom(validation, imageRef);
   }
 
+  function checkCountry() {
+    const country = countryRef.current?.value;
+    if (country === undefined) return;
+
+    const validation = countryValidation({ title: country });
+
+    return editDom(validation, countryRef);
+  }
+
   function handleClick(event: React.FormEvent<HTMLInputElement>) {
+    console.log(yup.ref('password'));
     event.preventDefault();
     const validate = [
       checkName(),
@@ -156,6 +168,7 @@ export default function FormUncontrolled() {
       checkRepeatPassword(),
       checkAccept(),
       checkImage(),
+      checkCountry(),
     ];
 
     if (validate.every((item) => item == true)) {
@@ -170,7 +183,7 @@ export default function FormUncontrolled() {
       fileReader.onload = (loadEvent) => {
         const imageBase64 = loadEvent.target?.result;
         dispatch(
-          setFormUncontrolledData({
+          setFormData({
             name: nameRef.current?.value,
             age: ageRef.current?.value,
             email: emailRef.current?.value,
@@ -302,14 +315,17 @@ export default function FormUncontrolled() {
         </label>
         <label className="form__field">
           <span className="field__title">Country</span>
-          <input
-            className="field__input"
-            ref={countryRef}
-            list="countryList"
-            name="country"
-            type="text"
-          />
-          <CountryList />
+          <div className="input-container">
+            <input
+              className="field__input field__input_width"
+              ref={countryRef}
+              list="countryList"
+              name="country"
+              type="text"
+            />
+            <div className="input__validate" hidden></div>
+            <CountryOptions />
+          </div>
         </label>
         <input
           className="submit-button"

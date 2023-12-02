@@ -2,27 +2,37 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from '../../shared/validationHook';
 import CountryOptions from '../country-options/CountryOptions';
+import cl from 'classnames';
+import './FormHook.css';
+
+interface SubmitForm {
+  image?: FileList | undefined;
+  country: string;
+  name: string;
+  age: string;
+  email: string;
+  password: string;
+  repeatPassword: string;
+  accept: NonNullable<boolean | undefined>;
+  gender: string;
+}
 
 export default function FormHook() {
   const {
     register,
     handleSubmit,
-    formState: { errors /* , isValid */ },
+    formState: { errors, isValid },
   } = useForm({
-    // mode: 'onBlur',
+    mode: 'onChange',
     resolver: yupResolver(schema),
   });
 
-  function onSubmitHandelr(data) {
+  function onSubmitHandelr(data: SubmitForm) {
     console.log(data);
     alert(JSON.stringify(data));
     console.log('submite');
   }
 
-  function handleClick() {
-    // console.log(yup.ref('password'));
-    // console.log(schema);
-  }
   return (
     <form className="form" onSubmit={handleSubmit(onSubmitHandelr)}>
       <fieldset className="form-uncontrolled">
@@ -91,23 +101,10 @@ export default function FormHook() {
         <div className="form__field">
           <span className="field__title">Choise your gender</span>
           <div className="field__input">
-            <label htmlFor="m">male</label>
-            <input
-              className="field__input_check"
-              id="m"
-              name="gender"
-              type="radio"
-              value={'male'}
-              defaultChecked
-            />
-            <label htmlFor="f">female</label>
-            <input
-              className="field__input_check"
-              id="f"
-              name="gender"
-              type="radio"
-              value={'female'}
-            />
+            <select {...register('gender')} className="gender" name="gender">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
           </div>
         </div>
         <label className="form__field">
@@ -126,16 +123,14 @@ export default function FormHook() {
           <span className="field__title">Input your image</span>
           <div className="input-container">
             <input
-              // {...register('image')}
+              {...register('image')}
               className="field__input field__input_fontsize"
               style={{ width: '100%', border: 'none' }}
               id="file"
               name="image"
               type="file"
             />
-            <div className="input__validate" hidden>
-              {errors.image?.message}
-            </div>
+            <div className="input__validate">{errors.image?.message}</div>
           </div>
         </label>
         <label className="form__field">
@@ -153,10 +148,11 @@ export default function FormHook() {
           </div>
         </label>
         <input
-          className="submit-button"
+          className={cl('submit-button', {
+            ['submit-button_disable']: !isValid,
+          })}
           type="submit"
           value="Submit form"
-          onClick={handleClick}
           // disabled={!isValid}
         />
       </fieldset>

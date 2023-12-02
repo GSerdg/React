@@ -58,10 +58,11 @@ export const schema = yup.object().shape({
     .bool()
     .required()
     .oneOf([true], 'You must accept the terms and conditions'),
-  /* image: yup
-    .array<yup.AnyObject, File>()
-    .nullable()
-    .required('Choose some image')
+  image: yup
+    .mixed<FileList>()
+    .test('required', 'Add your image', (image) => {
+      return image?.length === 0 ? false : true;
+    })
     .test(
       'is-correct-file',
       'the image must be no more than 5 megabytes',
@@ -71,14 +72,18 @@ export const schema = yup.object().shape({
       'is-big-file',
       'the image must be .png or .jpeg format',
       checkImageType
-    ), */
+    ),
   country: yup.string().required('Enter your country'),
+  gender: yup
+    .string()
+    .required()
+    .oneOf(['male', 'female'], 'Choose your gender'),
+  // genderFemale: yup.bool().nullable().required().oneOf([true, false], ''),
 });
 
-function checkImageWeight(image?: File[]): boolean {
+function checkImageWeight(image?: FileList): boolean {
   let isValid = true;
-  if (image) {
-    console.log(image);
+  if (image && image.length > 0) {
     const size = image[0].size / 1024 / 1024;
     if (size > 5) {
       isValid = false;
@@ -88,12 +93,14 @@ function checkImageWeight(image?: File[]): boolean {
   return isValid;
 }
 
-function checkImageType(image?: File[]): boolean {
+function checkImageType(image?: FileList): boolean {
   let isValid = true;
-  if (image) {
-    if (!['image/jpeg', 'image/png'].includes(image[0].type)) {
-      isValid = false;
-    }
+  if (
+    image &&
+    image.length > 0 &&
+    !['image/jpeg', 'image/png'].includes(image[0].type)
+  ) {
+    isValid = false;
   }
   return isValid;
 }

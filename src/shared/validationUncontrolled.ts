@@ -97,7 +97,6 @@ const countrySchema = yup.object().shape({
 function checkImageWeight(image?: File[]): boolean {
   let isValid = true;
   if (image) {
-    console.log(image);
     const size = image[0].size / 1024 / 1024;
     if (size > 5) {
       isValid = false;

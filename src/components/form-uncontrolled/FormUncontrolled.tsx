@@ -9,12 +9,11 @@ import {
   passwordValidation,
   repeatPasswordValidation,
 } from '../../shared/validationUncontrolled';
-import './Form-uncontrolled.css';
 import CountryOptions from '../country-options/CountryOptions';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setFormData } from '../../app/formSlice';
-import * as yup from 'yup';
+import './FormUncontrolled.css';
 
 export default function FormUncontrolled() {
   const nameRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
@@ -133,6 +132,7 @@ export default function FormUncontrolled() {
 
   function checkImage() {
     const image = imageRef.current?.files;
+    console.log(image);
     if (!image) return;
 
     let validation:
@@ -158,7 +158,6 @@ export default function FormUncontrolled() {
   }
 
   function handleClick(event: React.FormEvent<HTMLInputElement>) {
-    console.log(yup.ref('password'));
     event.preventDefault();
     const validate = [
       checkName(),

@@ -3,7 +3,7 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
-import formUncontrolledReducer from './formUncontrolledSlice';
+import formUncontrolledReducer from './formSlice';
 import countriesReducer from './countriesSlice';
 
 const rootReducer = combineReducers({

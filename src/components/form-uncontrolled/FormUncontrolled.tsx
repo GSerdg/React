@@ -12,7 +12,7 @@ import './Form-uncontrolled.css';
 import CountryList from '../countryList/CountryList';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setFormUncontrolledData } from '../../app/formUncontrolledSlice';
+import { setFormUncontrolledData } from '../../app/formSlice';
 
 export default function FormUncontrolled() {
   const nameRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
@@ -164,19 +164,26 @@ export default function FormUncontrolled() {
         if (femaleRef.current?.checked) return 'female';
         return undefined;
       };
+      const image = imageRef.current?.files?.[0];
+      const fileReader = new FileReader();
 
-      dispatch(
-        setFormUncontrolledData({
-          name: nameRef.current?.value,
-          age: ageRef.current?.value,
-          email: emailRef.current?.value,
-          password: passwordRef.current?.value,
-          gender: gender(),
-          accept: true,
-          country: countryRef.current?.value,
-        })
-      );
-      navigate('/');
+      fileReader.onload = (loadEvent) => {
+        const imageBase64 = loadEvent.target?.result;
+        dispatch(
+          setFormUncontrolledData({
+            name: nameRef.current?.value,
+            age: ageRef.current?.value,
+            email: emailRef.current?.value,
+            password: passwordRef.current?.value,
+            gender: gender(),
+            accept: true,
+            image: imageBase64,
+            country: countryRef.current?.value,
+          })
+        );
+        navigate('/');
+      };
+      image && fileReader.readAsDataURL(image);
     }
   }
 

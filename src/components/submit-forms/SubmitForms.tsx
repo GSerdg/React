@@ -4,7 +4,6 @@ import cl from 'classnames';
 
 export default function SubmitForms() {
   const formData = useSelector((state) => state.form.value);
-  console.log(formData);
   const formsList = formData.map((item, index) => {
     return (
       <div

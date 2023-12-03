@@ -3,18 +3,21 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from '../../shared/validationHook';
 import CountryOptions from '../country-options/CountryOptions';
 import cl from 'classnames';
+import { useDispatch } from 'react-redux';
+import { setFormData } from '../../app/formSlice';
+import { useNavigate } from 'react-router-dom';
 import './FormHook.css';
 
 interface SubmitForm {
   image?: FileList | undefined;
-  country: string;
-  name: string;
-  age: string;
-  email: string;
   password: string;
   repeatPassword: string;
-  accept: NonNullable<boolean | undefined>;
+  country: string;
+  email: string;
+  name: string;
+  age: number;
   gender: string;
+  accept: NonNullable<boolean | undefined>;
 }
 
 export default function FormHook() {
@@ -26,16 +29,35 @@ export default function FormHook() {
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function onSubmitHandelr(data: SubmitForm) {
-    console.log(data);
-    alert(JSON.stringify(data));
-    console.log('submite');
+    const image = data.image?.[0];
+    const fileReader = new FileReader();
+
+    fileReader.onload = (loadEvent) => {
+      const imageBase64 = loadEvent.target?.result;
+      dispatch(
+        setFormData({
+          name: data.name,
+          age: data.age,
+          email: data.email,
+          password: data.password,
+          gender: data.gender,
+          accept: true,
+          image: imageBase64,
+          country: data.country,
+        })
+      );
+      navigate('/');
+    };
+    image && fileReader.readAsDataURL(image);
   }
 
   return (
     <form className="form" onSubmit={handleSubmit(onSubmitHandelr)}>
-      <fieldset className="form-uncontrolled">
+      <fieldset className="form-hook">
         <label className="form__field">
           <span className="field__title">Name</span>
           <div className="input-container">
@@ -153,7 +175,7 @@ export default function FormHook() {
           })}
           type="submit"
           value="Submit form"
-          // disabled={!isValid}
+          disabled={!isValid}
         />
       </fieldset>
     </form>

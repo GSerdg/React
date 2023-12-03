@@ -38,7 +38,6 @@ const passwordSchema = yup.object().shape({
   title: yup
     .string()
     .required('Enter password')
-    .min(8, 'Password too short')
     .matches(
       /[A-Z]/,
       'Password must contain at least one uppercase letter (A-Z)'
@@ -52,6 +51,7 @@ const passwordSchema = yup.object().shape({
       /[\W_]/,
       'Password must contain at least one special character (e.g., !@#$%^&*-)'
     )
+    .min(8, 'Password too short')
     .matches(
       /^\S+\S+$/,
       'Password must not contain leading or trailing whitespace'

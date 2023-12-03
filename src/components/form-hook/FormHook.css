@@ -1,3 +1,11 @@
+.form-hook {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(255, 251, 240);
+  width: 100%;
+  gap: 10px;
+}
+
 .gender {
   font-size: 1.1rem;
 }

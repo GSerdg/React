@@ -6,9 +6,10 @@ export const schema = yup.object().shape({
     .required('Enter your name')
     .matches(/^[A-Z]/, 'The first letter should be upper case'),
   age: yup
-    .string()
+    .number()
+    .transform((value) => (Number.isNaN(value) ? null : value))
     .required('Enter your age')
-    .matches(/[1-9]+/, 'title must be greater than or equal to 1'),
+    .min(1),
   email: yup
     .string()
     .required('Enter your email')
@@ -32,7 +33,6 @@ export const schema = yup.object().shape({
   password: yup
     .string()
     .required('Enter password')
-    .min(8, 'Password too short')
     .matches(
       /[A-Z]/,
       'Password must contain at least one uppercase letter (A-Z)'
@@ -46,6 +46,7 @@ export const schema = yup.object().shape({
       /[\W_]/,
       'Password must contain at least one special character (e.g., !@#$%^&*-)'
     )
+    .min(8, 'Password too short')
     .matches(
       /^\S+\S+$/,
       'Password must not contain leading or trailing whitespace'
@@ -78,7 +79,6 @@ export const schema = yup.object().shape({
     .string()
     .required()
     .oneOf(['male', 'female'], 'Choose your gender'),
-  // genderFemale: yup.bool().nullable().required().oneOf([true, false], ''),
 });
 
 function checkImageWeight(image?: FileList): boolean {
@@ -102,5 +102,6 @@ function checkImageType(image?: FileList): boolean {
   ) {
     isValid = false;
   }
+
   return isValid;
 }

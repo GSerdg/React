@@ -8,7 +8,7 @@ export interface FormObjectState {
   age: number;
   email: string;
   password: string;
-  gender: 'male' | 'femail';
+  gender: 'male' | 'female';
   accept: true;
   image: string;
   country: string;

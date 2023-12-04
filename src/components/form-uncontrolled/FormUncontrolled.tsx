@@ -16,28 +16,21 @@ import {
 import './FormUncontrolled.css';
 
 export default function FormUncontrolled() {
-  const nameRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
-  const ageRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
-  const emailRef: React.MutableRefObject<null | HTMLInputElement> =
-    useRef(null);
-  const passwordRef: React.MutableRefObject<null | HTMLInputElement> =
-    useRef(null);
-  const repeatPasswordRef: React.MutableRefObject<null | HTMLInputElement> =
-    useRef(null);
-  const acceptRef: React.MutableRefObject<null | HTMLInputElement> =
-    useRef(null);
-  const imageRef: React.MutableRefObject<null | HTMLInputElement> =
-    useRef(null);
-  const countryRef: React.MutableRefObject<null | HTMLInputElement> =
-    useRef(null);
-  const maleRef: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
-  const femaleRef: React.MutableRefObject<null | HTMLInputElement> =
-    useRef(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const ageRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const repeatPasswordRef = useRef<HTMLInputElement>(null);
+  const acceptRef = useRef<HTMLInputElement>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
+  const countryRef = useRef<HTMLInputElement>(null);
+  const maleRef = useRef<HTMLInputElement>(null);
+  const femaleRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function handleClick(event: React.FormEvent<HTMLInputElement>) {
+  function handleSubmit(event: React.FormEvent<HTMLButtonElement>) {
     event.preventDefault();
     const validate = [
       checkName(nameRef),
@@ -51,7 +44,7 @@ export default function FormUncontrolled() {
     ];
 
     if (validate.every((item) => item == true)) {
-      const gender = () => {
+      const getGender = () => {
         if (maleRef.current?.checked) return 'male';
         if (femaleRef.current?.checked) return 'female';
         return undefined;
@@ -67,7 +60,7 @@ export default function FormUncontrolled() {
             age: ageRef.current?.value,
             email: emailRef.current?.value,
             password: passwordRef.current?.value,
-            gender: gender(),
+            gender: getGender(),
             accept: true,
             image: imageBase64,
             country: countryRef.current?.value,
@@ -91,7 +84,7 @@ export default function FormUncontrolled() {
               name="name"
               type="text"
             />
-            <div className="input__validate" hidden></div>
+            <div className="input__validation-messages" hidden></div>
           </div>
         </label>
         <label className="form__field">
@@ -103,7 +96,7 @@ export default function FormUncontrolled() {
               name="age"
               type="number"
             />
-            <div className="input__validate" hidden></div>
+            <div className="input__validation-messages" hidden></div>
           </div>
         </label>
         <label className="form__field">
@@ -115,7 +108,7 @@ export default function FormUncontrolled() {
               name="email"
               type="email"
             />
-            <div className="input__validate" hidden></div>
+            <div className="input__validation-messages" hidden></div>
           </div>
         </label>
         <label className="form__field">
@@ -127,7 +120,7 @@ export default function FormUncontrolled() {
               name="password"
               type="password"
             />
-            <div className="input__validate" hidden></div>
+            <div className="input__validation-messages" hidden></div>
           </div>
         </label>
         <label className="form__field">
@@ -139,7 +132,7 @@ export default function FormUncontrolled() {
               name="passwdRepl"
               type="password"
             />
-            <div className="input__validate" hidden></div>
+            <div className="input__validation-messages" hidden></div>
           </div>
         </label>
         <div className="form__field">
@@ -175,7 +168,7 @@ export default function FormUncontrolled() {
               name="checkbox"
               type="checkbox"
             />
-            <div className="input__validate" hidden></div>
+            <div className="input__validation-messages" hidden></div>
           </div>
         </label>
         <label htmlFor="file" className="form__field">
@@ -189,7 +182,7 @@ export default function FormUncontrolled() {
               name="image"
               type="file"
             />
-            <div className="input__validate" hidden></div>
+            <div className="input__validation-messages" hidden></div>
           </div>
         </label>
         <label className="form__field">
@@ -202,16 +195,18 @@ export default function FormUncontrolled() {
               name="country"
               type="text"
             />
-            <div className="input__validate" hidden></div>
+            <div className="input__validation-messages" hidden></div>
             <CountryOptions />
           </div>
         </label>
-        <input
+        <button
           className="submit-button"
           type="submit"
-          value="Submit form"
-          onClick={handleClick}
-        />
+          value=""
+          onClick={handleSubmit}
+        >
+          Submit form
+        </button>
       </fieldset>
     </form>
   );
